@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -5,232 +6,254 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>飲食日記</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-:root{--bg:#F6F4EF;--surface:#FFF;--surface2:#EFECE6;--text:#1C1C1A;--text2:#6A6760;--text3:#AAA79F;--accent:#3D6B4F;--abg:#E8F0EB;--abdr:#C5DBC9;--cal:#B83232;--pro:#2E7D52;--fat:#B87020;--carb:#1E5FA8;--water:#1A7EA8;--alcohol:#7B4FA0;--border:#E0DDD5;--r:12px;--rsm:8px;}
+:root{--bg:#F6F4EF;--sur:#FFF;--sur2:#EFECE6;--tx:#1C1C1A;--tx2:#6A6760;--tx3:#AAA79F;--ac:#3D6B4F;--abg:#E8F0EB;--adr:#C5DBC9;--cal:#B83232;--pro:#2E7D52;--fat:#B87020;--carb:#1E5FA8;--water:#1A7EA8;--alc:#7B4FA0;--bdr:#E0DDD5;--r:12px;--rs:8px;}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;font-size:15px;}
 .app{max-width:680px;margin:0 auto;padding:1rem 1rem 5rem;}
 .hidden{display:none!important;}
+/* Header */
 .hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px;}
 .hdr h1{font-size:20px;font-weight:500;}
 .hdr-r{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
-.badge{font-size:12px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:4px 10px;color:var(--text2);}
-.hbtn{background:none;border:1px solid var(--border);border-radius:20px;padding:4px 10px;font-size:12px;color:var(--text2);cursor:pointer;font-family:inherit;}
-.ex-toggle{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--accent);background:var(--abg);border:1px solid var(--abdr);border-radius:20px;padding:4px 10px;cursor:pointer;}
-.ex-toggle input{accent-color:var(--accent);width:13px;height:13px;}
-.tabs{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:1rem;}
-.tab{flex:1;padding:9px 2px;font-size:12px;text-align:center;cursor:pointer;color:var(--text2);border:none;background:transparent;font-family:inherit;border-right:1px solid var(--border);}
+.badge{font-size:12px;background:var(--sur);border:1px solid var(--bdr);border-radius:20px;padding:4px 10px;color:var(--tx2);}
+.hbtn{background:none;border:1px solid var(--bdr);border-radius:20px;padding:4px 10px;font-size:12px;color:var(--tx2);cursor:pointer;font-family:inherit;}
+.ex-tog{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--ac);background:var(--abg);border:1px solid var(--adr);border-radius:20px;padding:4px 10px;cursor:pointer;}
+.ex-tog input{accent-color:var(--ac);width:13px;height:13px;}
+/* Tabs */
+.tabs{display:flex;background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden;margin-bottom:1rem;}
+.tab{flex:1;padding:9px 2px;font-size:12px;text-align:center;cursor:pointer;color:var(--tx2);border:none;background:transparent;font-family:inherit;border-right:1px solid var(--bdr);}
 .tab:last-child{border-right:none;}
-.tab.active{background:var(--accent);color:white;}
+.tab.active{background:var(--ac);color:white;}
+/* Goals */
 .goals{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:1rem;}
-.gc{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:10px;}
-.gl{font-size:11px;color:var(--text3);margin-bottom:3px;}
-.gv{font-size:14px;font-weight:500;line-height:1.3;}
-.gt{font-size:10px;color:var(--text3);font-weight:400;}
-.gb{height:3px;background:var(--surface2);border-radius:2px;margin-top:6px;overflow:hidden;}
-.gf{height:100%;border-radius:2px;transition:width 0.5s;}
+.gc{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:10px;}
+.gl{font-size:11px;color:var(--tx3);margin-bottom:3px;}
+.gv{font-size:13px;font-weight:500;line-height:1.3;}
+.gt{font-size:10px;color:var(--tx3);font-weight:400;}
+.gb{height:3px;background:var(--sur2);border-radius:2px;margin-top:6px;overflow:hidden;}
+.gf{height:100%;border-radius:2px;transition:width .5s;}
+/* Alert */
 .alert{background:#FFF3E0;border:1px solid #FFB74D;border-radius:var(--r);padding:10px 14px;margin-bottom:1rem;font-size:13px;color:#E65100;}
-.net-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;margin-bottom:1rem;}
-.net-title{font-size:11px;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em;}
-.net-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;}
+/* Net card */
+.net-card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:12px 14px;margin-bottom:1rem;}
+.net-t{font-size:11px;color:var(--tx3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em;}
+.net-g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;}
 .nv{font-size:17px;font-weight:500;font-family:'DM Mono',monospace;}
-.nl{font-size:11px;color:var(--text2);margin-top:2px;}
-.net-remain{margin-top:8px;padding-top:8px;border-top:1px solid var(--surface2);font-size:13px;color:var(--text2);text-align:center;}
-.net-remain b{color:var(--accent);}
-.water-row{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;margin-bottom:1rem;}
-.water-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:5px;}
-.wlbl{font-size:13px;color:var(--text2);white-space:nowrap;}
+.nl{font-size:11px;color:var(--tx2);margin-top:2px;}
+.net-r{margin-top:8px;padding-top:8px;border-top:1px solid var(--sur2);font-size:13px;color:var(--tx2);text-align:center;}
+.net-r b{color:var(--ac);}
+/* Water */
+.wrow{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:10px 14px;margin-bottom:1rem;}
+.wtop{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:5px;}
+.wlbl{font-size:13px;color:var(--tx2);white-space:nowrap;}
 .wbtns{display:flex;gap:5px;flex:1;flex-wrap:wrap;}
 .wbtn{padding:4px 9px;font-size:12px;border:1px solid #AACFDE;border-radius:20px;background:transparent;cursor:pointer;color:var(--water);font-family:inherit;}
 .wval{font-size:13px;font-weight:500;color:var(--water);font-family:'DM Mono',monospace;white-space:nowrap;margin-left:auto;}
-.wbar-wrap{height:3px;background:var(--surface2);border-radius:2px;overflow:hidden;}
+.wbar-w{height:3px;background:var(--sur2);border-radius:2px;overflow:hidden;}
 .wbar{height:100%;background:var(--water);border-radius:2px;transition:width .4s;}
-.sug{background:var(--abg);border:1px solid var(--abdr);border-radius:var(--r);padding:12px 14px;margin-bottom:1rem;}
-.sug-t{font-size:11px;font-weight:500;color:var(--accent);margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em;}
+/* Suggestion */
+.sug{background:var(--abg);border:1px solid var(--adr);border-radius:var(--r);padding:12px 14px;margin-bottom:1rem;}
+.sug-t{font-size:11px;font-weight:500;color:var(--ac);margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em;}
 .sug-b{font-size:13px;color:#2D5A3D;line-height:1.7;}
-.input-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;margin-bottom:1rem;}
+/* Input card */
+.icard{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:12px 14px;margin-bottom:1rem;}
 .chips{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap;}
-.chip{font-size:12px;padding:4px 11px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;font-family:inherit;}
-.chip.active{background:var(--accent);color:white;border-color:var(--accent);}
-.chip.ac.active{background:var(--alcohol);border-color:var(--alcohol);}
+.chip{font-size:12px;padding:4px 11px;border-radius:20px;border:1px solid var(--bdr);background:transparent;color:var(--tx2);cursor:pointer;font-family:inherit;}
+.chip.active{background:var(--ac);color:white;border-color:var(--ac);}
+.chip.ac.active{background:var(--alc);border-color:var(--alc);}
 .chip.wc.active{background:var(--water);border-color:var(--water);}
-.date-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
-.date-row label{font-size:12px;color:var(--text2);white-space:nowrap;}
-.date-row input{flex:1;min-width:0;border:1px solid var(--border);border-radius:var(--rsm);padding:6px 10px;font-size:13px;font-family:inherit;background:var(--bg);color:var(--text);outline:none;}
-.food-row{display:flex;gap:6px;}
-.food-input{flex:1;min-width:0;border:1px solid var(--border);border-radius:var(--rsm);padding:9px 12px;font-size:14px;font-family:inherit;background:var(--bg);color:var(--text);outline:none;}
-.food-input:focus{border-color:var(--accent);}
-.btn-grp{display:flex;gap:5px;flex-shrink:0;}
-.add-btn{padding:9px 12px;background:var(--accent);color:white;border:none;border-radius:var(--rsm);font-size:13px;font-family:inherit;cursor:pointer;white-space:nowrap;}
-.add-btn:disabled{opacity:.4;cursor:not-allowed;}
-.man-btn{padding:9px 12px;background:transparent;border:1px solid var(--border);border-radius:var(--rsm);font-size:13px;font-family:inherit;cursor:pointer;color:var(--text2);white-space:nowrap;}
-.status{font-size:12px;margin-top:8px;min-height:16px;color:var(--text3);}
+.drow{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.drow label{font-size:12px;color:var(--tx2);white-space:nowrap;}
+.drow input{flex:1;min-width:0;border:1px solid var(--bdr);border-radius:var(--rs);padding:6px 10px;font-size:13px;font-family:inherit;background:var(--bg);color:var(--tx);outline:none;}
+.drow input:focus{border-color:var(--ac);}
+.frow{display:flex;gap:6px;}
+.finput{flex:1;min-width:0;border:1px solid var(--bdr);border-radius:var(--rs);padding:9px 12px;font-size:14px;font-family:inherit;background:var(--bg);color:var(--tx);outline:none;}
+.finput:focus{border-color:var(--ac);}
+.bgrp{display:flex;gap:5px;flex-shrink:0;}
+.abtn{padding:9px 12px;background:var(--ac);color:white;border:none;border-radius:var(--rs);font-size:13px;font-family:inherit;cursor:pointer;white-space:nowrap;}
+.abtn:disabled{opacity:.4;cursor:not-allowed;}
+.mbtn{padding:9px 10px;background:transparent;border:1px solid var(--bdr);border-radius:var(--rs);font-size:13px;font-family:inherit;cursor:pointer;color:var(--tx2);white-space:nowrap;}
+/* Photo */
+.photo-area{margin-top:8px;}
+.photo-label{display:flex;align-items:center;gap:6px;padding:8px 12px;border:1px dashed var(--bdr);border-radius:var(--rs);cursor:pointer;font-size:13px;color:var(--tx2);background:var(--bg);}
+.photo-label:hover{border-color:var(--ac);color:var(--ac);}
+.photo-label input{display:none;}
+.photo-preview{margin-top:6px;position:relative;display:inline-block;}
+.photo-preview img{max-width:100%;max-height:120px;border-radius:var(--rs);border:1px solid var(--bdr);}
+.photo-clear{position:absolute;top:-6px;right:-6px;background:var(--cal);color:white;border:none;border-radius:50%;width:18px;height:18px;font-size:12px;cursor:pointer;line-height:18px;text-align:center;}
+.status{font-size:12px;margin-top:8px;min-height:16px;color:var(--tx3);}
 .status.ok{color:var(--pro);}
 .status.err{color:var(--cal);}
-.spin{display:inline-block;width:11px;height:11px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:5px;}
+.spin{display:inline-block;width:11px;height:11px;border:2px solid var(--bdr);border-top-color:var(--ac);border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:5px;}
 @keyframes spin{to{transform:rotate(360deg);}}
-.sh-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:flex-end;justify-content:center;padding:0 1rem;}
-.sh-card{background:var(--surface);border-radius:16px 16px 0 0;padding:1.5rem 1.5rem 2rem;width:100%;max-width:680px;}
+/* Manual sheet */
+.sh-ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:flex-end;justify-content:center;padding:0 1rem;}
+.sh-card{background:var(--sur);border-radius:16px 16px 0 0;padding:1.5rem 1.5rem 2rem;width:100%;max-width:680px;}
 .sh-card h3{font-size:16px;font-weight:500;margin-bottom:1rem;}
 .sh-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem;}
-.sh-field label{font-size:11px;color:var(--text2);display:block;margin-bottom:4px;}
-.sh-field input{width:100%;border:1px solid var(--border);border-radius:var(--rsm);padding:8px 10px;font-size:14px;font-family:inherit;background:var(--bg);outline:none;}
-.sh-field input:focus{border-color:var(--accent);}
-.sh-field.full{grid-column:1/-1;}
-.sh-actions{display:flex;gap:8px;}
-.sh-save{flex:1;padding:10px;background:var(--accent);color:white;border:none;border-radius:var(--rsm);font-size:14px;cursor:pointer;font-family:inherit;}
-.sh-cancel{padding:10px 14px;background:transparent;border:1px solid var(--border);border-radius:var(--rsm);font-size:14px;cursor:pointer;color:var(--text2);font-family:inherit;}
-.day-sep{display:flex;justify-content:space-between;font-size:12px;color:var(--text3);padding-bottom:6px;border-bottom:1px solid var(--border);margin-bottom:8px;}
-.entry{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px;margin-bottom:6px;display:flex;gap:10px;align-items:flex-start;animation:fi .2s ease;}
+.shf label{font-size:11px;color:var(--tx2);display:block;margin-bottom:4px;}
+.shf input{width:100%;border:1px solid var(--bdr);border-radius:var(--rs);padding:8px 10px;font-size:14px;font-family:inherit;background:var(--bg);outline:none;}
+.shf input:focus{border-color:var(--ac);}
+.shf.full{grid-column:1/-1;}
+.sh-act{display:flex;gap:8px;}
+.sh-save{flex:1;padding:10px;background:var(--ac);color:white;border:none;border-radius:var(--rs);font-size:14px;cursor:pointer;font-family:inherit;}
+.sh-cancel{padding:10px 14px;background:transparent;border:1px solid var(--bdr);border-radius:var(--rs);font-size:14px;cursor:pointer;color:var(--tx2);font-family:inherit;}
+/* Entries */
+.day-sep{display:flex;justify-content:space-between;font-size:12px;color:var(--tx3);padding-bottom:6px;border-bottom:1px solid var(--bdr);margin-bottom:8px;}
+.entry{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:10px 12px;margin-bottom:6px;display:flex;gap:10px;align-items:flex-start;animation:fi .2s ease;}
 @keyframes fi{from{opacity:0;transform:translateY(3px);}to{opacity:1;}}
 .el{flex:1;min-width:0;}
-.etag{font-size:11px;color:var(--text3);margin-bottom:1px;}
+.etag{font-size:11px;color:var(--tx3);margin-bottom:1px;}
 .ename{font-size:14px;font-weight:500;word-break:break-word;}
 .macros{display:flex;gap:5px;flex-shrink:0;}
 .mm{text-align:right;min-width:30px;}
 .mv{font-size:12px;font-weight:500;font-family:'DM Mono',monospace;}
-.ml{font-size:10px;color:var(--text3);}
-.del{background:none;border:none;cursor:pointer;color:var(--text3);font-size:18px;padding:0;line-height:1;flex-shrink:0;}
+.ml2{font-size:10px;color:var(--tx3);}
+.del{background:none;border:none;cursor:pointer;color:var(--tx3);font-size:18px;padding:0;line-height:1;flex-shrink:0;}
 .del:hover{color:var(--cal);}
-.empty{text-align:center;padding:2rem 1rem;color:var(--text3);font-size:13px;}
-.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;}
-.cal-nav h3{font-size:15px;font-weight:500;}
-.cal-nav button{background:none;border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:13px;cursor:pointer;color:var(--text2);font-family:inherit;}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:1rem;}
-.cdl{text-align:center;font-size:11px;color:var(--text3);padding:3px 0;}
-.cd{text-align:center;padding:5px 2px;border-radius:var(--rsm);font-size:13px;cursor:pointer;border:1px solid transparent;position:relative;}
-.cd:hover{background:var(--surface);}
-.cd.today{font-weight:500;color:var(--accent);border-color:var(--accent);}
-.cd.sel{background:var(--accent);color:white;border-color:var(--accent);}
-.cd.has::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--accent);}
-.cd.sel::after{background:white;}
-.cd.emp{cursor:default;}
-.sum-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-top:1rem;}
-.sum-card h3{font-size:14px;font-weight:500;color:var(--text2);margin-bottom:10px;}
-.sr{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--surface2);}
-.sr:last-child{border-bottom:none;}
-.sl{font-size:13px;color:var(--text2);}
-.sv{font-size:13px;font-weight:500;font-family:'DM Mono',monospace;}
-.pc{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:1rem;}
-.pc h3{font-size:14px;font-weight:500;color:var(--text2);margin-bottom:12px;}
-.mchart{display:flex;align-items:flex-end;gap:4px;height:75px;}
-.mbw{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;}
-.mb{width:100%;background:var(--abg);border-radius:3px 3px 0 0;min-height:4px;border:1px solid var(--abdr);border-bottom:none;}
-.mbl{font-size:9px;color:var(--text3);}
-.mbv{font-size:10px;color:var(--accent);font-family:'DM Mono',monospace;}
-.win{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;margin-bottom:1rem;}
-.win-grid{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;align-items:end;}
-.wf label{font-size:11px;color:var(--text2);display:block;margin-bottom:4px;}
-.wf input{width:100%;border:1px solid var(--border);border-radius:var(--rsm);padding:7px 10px;font-size:14px;font-family:inherit;background:var(--bg);outline:none;}
-.wlbtn{padding:8px 14px;background:var(--abg);color:var(--accent);border:1px solid var(--abdr);border-radius:var(--rsm);font-size:13px;cursor:pointer;font-family:inherit;white-space:nowrap;}
-.ex-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;margin-bottom:1rem;}
-.ex-row{display:grid;grid-template-columns:1fr 70px 70px auto;gap:6px;align-items:center;margin-bottom:8px;}
-.ex-input{border:1px solid var(--border);border-radius:var(--rsm);padding:8px 10px;font-size:13px;font-family:inherit;background:var(--bg);color:var(--text);outline:none;width:100%;}
-.ex-add{padding:8px 12px;background:var(--accent);color:white;border:none;border-radius:var(--rsm);font-size:13px;cursor:pointer;font-family:inherit;}
-.ex-entry{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px;margin-bottom:6px;display:flex;align-items:center;gap:10px;}
+.empty{text-align:center;padding:2rem 1rem;color:var(--tx3);font-size:13px;}
+/* Exercise */
+.excard{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:12px 14px;margin-bottom:1rem;}
+.exrow{display:grid;grid-template-columns:1fr 60px 70px auto;gap:6px;align-items:center;margin-bottom:8px;}
+.exinput{border:1px solid var(--bdr);border-radius:var(--rs);padding:8px 10px;font-size:13px;font-family:inherit;background:var(--bg);color:var(--tx);outline:none;width:100%;}
+.exadd{padding:8px 12px;background:var(--ac);color:white;border:none;border-radius:var(--rs);font-size:13px;cursor:pointer;font-family:inherit;}
+.ex-entry{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:10px 12px;margin-bottom:6px;display:flex;align-items:center;gap:10px;}
 .exl{flex:1;}
 .exname{font-size:14px;font-weight:500;}
-.exmeta{font-size:12px;color:var(--text2);margin-top:1px;}
+.exmeta{font-size:12px;color:var(--tx2);margin-top:1px;}
 .excal{font-size:15px;font-weight:500;color:var(--pro);font-family:'DM Mono',monospace;white-space:nowrap;}
-.ai-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:1rem;}
-.ai-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
-.ai-title{font-size:13px;font-weight:500;color:var(--text2);}
-.ai-btn{padding:5px 12px;background:var(--abg);color:var(--accent);border:1px solid var(--abdr);border-radius:20px;font-size:12px;cursor:pointer;font-family:inherit;}
-.ai-btn:disabled{opacity:.5;cursor:not-allowed;}
-.ai-content{font-size:13px;color:#2D5A3D;line-height:1.8;white-space:pre-wrap;}
-.ai-ph{font-size:13px;color:var(--text3);}
-.s-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;display:flex;align-items:center;justify-content:center;padding:1rem;}
-.s-modal{background:var(--surface);border-radius:16px;padding:1.5rem;max-width:480px;width:100%;max-height:90vh;overflow-y:auto;}
-.s-modal h2{font-size:18px;font-weight:500;margin-bottom:1.2rem;}
-.s-sec{margin-bottom:1.2rem;}
-.s-lbl{font-size:11px;color:var(--text2);font-weight:500;display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em;}
-.s-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.sf input,.sf select{width:100%;padding:8px 11px;border:1px solid var(--border);border-radius:var(--rsm);font-size:14px;font-family:inherit;background:var(--bg);color:var(--text);outline:none;}
-.sf input:focus,.sf select:focus{border-color:var(--accent);}
-.s-hint{font-size:11px;color:var(--text3);margin-top:4px;}
-.s-hint a{color:var(--accent);}
-.s-auto{font-size:11px;color:var(--accent);margin-top:6px;padding:6px 10px;background:var(--abg);border-radius:var(--rsm);}
-.s-div{border:none;border-top:1px solid var(--border);margin:.8rem 0;}
-.s-actions{display:flex;gap:8px;margin-top:1rem;}
-.s-save{flex:1;padding:10px;background:var(--accent);color:white;border:none;border-radius:var(--rsm);font-size:14px;cursor:pointer;font-family:inherit;}
-.s-cancel{padding:10px 14px;background:transparent;border:1px solid var(--border);border-radius:var(--rsm);font-size:14px;cursor:pointer;color:var(--text2);font-family:inherit;}
-.export-btn{width:100%;padding:10px;background:transparent;border:1px solid var(--border);border-radius:var(--rsm);font-size:14px;cursor:pointer;color:var(--text2);font-family:inherit;margin-top:.5rem;}
-.clr-btn{color:var(--cal);border-color:var(--cal);}
+/* Calendar */
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;}
+.cal-nav h3{font-size:15px;font-weight:500;}
+.cal-nav button{background:none;border:1px solid var(--bdr);border-radius:20px;padding:4px 12px;font-size:13px;cursor:pointer;color:var(--tx2);font-family:inherit;}
+.cgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:1rem;}
+.cdl{text-align:center;font-size:11px;color:var(--tx3);padding:3px 0;}
+.cd{text-align:center;padding:5px 2px;border-radius:var(--rs);font-size:13px;cursor:pointer;border:1px solid transparent;position:relative;}
+.cd:hover{background:var(--sur);}
+.cd.today{font-weight:500;color:var(--ac);border-color:var(--ac);}
+.cd.sel{background:var(--ac);color:white;border-color:var(--ac);}
+.cd.has::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--ac);}
+.cd.sel::after{background:white;}
+.cd.emp{cursor:default;}
+.sum-card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:14px;margin-top:1rem;}
+.sum-card h3{font-size:14px;font-weight:500;color:var(--tx2);margin-bottom:10px;}
+.sr{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--sur2);}
+.sr:last-child{border-bottom:none;}
+.sl{font-size:13px;color:var(--tx2);}
+.sv{font-size:13px;font-weight:500;font-family:'DM Mono',monospace;}
+/* Progress */
+.pc{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:14px;margin-bottom:1rem;}
+.pc h3{font-size:14px;font-weight:500;color:var(--tx2);margin-bottom:12px;}
+.chart-wrap{position:relative;height:200px;}
+.win{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:12px 14px;margin-bottom:1rem;}
+.wgrid{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;align-items:end;}
+.wf label{font-size:11px;color:var(--tx2);display:block;margin-bottom:4px;}
+.wf input{width:100%;border:1px solid var(--bdr);border-radius:var(--rs);padding:7px 10px;font-size:14px;font-family:inherit;background:var(--bg);outline:none;}
+.wf input:focus{border-color:var(--ac);}
+.wlbtn{padding:8px 14px;background:var(--abg);color:var(--ac);border:1px solid var(--adr);border-radius:var(--rs);font-size:13px;cursor:pointer;font-family:inherit;}
+/* AI suggest */
+.aiblock{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:14px;margin-bottom:1rem;}
+.aihd{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.aititle{font-size:13px;font-weight:500;color:var(--tx2);}
+.aibtn{padding:5px 12px;background:var(--abg);color:var(--ac);border:1px solid var(--adr);border-radius:20px;font-size:12px;cursor:pointer;font-family:inherit;}
+.aibtn:disabled{opacity:.5;cursor:not-allowed;}
+.aic{font-size:13px;color:#2D5A3D;line-height:1.8;white-space:pre-wrap;}
+.aiph{font-size:13px;color:var(--tx3);}
+/* Settings modal */
+.sov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;display:flex;align-items:center;justify-content:center;padding:1rem;overflow-y:auto;}
+.smod{background:var(--sur);border-radius:16px;padding:1.5rem;max-width:500px;width:100%;max-height:90vh;overflow-y:auto;}
+.smod h2{font-size:18px;font-weight:500;margin-bottom:1.2rem;}
+.ssec{margin-bottom:1.2rem;}
+.ssec-title{font-size:12px;color:var(--tx2);font-weight:500;display:block;margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em;padding-bottom:4px;border-bottom:1px solid var(--sur2);}
+.srow{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.sf{display:flex;flex-direction:column;gap:4px;}
+.sf label{font-size:11px;color:var(--tx2);}
+.sf input,.sf select{padding:8px 11px;border:1px solid var(--bdr);border-radius:var(--rs);font-size:14px;font-family:inherit;background:var(--bg);color:var(--tx);outline:none;}
+.sf input:focus,.sf select:focus{border-color:var(--ac);}
+.sf.full{grid-column:1/-1;}
+.shint{font-size:11px;color:var(--tx3);margin-top:3px;}
+.shint a{color:var(--ac);}
+.sauto{font-size:12px;color:var(--ac);padding:8px 10px;background:var(--abg);border-radius:var(--rs);margin-top:6px;line-height:1.6;}
+.sact{display:flex;gap:8px;margin-top:1rem;}
+.ssave{flex:1;padding:10px;background:var(--ac);color:white;border:none;border-radius:var(--rs);font-size:14px;cursor:pointer;font-family:inherit;}
+.scancel{padding:10px 14px;background:transparent;border:1px solid var(--bdr);border-radius:var(--rs);font-size:14px;cursor:pointer;color:var(--tx2);font-family:inherit;}
 @media(max-width:480px){
   .goals{grid-template-columns:repeat(2,1fr);}
-  .macros{gap:3px;}
-  .mm{min-width:26px;}
-  .mv{font-size:11px;}
-  .ex-row{grid-template-columns:1fr 60px 60px auto;}
-  .win-grid{grid-template-columns:1fr 1fr;row-gap:8px;}
-  .win-grid .wlbtn{grid-column:1/-1;}
+  .macros{gap:3px;}.mm{min-width:26px;}.mv{font-size:11px;}
+  .exrow{grid-template-columns:1fr 55px 60px auto;}
+  .wgrid{grid-template-columns:1fr 1fr;row-gap:8px;}
+  .wgrid .wlbtn{grid-column:1/-1;}
 }
 </style>
 </head>
 <body>
 
-<!-- Settings -->
-<div class="s-overlay hidden" id="s-modal">
-  <div class="s-modal">
+<!-- Settings Modal -->
+<div class="sov hidden" id="smod">
+  <div class="smod">
     <h2>個人設定</h2>
-    <div class="s-sec">
-      <label class="s-lbl">Groq API Key</label>
-      <div class="sf"><input type="password" id="m-key" placeholder="gsk_..." /></div>
-      <p class="s-hint">免費申請：<a href="https://console.groq.com" target="_blank">console.groq.com</a> → API Keys</p>
-    </div>
-    <hr class="s-div">
-    <div class="s-sec">
-      <label class="s-lbl">個人資料</label>
-      <div class="s-grid">
-        <div class="sf"><input type="number" id="m-age" placeholder="年齡" /></div>
-        <div class="sf"><select id="m-gender"><option value="female">女</option><option value="male">男</option></select></div>
-        <div class="sf"><input type="number" id="m-height" placeholder="身高 cm" /></div>
-        <div class="sf"><input type="number" id="m-weight" placeholder="目前體重 kg" /></div>
+
+    <div class="ssec">
+      <span class="ssec-title">API 金鑰</span>
+      <div class="sf full">
+        <label>Gemini API Key</label>
+        <input type="password" id="m-key" placeholder="AIza..." />
+        <span class="shint">免費申請：<a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a>，選 Gemini 3.1 Flash-Lite</span>
       </div>
     </div>
-    <div class="s-sec">
-      <label class="s-lbl">InBody 數據（更準確）</label>
-      <div class="s-grid">
-        <div class="sf"><input type="number" id="m-bmr" placeholder="基礎代謝率 BMR" /></div>
-        <div class="sf"><input type="number" id="m-tdee" placeholder="TDEE 建議攝取" /></div>
+
+    <div class="ssec">
+      <span class="ssec-title">基本資料</span>
+      <div class="srow">
+        <div class="sf"><label>年齡</label><input type="number" id="m-age" placeholder="28" /></div>
+        <div class="sf"><label>性別</label><select id="m-gender"><option value="female">女</option><option value="male">男</option></select></div>
+        <div class="sf"><label>身高 (cm)</label><input type="number" id="m-height" placeholder="161" /></div>
+        <div class="sf"><label>目前體重 (kg)</label><input type="number" id="m-weight" placeholder="62" /></div>
+        <div class="sf"><label>目標體重 (kg)</label><input type="number" id="m-goal-w" placeholder="49" /></div>
+        <div class="sf"><label>每日喝水目標 (ml)</label><input type="number" id="m-water" placeholder="2000" /></div>
       </div>
     </div>
-    <div class="s-sec">
-      <label class="s-lbl">目標</label>
-      <div class="s-grid">
-        <div class="sf"><input type="number" id="m-goal-w" placeholder="目標體重 kg" /></div>
-        <div class="sf"><input type="number" id="m-water-goal" placeholder="每日喝水 ml" /></div>
+
+    <div class="ssec">
+      <span class="ssec-title">InBody 數據（更準確，可選填）</span>
+      <div class="srow">
+        <div class="sf"><label>基礎代謝率 BMR (kcal)</label><input type="number" id="m-bmr" placeholder="例如：1224" /></div>
+        <div class="sf"><label>TDEE 建議攝取 (kcal)</label><input type="number" id="m-tdee" placeholder="例如：1627" /></div>
       </div>
     </div>
-    <div class="s-sec">
-      <label class="s-lbl">每日目標（留空自動計算）</label>
-      <div class="s-grid">
-        <div class="sf"><input type="number" id="m-cal" placeholder="熱量 kcal" /></div>
-        <div class="sf"><input type="number" id="m-pro" placeholder="蛋白質 g（一般日）" /></div>
-        <div class="sf"><input type="number" id="m-fat" placeholder="脂肪 g" /></div>
-        <div class="sf"><input type="number" id="m-carb" placeholder="碳水 g" /></div>
+
+    <div class="ssec">
+      <span class="ssec-title">每日營養目標（留空自動計算）</span>
+      <div class="srow">
+        <div class="sf"><label>熱量 (kcal)</label><input type="number" id="m-cal" placeholder="自動計算" /></div>
+        <div class="sf"><label>蛋白質 g（一般日）</label><input type="number" id="m-pro" placeholder="自動計算" /></div>
+        <div class="sf"><label>脂肪 (g)</label><input type="number" id="m-fat" placeholder="自動計算" /></div>
+        <div class="sf"><label>碳水 (g)</label><input type="number" id="m-carb" placeholder="自動計算" /></div>
       </div>
-      <div class="s-auto hidden" id="auto-hint"></div>
+      <div class="sauto hidden" id="sauto"></div>
     </div>
-    <div class="s-actions">
-      <button class="s-cancel" id="s-cancel">取消</button>
-      <button class="s-save" id="s-save">儲存</button>
+
+    <div class="sact">
+      <button class="scancel" id="s-cancel">取消</button>
+      <button class="ssave" id="s-save">儲存</button>
     </div>
   </div>
 </div>
 
-<!-- Manual Sheet -->
-<div class="sh-overlay hidden" id="sh-modal">
+<!-- Manual Entry Sheet -->
+<div class="sh-ov hidden" id="shmod">
   <div class="sh-card">
     <h3>手動輸入營養</h3>
     <div class="sh-grid">
-      <div class="sh-field full"><label>食物名稱</label><input type="text" id="mn-name" placeholder="例如：雞胸肉便當" /></div>
-      <div class="sh-field"><label>熱量 kcal</label><input type="number" id="mn-cal" placeholder="0" /></div>
-      <div class="sh-field"><label>蛋白質 g</label><input type="number" id="mn-pro" placeholder="0" /></div>
-      <div class="sh-field"><label>脂肪 g</label><input type="number" id="mn-fat" placeholder="0" /></div>
-      <div class="sh-field"><label>碳水 g</label><input type="number" id="mn-carb" placeholder="0" /></div>
+      <div class="shf full"><label>食物名稱</label><input type="text" id="mn-name" placeholder="例如：雞胸肉沙拉" /></div>
+      <div class="shf"><label>熱量 kcal</label><input type="number" id="mn-cal" placeholder="0" /></div>
+      <div class="shf"><label>蛋白質 g</label><input type="number" id="mn-pro" placeholder="0" /></div>
+      <div class="shf"><label>脂肪 g</label><input type="number" id="mn-fat" placeholder="0" /></div>
+      <div class="shf"><label>碳水 g</label><input type="number" id="mn-carb" placeholder="0" /></div>
     </div>
-    <div class="sh-actions">
+    <div class="sh-act">
       <button class="sh-cancel" id="mn-cancel">取消</button>
       <button class="sh-save" id="mn-save">新增記錄</button>
     </div>
@@ -242,7 +265,7 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text
     <h1>飲食日記</h1>
     <div class="hdr-r">
       <div class="badge" id="date-badge"></div>
-      <label class="ex-toggle"><input type="checkbox" id="ex-chk">運動日</label>
+      <label class="ex-tog"><input type="checkbox" id="ex-chk"> 運動日</label>
       <button class="hbtn" id="settings-btn">設定</button>
     </div>
   </div>
@@ -265,16 +288,16 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text
       <div class="gc"><div class="gl">碳水</div><div class="gv" id="g-carb">0g</div><div class="gb"><div class="gf" id="gf-carb" style="width:0%;background:var(--carb)"></div></div></div>
     </div>
     <div class="net-card">
-      <div class="net-title">今日熱量平衡</div>
-      <div class="net-grid">
+      <div class="net-t">今日熱量平衡</div>
+      <div class="net-g">
         <div><div class="nv" style="color:var(--cal)" id="n-eat">0</div><div class="nl">飲食攝取</div></div>
         <div><div class="nv" style="color:var(--pro)" id="n-burn">0</div><div class="nl">運動消耗</div></div>
         <div><div class="nv" id="n-net">0</div><div class="nl">淨攝取</div></div>
       </div>
-      <div class="net-remain" id="n-remain"></div>
+      <div class="net-r" id="n-remain"></div>
     </div>
-    <div class="water-row">
-      <div class="water-top">
+    <div class="wrow">
+      <div class="wtop">
         <div class="wlbl">💧 喝水</div>
         <div class="wbtns">
           <button class="wbtn" id="w100">+100</button>
@@ -284,10 +307,10 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text
         </div>
         <div class="wval" id="wval">0/2000ml</div>
       </div>
-      <div class="wbar-wrap"><div class="wbar" id="wbar" style="width:0%"></div></div>
+      <div class="wbar-w"><div class="wbar" id="wbar" style="width:0%"></div></div>
     </div>
     <div class="sug hidden" id="sug-banner"><div class="sug-t">今日 AI 建議</div><div class="sug-b" id="sug-text"></div></div>
-    <div class="input-card">
+    <div class="icard">
       <div class="chips" id="meal-chips">
         <button class="chip active" data-meal="早餐">早餐</button>
         <button class="chip" data-meal="午餐">午餐</button>
@@ -297,12 +320,22 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text
         <button class="chip ac" data-meal="酒精">酒精</button>
         <button class="chip" data-meal="其他">其他</button>
       </div>
-      <div class="date-row"><label>記錄日期</label><input type="date" id="entry-date" /></div>
-      <div class="food-row">
-        <input class="food-input" id="food-input" type="text" placeholder="例如：鍋燒烏龍麵不喝湯" />
-        <div class="btn-grp">
-          <button class="man-btn" id="manual-btn">手動</button>
-          <button class="add-btn" id="add-btn">AI 解析</button>
+      <div class="drow"><label>記錄日期</label><input type="date" id="entry-date" /></div>
+      <div class="frow">
+        <input class="finput" id="food-input" type="text" placeholder="例如：地瓜蛋餅、鮮奶茶 500ml" />
+        <div class="bgrp">
+          <button class="mbtn" id="manual-btn">手動</button>
+          <button class="abtn" id="add-btn">AI 解析</button>
+        </div>
+      </div>
+      <div class="photo-area">
+        <label class="photo-label">
+          📷 上傳食物照片讓 AI 辨識
+          <input type="file" id="photo-input" accept="image/*" capture="environment" />
+        </label>
+        <div class="photo-preview hidden" id="photo-preview">
+          <img id="photo-img" src="" alt="food" />
+          <button class="photo-clear" id="photo-clear">×</button>
         </div>
       </div>
       <div class="status" id="status"></div>
@@ -312,7 +345,7 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text
 
   <!-- EXERCISE -->
   <div id="pane-exercise" class="hidden">
-    <div class="ex-card">
+    <div class="excard">
       <div class="chips" id="ex-chips">
         <button class="chip active" data-ex="有氧">有氧</button>
         <button class="chip" data-ex="重訓">重訓</button>
@@ -322,11 +355,11 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text
         <button class="chip" data-ex="游泳">游泳</button>
         <button class="chip" data-ex="其他">其他</button>
       </div>
-      <div class="ex-row">
-        <input class="ex-input" id="ex-name" type="text" placeholder="運動名稱" />
-        <input class="ex-input" id="ex-mins" type="number" placeholder="分鐘" />
-        <input class="ex-input" id="ex-kcal" type="number" placeholder="大卡" />
-        <button class="ex-add" id="ex-add">記錄</button>
+      <div class="exrow">
+        <input class="exinput" id="ex-name" type="text" placeholder="運動名稱" />
+        <input class="exinput" id="ex-mins" type="number" placeholder="分鐘" />
+        <input class="exinput" id="ex-kcal" type="number" placeholder="大卡" />
+        <button class="exadd" id="ex-add">記錄</button>
       </div>
       <div class="status" id="ex-status"></div>
     </div>
@@ -340,7 +373,7 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text
       <h3 id="cal-title"></h3>
       <button id="cal-next">下月 ›</button>
     </div>
-    <div class="cal-grid" id="cal-grid"></div>
+    <div class="cgrid" id="cal-grid"></div>
     <div id="cal-entries"></div>
     <div id="cal-summary"></div>
   </div>
@@ -348,51 +381,55 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text
   <!-- PROGRESS -->
   <div id="pane-progress" class="hidden">
     <div class="win">
-      <div class="win-grid">
-        <div class="wf"><label>體重 kg</label><input type="number" id="w-input" placeholder="kg" step="0.1"/></div>
-        <div class="wf"><label>體脂率 %</label><input type="number" id="bf-input" placeholder="%" step="0.1"/></div>
+      <div class="wgrid">
+        <div class="wf"><label>體重 (kg)</label><input type="number" id="w-input" placeholder="kg" step="0.1"/></div>
+        <div class="wf"><label>體脂率 (%)</label><input type="number" id="bf-input" placeholder="%" step="0.1"/></div>
         <div class="wf"><label>日期</label><input type="date" id="w-date"/></div>
         <button class="wlbtn" id="w-log">記錄</button>
       </div>
     </div>
-    <div class="pc"><h3>體重趨勢</h3><div class="mchart" id="weight-chart"><div style="color:var(--text3);font-size:13px">還沒有體重記錄</div></div></div>
-    <div class="pc"><h3>體脂率趨勢</h3><div class="mchart" id="bf-chart"><div style="color:var(--text3);font-size:13px">還沒有體脂記錄</div></div></div>
+    <div class="pc">
+      <h3>體重 & 體脂趨勢</h3>
+      <div class="chart-wrap"><canvas id="body-chart"></canvas></div>
+    </div>
     <div class="pc"><h3>目標進度</h3><div id="goal-stats"></div></div>
     <div class="pc"><h3>本週平均</h3><div id="week-stats"></div></div>
-    <button class="export-btn" id="export-btn">匯出 CSV</button>
-    <button class="export-btn clr-btn" id="clear-btn">清除今日記錄</button>
   </div>
 
   <!-- SUGGEST -->
   <div id="pane-suggest" class="hidden">
-    <div class="ai-block">
-      <div class="ai-hd"><div class="ai-title">每日建議</div><button class="ai-btn" id="btn-daily">生成建議</button></div>
-      <div class="ai-content hidden" id="c-daily"></div>
-      <div class="ai-ph" id="p-daily">根據今天飲食給你具體建議</div>
+    <div class="aiblock">
+      <div class="aihd"><div class="aititle">今日建議</div><button class="aibtn" id="btn-daily">生成建議</button></div>
+      <div class="aic hidden" id="c-daily"></div>
+      <div class="aiph" id="p-daily">根據今天飲食給你具體建議</div>
     </div>
-    <div class="ai-block">
-      <div class="ai-hd"><div class="ai-title">每週建議</div><button class="ai-btn" id="btn-weekly">生成建議</button></div>
-      <div class="ai-content hidden" id="c-weekly"></div>
-      <div class="ai-ph" id="p-weekly">根據本週趨勢給你調整方向</div>
+    <div class="aiblock">
+      <div class="aihd"><div class="aititle">每週建議</div><button class="aibtn" id="btn-weekly">生成建議</button></div>
+      <div class="aic hidden" id="c-weekly"></div>
+      <div class="aiph" id="p-weekly">根據本週趨勢給你調整方向</div>
     </div>
-    <div class="ai-block">
-      <div class="ai-hd"><div class="ai-title">達成目標計畫</div><button class="ai-btn" id="btn-goal">生成計畫</button></div>
-      <div class="ai-content hidden" id="c-goal"></div>
-      <div class="ai-ph" id="p-goal">告訴你什麼時候可以達成目標體重</div>
+    <div class="aiblock">
+      <div class="aihd"><div class="aititle">達成目標計畫</div><button class="aibtn" id="btn-goal">生成計畫</button></div>
+      <div class="aic hidden" id="c-goal"></div>
+      <div class="aiph" id="p-goal">告訴你什麼時候可以達成目標體重</div>
     </div>
-    <div class="ai-block">
-      <div class="ai-hd"><div class="ai-title">運動建議</div><button class="ai-btn" id="btn-exercise">生成建議</button></div>
-      <div class="ai-content hidden" id="c-exercise"></div>
-      <div class="ai-ph" id="p-exercise">根據目標推薦本週運動計畫</div>
+    <div class="aiblock">
+      <div class="aihd"><div class="aititle">運動建議</div><button class="aibtn" id="btn-exercise-s">生成建議</button></div>
+      <div class="aic hidden" id="c-exercise"></div>
+      <div class="aiph" id="p-exercise">根據目標推薦本週運動計畫</div>
     </div>
   </div>
 </div>
 
 <script>
-const GROQ='https://api.groq.com/openai/v1/chat/completions';
-const TW={'熱美式':'hot Americano coffee black','冰美式':'iced Americano','美式':'Americano coffee','拿鐵':'latte','熱拿鐵':'hot latte','無糖拿鐵':'unsweetened latte','鮮奶茶':'milk tea','豆漿':'soy milk 250ml','無糖豆漿':'unsweetened soy milk 250ml','地瓜':'sweet potato 150g','烏龍麵':'udon noodle soup','鍋燒烏龍麵':'hot pot udon noodle with egg fishcake','茶葉蛋':'tea egg','水煮蛋':'hard boiled egg','御飯糰':'Japanese onigiri rice ball','可頌':'croissant','吐司':'toast bread','抓餅':'scallion pancake','蔥抓餅':'scallion pancake Taiwan','雞腿便當':'chicken leg bento box Taiwan','雞胸肉':'cooked chicken breast 100g','滷肉飯':'braised pork rice Taiwan','燙青菜':'blanched vegetables','關東煮':'oden','毛豆':'edamame 100g','希臘優格':'Greek yogurt plain','乾紅酒':'dry red wine','啤酒':'beer 350ml'};
+const GURL='https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-preview:generateContent?key=';
+const TW={'熱美式':'hot Americano coffee black','冰美式':'iced Americano','美式':'Americano coffee black','拿鐵':'latte milk coffee','熱拿鐵':'hot latte','無糖拿鐵':'unsweetened latte','鮮奶茶':'milk tea','豆漿':'soy milk 250ml','無糖豆漿':'unsweetened soy milk','地瓜':'sweet potato 150g','烏龍麵':'udon noodle soup','鍋燒烏龍麵':'hot pot udon noodle egg fishcake','茶葉蛋':'tea egg','水煮蛋':'hard boiled egg','御飯糰':'onigiri rice ball','可頌':'croissant','吐司':'toast bread','抓餅':'scallion pancake','蔥抓餅':'scallion pancake Taiwan','雞腿便當':'chicken leg bento Taiwan','雞胸肉':'cooked chicken breast 100g','滷肉飯':'braised pork rice Taiwan','燙青菜':'blanched vegetables','關東煮':'oden Japanese','毛豆':'edamame 100g','希臘優格':'Greek yogurt plain','乾紅酒':'dry red wine','啤酒':'beer 350ml','蛋餅':'egg crepe Taiwan','地瓜蛋餅':'sweet potato egg crepe Taiwan'};
+
 let cfg={},entries=[],weights=[],bodyfats=[],exercises=[],waterToday=0;
 let selMeal='早餐',selEx='有氧',calYear,calMonth,calSelDate,curTab='today',isExDay=false;
+let photoBase64=null,photoMime=null,bodyChart=null;
+// Track which goal fields were manually set
+let manualGoals={cal:false,pro:false,fat:false,carb:false};
 
 function loadAll(){
   try{cfg=JSON.parse(localStorage.getItem('dc-cfg')||'{}');}catch(e){cfg={};}
@@ -414,33 +451,39 @@ function saveAll(){
   localStorage.setItem('dc-water-date',getToday());
   localStorage.setItem('dc-exday-'+getToday(),isExDay?'1':'0');
 }
+
 function getToday(){return new Date().toISOString().slice(0,10);}
 function fmtDate(iso){return new Date(iso+'T00:00:00').toLocaleDateString('zh-TW',{month:'long',day:'numeric',weekday:'short'});}
 function fmtShort(iso){return new Date(iso+'T00:00:00').toLocaleDateString('zh-TW',{month:'numeric',day:'numeric'});}
 function getTime(){return new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'});}
 
-function calcGoals(w,a,g,bmrOvr,isEx){
+// ── Goal calculation ──────────────────────────────
+function calcGoals(w,a,g,bmrOvr,exDay){
   const weight=w||62,age=a||28,gender=g||'female';
   let bmr=bmrOvr||0;
   if(!bmr) bmr=gender==='female'?10*weight+6.25*161-5*age-161:10*weight+6.25*161-5*age+5;
   const tdee=Math.round(bmr*1.375);
   const cal=Math.round(tdee*0.80);
-  const pro=isEx?Math.round(weight*1.8):Math.round(weight*1.5);
-  const fat=Math.round(cal*0.25/9);
-  const carb=Math.max(50,Math.round((cal-pro*4-fat*9)/4));
+  // Coach formula: fat 60g, carb 110g based on 1346 kcal target
+  // Scale proportionally to actual cal target
+  const scale=cal/1346;
+  const pro=exDay?Math.round(weight*1.8):Math.round(weight*1.5);
+  const fat=Math.round(60*scale);
+  const carb=Math.round(110*scale);
   return{bmr,tdee,cal,pro,fat,carb};
 }
 function getGoals(){
   const g=calcGoals(cfg.weight,cfg.age,cfg.gender,cfg.bmr,isExDay);
   return{
     cal:cfg.calGoal||g.cal,
-    pro:isExDay?(cfg.proGoalEx||g.pro):(cfg.proGoal||g.pro),
+    pro:isExDay?(cfg.proGoalEx||Math.round((cfg.weight||62)*1.8)):(cfg.proGoal||g.pro),
     fat:cfg.fatGoal||g.fat,
     carb:cfg.carbGoal||g.carb,
     bmr:cfg.bmr||g.bmr
   };
 }
 
+// ── UI Updates ────────────────────────────────────
 function updateGoals(){
   const goals=getGoals();
   const te=entries.filter(e=>e.date===getToday());
@@ -450,14 +493,12 @@ function updateGoals(){
   document.getElementById('g-pro').innerHTML=pr+'<span class="gt">g/'+goals.pro+'g</span>';
   document.getElementById('g-fat').innerHTML=f+'<span class="gt">g/'+goals.fat+'g</span>';
   document.getElementById('g-carb').innerHTML=cb+'<span class="gt">g/'+goals.carb+'g</span>';
-  const sp=(id,v,max,col)=>{const p=Math.min(100,Math.round(v/max*100));const el=document.getElementById(id);el.style.width=p+'%';el.style.background=p>=100?'var(--cal)':col;};
+  const sp=(id,v,max,col)=>{const p=Math.min(100,max?Math.round(v/max*100):0);const el=document.getElementById(id);el.style.width=p+'%';el.style.background=p>=100?'var(--cal)':col;};
   sp('gf-cal',c,goals.cal,'var(--cal)');sp('gf-pro',pr,goals.pro,'var(--pro)');
   sp('gf-fat',f,goals.fat,'var(--fat)');sp('gf-carb',cb,goals.carb,'var(--carb)');
-  // BMR alert
   const al=document.getElementById('bmr-alert');
   if(c>0&&c<goals.bmr){document.getElementById('bmr-val').textContent=goals.bmr;al.classList.remove('hidden');}
   else al.classList.add('hidden');
-  // Net
   const burn=exercises.filter(e=>e.date===getToday()).reduce((s,e)=>s+e.kcal,0);
   const net=c-burn;
   document.getElementById('n-eat').textContent=c;
@@ -473,14 +514,21 @@ function updateWater(){
 }
 function setStatus(h,c){const el=document.getElementById('status');el.innerHTML=h;el.className='status'+(c?' '+c:'');}
 
-async function callAI(sys,usr,maxT,json){
+// ── Gemini API ────────────────────────────────────
+async function callGemini(parts,maxT,json){
   const key=cfg.apiKey;if(!key) throw new Error('請先設定 API Key');
-  const body={model:'llama-3.3-70b-versatile',messages:[{role:'system',content:sys},{role:'user',content:usr}],temperature:json?0:0.7,max_tokens:maxT||500};
-  if(json) body.response_format={type:'json_object'};
-  const r=await fetch(GROQ,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},body:JSON.stringify(body)});
+  const body={contents:[{parts}],generationConfig:{temperature:json?0:0.7,maxOutputTokens:maxT||500}};
+  if(json) body.generationConfig.responseMimeType='application/json';
+  const r=await fetch(GURL+key,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
   if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error((e.error&&e.error.message)||'HTTP '+r.status);}
-  return((await r.json()).choices[0].message.content||'').trim();
+  const data=await r.json();
+  return(data.candidates[0].content.parts[0].text||'').trim();
 }
+async function callText(prompt,maxT,json){return callGemini([{text:prompt}],maxT,json);}
+async function callWithImage(prompt,b64,mime){
+  return callGemini([{text:prompt},{inline_data:{mime_type:mime,data:b64}}],500,true);
+}
+
 function parseNut(raw,txt){
   try{
     const s=raw.indexOf('{'),e=raw.lastIndexOf('}');
@@ -492,15 +540,35 @@ function parseNut(raw,txt){
   }
 }
 
+// ── Add Entry ─────────────────────────────────────
 async function addEntry(){
-  const text=document.getElementById('food-input').value.trim();if(!text) return;
+  const text=document.getElementById('food-input').value.trim();
   const date=document.getElementById('entry-date').value||getToday();
   const btn=document.getElementById('add-btn');btn.disabled=true;
+
+  if(photoBase64){
+    setStatus('<span class="spin"></span>AI 辨識照片中...','');
+    try{
+      const prompt='Analyze this food image and return ONLY JSON: {"calories":int,"protein":int,"fat":int,"carbs":int}. Estimate for Taiwan portion size. No other text.';
+      const raw=await callWithImage(prompt,photoBase64,photoMime);
+      const foodName=text||'照片食物';
+      pushEntry(parseNut(raw,foodName),date);
+      document.getElementById('food-input').value='';
+      clearPhoto();
+      setStatus('已記錄 ✓','ok');setTimeout(()=>setStatus('',''),3000);
+      genBanner();
+    }catch(e){setStatus('失敗：'+e.message,'err');}
+    finally{btn.disabled=false;}
+    return;
+  }
+
+  if(!text){btn.disabled=false;return;}
   setStatus('<span class="spin"></span>AI 解析中...','');
   try{
     let translated=text;
-    Object.entries(TW).forEach(([k,v])=>{if(translated.includes(k)) translated=translated.replace(k,v+'('+k+')');});
-    const raw=await callAI('You are a nutrition database. Return ONLY valid JSON: {calories:int,protein:int,fat:int,carbs:int}. No other text.','Estimate nutrition for: "'+translated+'". Taiwan portion.',200,true);
+    Object.entries(TW).forEach(([k,v])=>{if(translated.includes(k))translated=translated.replace(k,v+'('+k+')');});
+    const prompt='Estimate nutrition for this Taiwan food: "'+translated+'". Return ONLY JSON: {"calories":int,"protein":int,"fat":int,"carbs":int}. No other text.';
+    const raw=await callText(prompt,300,true);
     pushEntry(parseNut(raw,text),date);
     document.getElementById('food-input').value='';
     setStatus('已記錄 ✓','ok');setTimeout(()=>setStatus('',''),3000);
@@ -508,39 +576,50 @@ async function addEntry(){
   }catch(e){setStatus('失敗：'+e.message,'err');}
   finally{btn.disabled=false;}
 }
+
 function addManual(){
   const name=document.getElementById('mn-name').value.trim();if(!name) return;
   const date=document.getElementById('entry-date').value||getToday();
   pushEntry({display_name:name,items:[name],calories:parseInt(document.getElementById('mn-cal').value)||0,protein:parseInt(document.getElementById('mn-pro').value)||0,fat:parseInt(document.getElementById('mn-fat').value)||0,carbs:parseInt(document.getElementById('mn-carb').value)||0},date);
   ['mn-name','mn-cal','mn-pro','mn-fat','mn-carb'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('sh-modal').classList.add('hidden');genBanner();
+  document.getElementById('shmod').classList.add('hidden');genBanner();
 }
 function pushEntry(p,date){
   entries.push({id:Date.now(),date,time:getTime(),meal:selMeal,display_name:p.display_name,items:p.items,calories:p.calories,protein:p.protein,fat:p.fat,carbs:p.carbs});
   saveAll();updateGoals();renderToday();
   if(curTab==='calendar') renderCalEntries();
 }
-function delEntry(id){entries=entries.filter(e=>e.id!==id);saveAll();updateGoals();renderToday();if(curTab==='calendar') renderCalEntries();}
+function delEntry(id){entries=entries.filter(e=>e.id!==id);saveAll();updateGoals();renderToday();if(curTab==='calendar')renderCalEntries();}
 
+// ── Photo ─────────────────────────────────────────
+function clearPhoto(){
+  photoBase64=null;photoMime=null;
+  document.getElementById('photo-preview').classList.add('hidden');
+  document.getElementById('photo-img').src='';
+  document.getElementById('photo-input').value='';
+}
+
+// ── Banner suggestion ─────────────────────────────
 async function genBanner(){
   if(!cfg.apiKey) return;
   const te=entries.filter(e=>e.date===getToday());if(!te.length) return;
   const goals=getGoals();
   const c=te.reduce((s,e)=>s+e.calories,0),pr=te.reduce((s,e)=>s+e.protein,0);
   try{
-    const txt=await callAI('你是健身營養師，用一句話（25字內）給建議，直接說重點，繁體中文。','已吃：'+te.map(e=>e.display_name).join('、')+'。熱量'+c+'/'+goals.cal+'kcal，蛋白質'+pr+'/'+goals.pro+'g。',150,false);
+    const txt=await callText('你是健身營養師。已吃：'+te.map(e=>e.display_name).join('、')+'。熱量'+c+'/'+goals.cal+'kcal，蛋白質'+pr+'/'+goals.pro+'g。用一句話（25字內）告訴用戶晚餐該吃什麼。繁體中文，直接說建議。',150,false);
     document.getElementById('sug-text').textContent=txt.trim();
     document.getElementById('sug-banner').classList.remove('hidden');
   }catch(_){}
 }
 
+// ── Render entries ────────────────────────────────
 function buildHTML(list,dateStr){
   if(!list.length) return '<div class="empty">這天還沒有飲食記錄</div>';
   const total=list.reduce((s,e)=>s+e.calories,0);
   let h='<div class="day-sep"><span>'+fmtDate(dateStr)+'</span><span>'+total+' kcal</span></div>';
   list.forEach(e=>{
-    let tc='var(--text3)';if(e.meal==='酒精')tc='var(--alcohol)';if(e.meal==='飲料')tc='var(--water)';
-    h+=`<div class="entry"><div class="el"><div class="etag" style="color:${tc}">${e.meal} · ${e.time}</div><div class="ename">${e.display_name}</div></div><div class="macros"><div class="mm"><div class="mv" style="color:var(--cal)">${e.calories}</div><div class="ml">kcal</div></div><div class="mm"><div class="mv" style="color:var(--pro)">${e.protein}g</div><div class="ml">蛋白</div></div><div class="mm"><div class="mv" style="color:var(--fat)">${e.fat}g</div><div class="ml">脂肪</div></div><div class="mm"><div class="mv" style="color:var(--carb)">${e.carbs}g</div><div class="ml">碳水</div></div></div><button class="del" data-id="${e.id}">×</button></div>`;
+    let tc='var(--tx3)';if(e.meal==='酒精')tc='var(--alc)';if(e.meal==='飲料')tc='var(--water)';
+    h+=`<div class="entry"><div class="el"><div class="etag" style="color:${tc}">${e.meal} · ${e.time}</div><div class="ename">${e.display_name}</div></div><div class="macros"><div class="mm"><div class="mv" style="color:var(--cal)">${e.calories}</div><div class="ml2">kcal</div></div><div class="mm"><div class="mv" style="color:var(--pro)">${e.protein}g</div><div class="ml2">蛋白</div></div><div class="mm"><div class="mv" style="color:var(--fat)">${e.fat}g</div><div class="ml2">脂肪</div></div><div class="mm"><div class="mv" style="color:var(--carb)">${e.carbs}g</div><div class="ml2">碳水</div></div></div><button class="del" data-id="${e.id}">×</button></div>`;
   });return h;
 }
 function renderToday(){
@@ -550,6 +629,7 @@ function renderToday(){
   w.querySelectorAll('.del').forEach(b=>b.addEventListener('click',()=>delEntry(parseInt(b.dataset.id))));
 }
 
+// ── Exercise ──────────────────────────────────────
 const burnRate={'有氧':7,'重訓':5,'爬坡':8,'抱石':6,'走路':4,'游泳':8,'其他':5};
 function addExercise(){
   const name=document.getElementById('ex-name').value.trim()||selEx;
@@ -569,12 +649,13 @@ function renderExercise(){
   w.querySelectorAll('.del[data-exid]').forEach(b=>b.addEventListener('click',()=>{exercises=exercises.filter(e=>e.id!==parseInt(b.dataset.exid));saveAll();renderExercise();updateGoals();}));
 }
 
+// ── Calendar ──────────────────────────────────────
 function renderCalendar(){
   document.getElementById('cal-title').textContent=new Date(calYear,calMonth,1).toLocaleDateString('zh-TW',{year:'numeric',month:'long'});
   const dim=new Date(calYear,calMonth+1,0).getDate(),fd=new Date(calYear,calMonth,1).getDay();
   const today=getToday(),has=new Set(entries.map(e=>e.date));
   let h=['日','一','二','三','四','五','六'].map(d=>'<div class="cdl">'+d+'</div>').join('');
-  for(let i=0;i<fd;i++) h+='<div class="cd emp"></div>';
+  for(let i=0;i<fd;i++)h+='<div class="cd emp"></div>';
   for(let d=1;d<=dim;d++){
     const iso=calYear+'-'+String(calMonth+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
     let cls='cd';if(iso===today)cls+=' today';if(iso===calSelDate)cls+=' sel';if(has.has(iso))cls+=' has';
@@ -591,11 +672,8 @@ function renderCalEntries(){
   const bfDay=bodyfats.find(b=>b.date===calSelDate);
   const goals=getGoals();
   const w=document.getElementById('cal-entries');
-  if(w){
-    w.innerHTML=de.length?buildHTML(de,calSelDate):'<div class="empty">這天還沒有飲食記錄</div>';
-    w.querySelectorAll('.del').forEach(b=>b.addEventListener('click',()=>delEntry(parseInt(b.dataset.id))));
-  }
-  const sw=document.getElementById('cal-summary');if(!sw) return;
+  if(w){w.innerHTML=de.length?buildHTML(de,calSelDate):'<div class="empty">這天還沒有飲食記錄</div>';w.querySelectorAll('.del').forEach(b=>b.addEventListener('click',()=>delEntry(parseInt(b.dataset.id))));}
+  const sw=document.getElementById('cal-summary');if(!sw)return;
   const c=de.reduce((s,e)=>s+e.calories,0),pr=de.reduce((s,e)=>s+e.protein,0);
   const f=de.reduce((s,e)=>s+e.fat,0),cb=de.reduce((s,e)=>s+e.carbs,0);
   const burn=exDay.reduce((s,e)=>s+e.kcal,0);
@@ -607,45 +685,67 @@ function renderCalEntries(){
   h+=row('脂肪',f+' / '+goals.fat+' g','');
   h+=row('碳水',cb+' / '+goals.carb+' g','');
   if(isToday){const wg=cfg.waterGoal||2000;const ok=waterToday>=wg;h+=row('喝水',waterToday+'/'+wg+'ml '+(ok?'✓ 達標':'未達標'),ok?'var(--pro)':'var(--fat)');}
-  h+=row('運動消耗',exDay.length?'-'+burn+' kcal 消耗':'無記錄',exDay.length?'var(--pro)':'var(--text3)');
-  if(exDay.length) h+=row('運動',exDay.map(e=>e.name+'('+e.mins+'分)').join('、'),'');
-  h+=row('體重',wDay?wDay.w+' kg':'無記錄',wDay?'':'var(--text3)');
-  h+=row('體脂率',bfDay?bfDay.bf+' %':'無記錄',bfDay?'':'var(--text3)');
+  h+=row('運動消耗',exDay.length?'-'+burn+' kcal':'無記錄',exDay.length?'var(--pro)':'var(--tx3)');
+  if(exDay.length)h+=row('運動',exDay.map(e=>e.name+'('+e.mins+'分)').join('、'),'');
+  h+=row('體重',wDay?wDay.w+' kg':'無記錄',wDay?'':'var(--tx3)');
+  h+=row('體脂率',bfDay?bfDay.bf+' %':'無記錄',bfDay?'':'var(--tx3)');
   h+='</div>';sw.innerHTML=h;
 }
 
+// ── Progress ──────────────────────────────────────
 function renderProgress(){
-  const l7w=weights.slice(-7),wc=document.getElementById('weight-chart');
-  if(!l7w.length){wc.innerHTML='<div style="color:var(--text3);font-size:13px">還沒有體重記錄</div>';}
-  else{const v=l7w.map(w=>w.w),mn=Math.min(...v)-.5,mx=Math.max(...v)+.5,rng=mx-mn||1;wc.innerHTML=l7w.map(w=>{const h=Math.round(((w.w-mn)/rng)*64)+8;return'<div class="mbw"><div class="mbv">'+w.w+'</div><div class="mb" style="height:'+h+'px"></div><div class="mbl">'+fmtShort(w.date)+'</div></div>';}).join('');}
-  const l7b=bodyfats.slice(-7),bc=document.getElementById('bf-chart');
-  if(!l7b.length){bc.innerHTML='<div style="color:var(--text3);font-size:13px">還沒有體脂記錄</div>';}
-  else{const v=l7b.map(b=>b.bf),mn=Math.min(...v)-1,mx=Math.max(...v)+1,rng=mx-mn||1;bc.innerHTML=l7b.map(b=>{const h=Math.round(((b.bf-mn)/rng)*64)+8;return'<div class="mbw"><div class="mbv">'+b.bf+'%</div><div class="mb" style="height:'+h+'px;background:#F3E5F5;border-color:#CE93D8"></div><div class="mbl">'+fmtShort(b.date)+'</div></div>';}).join('');}
+  const allDates=new Set([...weights.map(w=>w.date),...bodyfats.map(b=>b.date)]);
+  const sortedDates=[...allDates].sort().slice(-10);
+
+  if(bodyChart) bodyChart.destroy();
+
+  if(sortedDates.length>0){
+    const labels=sortedDates.map(d=>fmtShort(d));
+    const wData=sortedDates.map(d=>{const f=weights.find(w=>w.date===d);return f?f.w:null;});
+    const bData=sortedDates.map(d=>{const f=bodyfats.find(b=>b.date===d);return f?f.bf:null;});
+    const ctx=document.getElementById('body-chart').getContext('2d');
+    bodyChart=new Chart(ctx,{
+      type:'line',
+      data:{
+        labels,
+        datasets:[
+          {label:'體重(kg)',data:wData,borderColor:'#3D6B4F',backgroundColor:'rgba(61,107,79,.1)',pointBackgroundColor:'#3D6B4F',tension:.3,yAxisID:'y',spanGaps:true},
+          {label:'體脂(%)',data:bData,borderColor:'#B87020',backgroundColor:'rgba(184,112,32,.1)',pointBackgroundColor:'#B87020',tension:.3,yAxisID:'y2',spanGaps:true}
+        ]
+      },
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        interaction:{mode:'index',intersect:false},
+        plugins:{legend:{labels:{font:{size:12},boxWidth:12}}},
+        scales:{
+          y:{type:'linear',position:'left',title:{display:true,text:'體重 kg',font:{size:11}},grid:{color:'rgba(0,0,0,.05)'}},
+          y2:{type:'linear',position:'right',title:{display:true,text:'體脂 %',font:{size:11}},grid:{drawOnChartArea:false}}
+        }
+      }
+    });
+  }
+
   const cur=weights.length?weights[weights.length-1].w:(cfg.weight||62);
   const curBf=bodyfats.length?bodyfats[bodyfats.length-1].bf:null;
   const diff=Math.max(0,cur-(cfg.goalWeight||49)).toFixed(1);
   const weeks=Math.ceil(diff/.4);
   const goals=getGoals();
   document.getElementById('goal-stats').innerHTML=[
-    ['目前體重',cur+' kg'],['目標體重',(cfg.goalWeight||49)+' kg'],['還需減',diff+' kg'],
-    ['預計達成',parseFloat(diff)<=0?'已達成 🎉':'約 '+weeks+' 週（'+Math.ceil(weeks/4)+' 個月）'],
+    ['目前體重',cur+' kg'],['目標體重',(cfg.goalWeight||49)+' kg'],
+    ['還需減',diff+' kg'],['預計達成',parseFloat(diff)<=0?'已達成 🎉':'約 '+weeks+' 週（'+Math.ceil(weeks/4)+' 個月）'],
     ['目前體脂',curBf?curBf+'%':'未記錄'],['每日熱量目標',goals.cal+' kcal'],
     ['基礎代謝率',goals.bmr+' kcal'],
   ].map(([l,v])=>'<div class="sr"><span class="sl">'+l+'</span><span class="sv">'+v+'</span></div>').join('');
+
   const wa=new Date(Date.now()-7*864e5).toISOString().slice(0,10);
-  const we=entries.filter(e=>e.date>=wa),ws=document.getElementById('week-stats');
-  if(!we.length){ws.innerHTML='<div class="sr"><span class="sl" style="color:var(--text3)">本週還沒有記錄</span></div>';return;}
+  const we=entries.filter(e=>e.date>=wa);
+  const ws=document.getElementById('week-stats');
+  if(!we.length){ws.innerHTML='<div class="sr"><span class="sl" style="color:var(--tx3)">本週還沒有記錄</span></div>';return;}
   const days=new Set(we.map(e=>e.date)).size||1;
   ws.innerHTML=[['記錄天數',days+'天'],['平均熱量',Math.round(we.reduce((s,e)=>s+e.calories,0)/days)+' kcal'],['平均蛋白質',Math.round(we.reduce((s,e)=>s+e.protein,0)/days)+' g']].map(([l,v])=>'<div class="sr"><span class="sl">'+l+'</span><span class="sv">'+v+'</span></div>').join('');
 }
 
-function exportCSV(){
-  const rows=[['日期','時間','餐次','食物','熱量','蛋白質','脂肪','碳水']];
-  entries.forEach(e=>rows.push([e.date,e.time,e.meal,e.display_name,e.calories,e.protein,e.fat,e.carbs]));
-  const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
-  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'}));a.download='飲食日記_'+getToday()+'.csv';a.click();
-}
-
+// ── AI Suggest ────────────────────────────────────
 async function genSuggest(type){
   const btn=document.getElementById('btn-'+type),cEl=document.getElementById('c-'+type),pEl=document.getElementById('p-'+type);
   btn.disabled=true;btn.textContent='生成中...';cEl.classList.add('hidden');pEl.textContent='⏳ 分析中...';pEl.classList.remove('hidden');
@@ -656,30 +756,35 @@ async function genSuggest(type){
   let prompt='';
   if(type==='daily'){const c=te.reduce((s,e)=>s+e.calories,0),pr=te.reduce((s,e)=>s+e.protein,0);prompt=base+'今天已吃：'+te.map(e=>e.display_name).join('、')+'。熱量'+c+'/'+goals.cal+'kcal，蛋白質'+pr+'/'+goals.pro+'g。給今天建議：1.做得好 2.還需補充 3.晚餐建議。條列式，繁體中文，100字內。';}
   else if(type==='weekly'){const days=new Set(we.map(e=>e.date)).size||1;const avgC=Math.round(we.reduce((s,e)=>s+e.calories,0)/days),avgP=Math.round(we.reduce((s,e)=>s+e.protein,0)/days);prompt=base+'本週平均熱量'+avgC+'kcal，蛋白質'+avgP+'g，記錄'+days+'天。給本週總結和下週改善建議，條列式，繁體中文，150字內。';}
-  else if(type==='goal'){const diff=Math.max(0,cur-(cfg.goalWeight||49)).toFixed(1);const weeks=Math.ceil(diff/.4);prompt=base+'還需減'+diff+'kg，約'+weeks+'週可達成。給具體計畫：1.每週應減多少 2.飲食關鍵 3.運動建議 4.預計幾月達成。條列式，繁體中文，200字內。';}
+  else if(type==='goal'){const diff=Math.max(0,cur-(cfg.goalWeight||49)).toFixed(1);const weeks=Math.ceil(diff/.4);prompt=base+'還需減'+diff+'kg，照目前進度約'+weeks+'週可達成。給具體計畫：1.每週應減多少 2.飲食關鍵 3.運動建議 4.預計幾月達成。條列式，繁體中文，200字內。';}
   else{prompt=base+'她有做：健身房爬坡有氧、抱石。給本週運動計畫，含頻率時間強度。條列式，繁體中文，150字內。';}
   try{
-    const txt=await callAI('你是專業健身營養師，給具體可執行的建議，繁體中文。',prompt,600,false);
+    const txt=await callText(prompt,600,false);
     cEl.textContent=txt.trim();cEl.classList.remove('hidden');pEl.classList.add('hidden');
   }catch(e){pEl.textContent='生成失敗：'+e.message;}
   finally{btn.disabled=false;btn.textContent='重新生成';}
 }
 
+// ── Settings ──────────────────────────────────────
 function autoCalc(){
-  const a=parseInt(document.getElementById('m-age').value)||0,g=document.getElementById('m-gender').value;
-  const w=parseFloat(document.getElementById('m-weight').value)||0,bmr=parseInt(document.getElementById('m-bmr').value)||0;
-  if((!a||!w)&&!bmr) return;
+  const a=parseInt(document.getElementById('m-age').value)||0;
+  const g=document.getElementById('m-gender').value;
+  const w=parseFloat(document.getElementById('m-weight').value)||0;
+  const bmr=parseInt(document.getElementById('m-bmr').value)||0;
+  if((!a||!w)&&!bmr)return;
   const goals=calcGoals(w,a,g,bmr,isExDay);
-  document.getElementById('m-cal').placeholder='熱量 kcal（建議 '+goals.cal+'）';
-  document.getElementById('m-pro').placeholder='蛋白質 g（建議 '+goals.pro+'）';
-  document.getElementById('m-fat').placeholder='脂肪 g（建議 '+goals.fat+'）';
-  document.getElementById('m-carb').placeholder='碳水 g（建議 '+goals.carb+'）';
-  document.getElementById('m-water-goal').placeholder='每日喝水（建議 '+Math.round(w*35/100)*100+'ml）';
-  const h=document.getElementById('auto-hint');
-  h.textContent='BMR '+goals.bmr+' → TDEE '+goals.tdee+' → 減脂目標 '+goals.cal+' kcal';
+  // Only update if not manually overridden
+  if(!manualGoals.cal) document.getElementById('m-cal').placeholder='建議 '+goals.cal;
+  if(!manualGoals.pro) document.getElementById('m-pro').placeholder='建議 '+goals.pro;
+  if(!manualGoals.fat) document.getElementById('m-fat').placeholder='建議 '+goals.fat;
+  if(!manualGoals.carb) document.getElementById('m-carb').placeholder='建議 '+goals.carb;
+  document.getElementById('m-water').placeholder='建議 '+Math.round(w*35/100)*100;
+  const h=document.getElementById('sauto');
+  h.textContent='BMR '+goals.bmr+' → TDEE '+goals.tdee+' → 減脂目標 '+goals.cal+' kcal（脂肪 '+goals.fat+'g / 碳水 '+goals.carb+'g）';
   h.classList.remove('hidden');
 }
 function openSettings(){
+  manualGoals={cal:false,pro:false,fat:false,carb:false};
   document.getElementById('m-key').value=cfg.apiKey||'';
   document.getElementById('m-age').value=cfg.age||'';
   document.getElementById('m-gender').value=cfg.gender||'female';
@@ -688,12 +793,12 @@ function openSettings(){
   document.getElementById('m-bmr').value=cfg.bmr||'';
   document.getElementById('m-tdee').value=cfg.tdee||'';
   document.getElementById('m-goal-w').value=cfg.goalWeight||'';
-  document.getElementById('m-water-goal').value=cfg.waterGoal||'';
-  document.getElementById('m-cal').value=cfg.calGoal||'';
-  document.getElementById('m-pro').value=cfg.proGoal||'';
-  document.getElementById('m-fat').value=cfg.fatGoal||'';
-  document.getElementById('m-carb').value=cfg.carbGoal||'';
-  document.getElementById('s-modal').classList.remove('hidden');
+  document.getElementById('m-water').value=cfg.waterGoal||'';
+  document.getElementById('m-cal').value=cfg.manualCal?cfg.calGoal:'';
+  document.getElementById('m-pro').value=cfg.manualPro?cfg.proGoal:'';
+  document.getElementById('m-fat').value=cfg.manualFat?cfg.fatGoal:'';
+  document.getElementById('m-carb').value=cfg.manualCarb?cfg.carbGoal:'';
+  document.getElementById('smod').classList.remove('hidden');
   autoCalc();
 }
 function saveSettings(){
@@ -705,21 +810,33 @@ function saveSettings(){
   cfg.bmr=parseInt(document.getElementById('m-bmr').value)||0;
   cfg.tdee=parseInt(document.getElementById('m-tdee').value)||0;
   cfg.goalWeight=parseFloat(document.getElementById('m-goal-w').value)||49;
-  cfg.waterGoal=parseInt(document.getElementById('m-water-goal').value)||Math.round(cfg.weight*35/100)*100;
+  cfg.waterGoal=parseInt(document.getElementById('m-water').value)||Math.round(cfg.weight*35/100)*100;
   const g=calcGoals(cfg.weight,cfg.age,cfg.gender,cfg.bmr,isExDay);
-  cfg.calGoal=parseInt(document.getElementById('m-cal').value)||g.cal;
-  cfg.proGoal=parseInt(document.getElementById('m-pro').value)||g.pro;
+  const calV=parseInt(document.getElementById('m-cal').value);
+  const proV=parseInt(document.getElementById('m-pro').value);
+  const fatV=parseInt(document.getElementById('m-fat').value);
+  const carbV=parseInt(document.getElementById('m-carb').value);
+  cfg.calGoal=calV||g.cal; cfg.manualCal=!!calV;
+  cfg.proGoal=proV||g.pro; cfg.manualPro=!!proV;
   cfg.proGoalEx=Math.round(cfg.weight*1.8);
-  cfg.fatGoal=parseInt(document.getElementById('m-fat').value)||g.fat;
-  cfg.carbGoal=parseInt(document.getElementById('m-carb').value)||g.carb;
-  saveAll();document.getElementById('s-modal').classList.add('hidden');updateGoals();updateWater();
-}
-function switchTab(t){
-  curTab=t;
-  ['today','exercise','calendar','progress','suggest'].forEach(x=>{document.getElementById('tab-'+x).classList.toggle('active',x===t);document.getElementById('pane-'+x).classList.toggle('hidden',x!==t);});
-  if(t==='calendar') renderCalendar();if(t==='progress') renderProgress();if(t==='exercise') renderExercise();
+  cfg.fatGoal=fatV||g.fat; cfg.manualFat=!!fatV;
+  cfg.carbGoal=carbV||g.carb; cfg.manualCarb=!!carbV;
+  saveAll();document.getElementById('smod').classList.add('hidden');
+  updateGoals();updateWater();
 }
 
+function switchTab(t){
+  curTab=t;
+  ['today','exercise','calendar','progress','suggest'].forEach(x=>{
+    document.getElementById('tab-'+x).classList.toggle('active',x===t);
+    document.getElementById('pane-'+x).classList.toggle('hidden',x!==t);
+  });
+  if(t==='calendar')renderCalendar();
+  if(t==='progress')renderProgress();
+  if(t==='exercise')renderExercise();
+}
+
+// ── Init ──────────────────────────────────────────
 document.addEventListener('DOMContentLoaded',function(){
   loadAll();
   const now=new Date();calYear=now.getFullYear();calMonth=now.getMonth();calSelDate=getToday();
@@ -728,36 +845,64 @@ document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('w-date').value=getToday();
   document.getElementById('ex-chk').checked=isExDay;
   updateGoals();renderToday();updateWater();
+
   document.getElementById('meal-chips').addEventListener('click',e=>{const c=e.target.closest('.chip');if(!c)return;document.querySelectorAll('#meal-chips .chip').forEach(x=>x.classList.remove('active'));c.classList.add('active');selMeal=c.dataset.meal;});
   document.getElementById('ex-chips').addEventListener('click',e=>{const c=e.target.closest('.chip');if(!c)return;document.querySelectorAll('#ex-chips .chip').forEach(x=>x.classList.remove('active'));c.classList.add('active');selEx=c.dataset.ex;});
   document.getElementById('ex-chk').addEventListener('change',function(){isExDay=this.checked;saveAll();updateGoals();});
   document.getElementById('add-btn').addEventListener('click',addEntry);
-  document.getElementById('manual-btn').addEventListener('click',()=>{document.getElementById('mn-name').value=document.getElementById('food-input').value;document.getElementById('sh-modal').classList.remove('hidden');document.getElementById('mn-name').focus();});
+  document.getElementById('manual-btn').addEventListener('click',()=>{document.getElementById('mn-name').value=document.getElementById('food-input').value;document.getElementById('shmod').classList.remove('hidden');document.getElementById('mn-name').focus();});
   document.getElementById('mn-save').addEventListener('click',addManual);
-  document.getElementById('mn-cancel').addEventListener('click',()=>document.getElementById('sh-modal').classList.add('hidden'));
+  document.getElementById('mn-cancel').addEventListener('click',()=>document.getElementById('shmod').classList.add('hidden'));
+
+  // Photo input
+  document.getElementById('photo-input').addEventListener('change',function(){
+    const file=this.files[0];if(!file)return;
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      const result=ev.target.result;
+      photoBase64=result.split(',')[1];
+      photoMime=file.type;
+      document.getElementById('photo-img').src=result;
+      document.getElementById('photo-preview').classList.remove('hidden');
+    };
+    reader.readAsDataURL(file);
+  });
+  document.getElementById('photo-clear').addEventListener('click',clearPhoto);
+
   document.getElementById('w100').addEventListener('click',()=>{waterToday+=100;saveAll();updateWater();});
   document.getElementById('w300').addEventListener('click',()=>{waterToday+=300;saveAll();updateWater();});
   document.getElementById('w500').addEventListener('click',()=>{waterToday+=500;saveAll();updateWater();});
   document.getElementById('wreset').addEventListener('click',()=>{waterToday=0;saveAll();updateWater();});
+
   ['today','exercise','calendar','progress','suggest'].forEach(t=>document.getElementById('tab-'+t).addEventListener('click',()=>switchTab(t)));
   document.getElementById('settings-btn').addEventListener('click',openSettings);
-  document.getElementById('s-cancel').addEventListener('click',()=>document.getElementById('s-modal').classList.add('hidden'));
+  document.getElementById('s-cancel').addEventListener('click',()=>document.getElementById('smod').classList.add('hidden'));
   document.getElementById('s-save').addEventListener('click',saveSettings);
-  ['m-age','m-height','m-weight','m-gender','m-bmr'].forEach(id=>{document.getElementById(id).addEventListener('input',autoCalc);document.getElementById(id).addEventListener('change',autoCalc);});
+
+  // Auto-calc on data change, respect manual overrides
+  ['m-age','m-height','m-weight','m-gender','m-bmr'].forEach(id=>{
+    document.getElementById(id).addEventListener('input',autoCalc);
+    document.getElementById(id).addEventListener('change',autoCalc);
+  });
+  ['cal','pro','fat','carb'].forEach(k=>{
+    document.getElementById('m-'+k).addEventListener('input',()=>{manualGoals[k]=!!document.getElementById('m-'+k).value;});
+  });
+
   document.getElementById('w-log').addEventListener('click',()=>{
     const w=parseFloat(document.getElementById('w-input').value),bf=parseFloat(document.getElementById('bf-input').value);
-    const date=document.getElementById('w-date').value||getToday();if(!w&&!bf) return;
+    const date=document.getElementById('w-date').value||getToday();if(!w&&!bf)return;
     if(w&&w>=30&&w<=250){weights=weights.filter(e=>e.date!==date);weights.push({w,date});weights.sort((a,b)=>a.date.localeCompare(b.date));}
     if(bf&&bf>=1&&bf<=60){bodyfats=bodyfats.filter(e=>e.date!==date);bodyfats.push({bf,date});bodyfats.sort((a,b)=>a.date.localeCompare(b.date));}
-    saveAll();document.getElementById('w-input').value='';document.getElementById('bf-input').value='';document.getElementById('w-date').value=getToday();renderProgress();
+    saveAll();document.getElementById('w-input').value='';document.getElementById('bf-input').value='';document.getElementById('w-date').value=getToday();
+    renderProgress();
   });
+
   document.getElementById('ex-add').addEventListener('click',addExercise);
   document.getElementById('cal-prev').addEventListener('click',()=>{if(calMonth===0){calMonth=11;calYear--;}else calMonth--;renderCalendar();});
   document.getElementById('cal-next').addEventListener('click',()=>{if(calMonth===11){calMonth=0;calYear++;}else calMonth++;renderCalendar();});
-  ['daily','weekly','goal','exercise'].forEach(t=>document.getElementById('btn-'+t).addEventListener('click',()=>genSuggest(t)));
-  document.getElementById('export-btn').addEventListener('click',exportCSV);
-  document.getElementById('clear-btn').addEventListener('click',()=>{if(confirm('確定要清除今日所有飲食記錄嗎？')){entries=entries.filter(e=>e.date!==getToday());saveAll();updateGoals();renderToday();document.getElementById('sug-banner').classList.add('hidden');}});
-  if(!cfg.apiKey) openSettings();
+  ['daily','weekly','goal','exercise-s'].forEach(t=>document.getElementById('btn-'+t).addEventListener('click',()=>genSuggest(t.replace('-s',''))));
+
+  if(!cfg.apiKey)openSettings();
 });
 </script>
 </body>
