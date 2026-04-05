@@ -4,14 +4,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Diet Daily</title>
+<title>Diet Diary</title>
+<meta name="author" content="MiTime Marketing">
+<meta name="copyright" content="© 2026 MiTime Marketing">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-:root{--bg:#F6F4EF;--sur:#FFF;--sur2:#EFECE6;--tx:#1C1C1A;--tx2:#6A6760;--tx3:#AAA79F;--ac:#3D6B4F;--abg:#E8F0EB;--adr:#C5DBC9;--cal:#B83232;--pro:#2E7D52;--fat:#B87020;--carb:#1E5FA8;--water:#1A7EA8;--alc:#7B4FA0;--bdr:#E0DDD5;--r:12px;--rs:8px;}
+:root{
+  --bg:#FFFBF3;--sur:#FFFFFF;--sur2:#F5EFE6;
+  --tx:#3D2B1F;--tx2:#7A6455;--tx3:#B8A898;
+  --ac:#F3904C;--abg:#FEF3EB;--adr:#F9CEAD;
+  --cal:#F3904C;--pro:#604D3F;--fat:#B89DBC;--carb:#C89A3A;
+  --water:#5B8FA8;--alc:#B89DBC;
+  --bdr:#E8DDD0;--r:12px;--rs:8px;
+  --orange:#F3904C;--yellow:#F7EE91;--purple:#B89DBC;--brown:#604D3F;--cream:#FFFBF3;
+}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;font-size:15px;}
-.app{max-width:680px;margin:0 auto;padding:1rem 1rem 5rem;}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;font-size:15px;display:flex;flex-direction:column;}
+.app{max-width:680px;margin:0 auto;padding:1rem 1rem 3rem;flex:1;width:100%;}
 .hidden{display:none!important;}
 
 /* Onboarding overlay */
@@ -21,11 +31,11 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);
 .ob-card .ob-sub{font-size:13px;color:var(--tx2);margin-bottom:1.2rem;}
 .ob-step{display:flex;gap:12px;align-items:flex-start;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--sur2);}
 .ob-step:last-of-type{border-bottom:none;margin-bottom:1.2rem;}
-.ob-num{width:26px;height:26px;background:var(--ac);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;flex-shrink:0;}
+.ob-num{width:26px;height:26px;background:var(--orange);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;flex-shrink:0;}
 .ob-content h4{font-size:14px;font-weight:500;margin-bottom:3px;}
 .ob-content p{font-size:13px;color:var(--tx2);line-height:1.6;}
 .ob-content a{color:var(--ac);}
-.ob-btn{width:100%;padding:11px;background:var(--ac);color:white;border:none;border-radius:var(--rs);font-size:15px;cursor:pointer;font-family:inherit;}
+.ob-btn{width:100%;padding:11px;background:var(--orange);color:white;border:none;border-radius:var(--rs);font-size:15px;cursor:pointer;font-family:inherit;}
 
 /* Header */
 .hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px;}
@@ -33,14 +43,28 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);
 .hdr-r{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
 .badge{font-size:12px;background:var(--sur);border:1px solid var(--bdr);border-radius:20px;padding:4px 10px;color:var(--tx2);}
 .hbtn{background:none;border:1px solid var(--bdr);border-radius:20px;padding:4px 10px;font-size:12px;color:var(--tx2);cursor:pointer;font-family:inherit;}
-.ex-tog{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--ac);background:var(--abg);border:1px solid var(--adr);border-radius:20px;padding:4px 10px;cursor:pointer;}
-.ex-tog input{accent-color:var(--ac);width:13px;height:13px;}
+.ex-tog{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--orange);background:var(--abg);border:1px solid var(--adr);border-radius:20px;padding:4px 10px;cursor:pointer;transition:all .15s;}
+.ex-tog.checked{background:var(--orange)!important;color:white!important;border-color:var(--orange)!important;}
+.ex-tog input[type=checkbox]{
+  -webkit-appearance:none;appearance:none;
+  width:15px;height:15px;flex-shrink:0;
+  border:2px solid var(--orange);border-radius:3px;
+  cursor:pointer;position:relative;background:white;
+  display:inline-flex;align-items:center;justify-content:center;
+}
+.ex-tog input[type=checkbox]:checked{background:var(--orange);border-color:var(--orange);}
+.ex-tog input[type=checkbox]:checked::after{
+  content:'';position:absolute;
+  left:2px;top:-1px;width:5px;height:9px;
+  border:2.5px solid white;border-top:none;border-left:none;
+  transform:rotate(45deg);
+}
 
 /* Tabs */
 .tabs{display:flex;background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden;margin-bottom:1rem;}
 .tab{flex:1;padding:9px 2px;font-size:12px;text-align:center;cursor:pointer;color:var(--tx2);border:none;background:transparent;font-family:inherit;border-right:1px solid var(--bdr);}
 .tab:last-child{border-right:none;}
-.tab.active{background:var(--ac);color:white;}
+.tab.active{background:var(--orange);color:white;}
 
 /* Goals */
 .goals{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:1rem;}
@@ -51,6 +75,9 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);
 .gb{height:3px;background:var(--sur2);border-radius:2px;margin-top:6px;overflow:hidden;}
 .gf{height:100%;border-radius:2px;transition:width .5s;}
 
+/* Section titles */
+.sec-t{font-size:11px;color:var(--tx3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;margin-top:1rem;}
+.sec-t:first-child{margin-top:0;}
 /* Alert */
 .alert{background:#FFF3E0;border:1px solid #FFB74D;border-radius:var(--r);padding:10px 14px;margin-bottom:1rem;font-size:13px;color:#E65100;}
 
@@ -61,26 +88,26 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);
 .nv{font-size:17px;font-weight:500;font-family:'DM Mono',monospace;}
 .nl{font-size:11px;color:var(--tx2);margin-top:2px;}
 .net-r{margin-top:8px;padding-top:8px;border-top:1px solid var(--sur2);font-size:13px;color:var(--tx2);text-align:center;}
-.net-r b{color:var(--ac);}
+.net-r b{color:var(--orange);}
 
 /* Water */
 .wrow{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:10px 14px;margin-bottom:1rem;}
 .wtop{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:5px;}
 .wlbl{font-size:13px;color:var(--tx2);white-space:nowrap;}
 .wbtns{display:flex;gap:5px;flex:1;flex-wrap:wrap;}
-.wbtn{padding:4px 9px;font-size:12px;border:1px solid #AACFDE;border-radius:20px;background:transparent;cursor:pointer;color:var(--water);font-family:inherit;}
-.wval{font-size:13px;font-weight:500;color:var(--water);font-family:'DM Mono',monospace;white-space:nowrap;margin-left:auto;}
+.wbtn{padding:4px 9px;font-size:12px;border:1px solid var(--adr);border-radius:20px;background:transparent;cursor:pointer;color:var(--orange);font-family:inherit;}
+.wval{font-size:13px;font-weight:500;color:var(--orange);font-family:'DM Mono',monospace;white-space:nowrap;margin-left:auto;}
 .wbar-w{height:3px;background:var(--sur2);border-radius:2px;overflow:hidden;}
-.wbar{height:100%;background:var(--water);border-radius:2px;transition:width .4s;}
+.wbar{height:100%;background:var(--orange);border-radius:2px;transition:width .4s;}
 .w-custom-row{display:flex;gap:6px;margin-top:6px;align-items:center;}
 .w-custom-row input{flex:1;border:1px solid var(--bdr);border-radius:var(--rs);padding:5px 10px;font-size:13px;font-family:inherit;background:var(--bg);outline:none;min-width:0;}
-.w-custom-row input:focus{border-color:var(--water);}
-.w-custom-btn{padding:5px 12px;font-size:12px;border:1px solid #AACFDE;border-radius:20px;background:transparent;cursor:pointer;color:var(--water);font-family:inherit;white-space:nowrap;}
+.w-custom-row input:focus{border-color:var(--orange);}
+.w-custom-btn{padding:5px 12px;font-size:12px;border:1px solid var(--adr);border-radius:20px;background:transparent;cursor:pointer;color:var(--orange);font-family:inherit;white-space:nowrap;}
 
 /* Suggestion */
 .sug{background:var(--abg);border:1px solid var(--adr);border-radius:var(--r);padding:12px 14px;margin-bottom:1rem;}
-.sug-t{font-size:11px;font-weight:500;color:var(--ac);margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em;}
-.sug-b{font-size:13px;color:#2D5A3D;line-height:1.7;}
+.sug-t{font-size:11px;font-weight:500;color:var(--orange);margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em;}
+.sug-b{font-size:13px;color:var(--tx2);line-height:1.7;}
 
 /* Input card */
 .icard{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:12px 14px;margin-bottom:1rem;}
@@ -92,12 +119,12 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);
 .drow{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
 .drow label{font-size:12px;color:var(--tx2);white-space:nowrap;}
 .drow input{flex:1;min-width:0;border:1px solid var(--bdr);border-radius:var(--rs);padding:6px 10px;font-size:13px;font-family:inherit;background:var(--bg);color:var(--tx);outline:none;}
-.drow input:focus{border-color:var(--ac);}
+.drow input:focus{border-color:var(--orange);}
 .frow{display:flex;gap:6px;}
 .finput{flex:1;min-width:0;border:1px solid var(--bdr);border-radius:var(--rs);padding:9px 12px;font-size:14px;font-family:inherit;background:var(--bg);color:var(--tx);outline:none;}
-.finput:focus{border-color:var(--ac);}
+.finput:focus{border-color:var(--orange);}
 .bgrp{display:flex;gap:5px;flex-shrink:0;}
-.abtn{padding:9px 12px;background:var(--ac);color:white;border:none;border-radius:var(--rs);font-size:13px;font-family:inherit;cursor:pointer;white-space:nowrap;}
+.abtn{padding:9px 12px;background:var(--orange);color:white;border:none;border-radius:var(--rs);font-size:13px;font-family:inherit;cursor:pointer;white-space:nowrap;}
 .abtn:disabled{opacity:.4;cursor:not-allowed;}
 .mbtn{padding:9px 10px;background:transparent;border:1px solid var(--bdr);border-radius:var(--rs);font-size:13px;font-family:inherit;cursor:pointer;color:var(--tx2);white-space:nowrap;}
 .input-hint{font-size:11px;color:var(--tx3);margin-top:6px;line-height:1.5;}
@@ -106,14 +133,14 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);
 .photo-area{margin-top:8px;}
 .photo-btns{display:flex;gap:6px;flex-wrap:wrap;}
 .photo-btn{display:flex;align-items:center;gap:5px;padding:7px 12px;border:1px dashed var(--bdr);border-radius:var(--rs);cursor:pointer;font-size:12px;color:var(--tx2);background:var(--bg);font-family:inherit;}
-.photo-btn:hover{border-color:var(--ac);color:var(--ac);}
+.photo-btn:hover{border-color:var(--orange);color:var(--orange);}
 .photo-btn input{display:none;}
 .photo-hint{font-size:11px;color:var(--tx3);margin-top:5px;}
 .photo-preview{margin-top:6px;position:relative;display:inline-block;}
 .photo-preview img{max-width:100%;max-height:120px;border-radius:var(--rs);border:1px solid var(--bdr);}
 .photo-clear{position:absolute;top:-6px;right:-6px;background:var(--cal);color:white;border:none;border-radius:50%;width:18px;height:18px;font-size:12px;cursor:pointer;line-height:18px;text-align:center;}
 .status{font-size:12px;margin-top:8px;min-height:16px;color:var(--tx3);}
-.status.ok{color:var(--pro);}
+.status.ok{color:var(--orange);}
 .status.err{color:var(--cal);}
 .spin{display:inline-block;width:11px;height:11px;border:2px solid var(--bdr);border-top-color:var(--ac);border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:5px;}
 @keyframes spin{to{transform:rotate(360deg);}}
@@ -127,7 +154,7 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);
 .shf input{width:100%;border:1px solid var(--bdr);border-radius:var(--rs);padding:8px 10px;font-size:14px;font-family:inherit;background:var(--bg);outline:none;}
 .shf.full{grid-column:1/-1;}
 .sh-act{display:flex;gap:8px;}
-.sh-save{flex:1;padding:10px;background:var(--ac);color:white;border:none;border-radius:var(--rs);font-size:14px;cursor:pointer;font-family:inherit;}
+.sh-save{flex:1;padding:10px;background:var(--orange);color:white;border:none;border-radius:var(--rs);font-size:14px;cursor:pointer;font-family:inherit;}
 .sh-cancel{padding:10px 14px;background:transparent;border:1px solid var(--bdr);border-radius:var(--rs);font-size:14px;cursor:pointer;color:var(--tx2);font-family:inherit;}
 
 /* Entries */
@@ -149,12 +176,12 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);
 .excard{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:12px 14px;margin-bottom:1rem;}
 .exrow{display:grid;grid-template-columns:1fr 60px 70px auto;gap:6px;align-items:center;margin-bottom:8px;}
 .exinput{border:1px solid var(--bdr);border-radius:var(--rs);padding:8px 10px;font-size:13px;font-family:inherit;background:var(--bg);color:var(--tx);outline:none;width:100%;}
-.exadd{padding:8px 12px;background:var(--ac);color:white;border:none;border-radius:var(--rs);font-size:13px;cursor:pointer;font-family:inherit;}
+.exadd{padding:8px 12px;background:var(--orange);color:white;border:none;border-radius:var(--rs);font-size:13px;cursor:pointer;font-family:inherit;}
 .ex-entry{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:10px 12px;margin-bottom:6px;display:flex;align-items:center;gap:10px;}
 .exl{flex:1;}
 .exname{font-size:14px;font-weight:500;}
 .exmeta{font-size:12px;color:var(--tx2);margin-top:1px;}
-.excal{font-size:15px;font-weight:500;color:var(--pro);font-family:'DM Mono',monospace;white-space:nowrap;}
+.excal{font-size:15px;font-weight:500;color:var(--orange);font-family:'DM Mono',monospace;white-space:nowrap;}
 
 /* Calendar */
 .cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;}
@@ -164,13 +191,13 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);
 .cdl{text-align:center;font-size:11px;color:var(--tx3);padding:3px 0;}
 .cd{text-align:center;padding:5px 2px;border-radius:var(--rs);font-size:13px;cursor:pointer;border:1px solid transparent;position:relative;}
 .cd:hover{background:var(--sur);}
-.cd.today{font-weight:500;color:var(--ac);border-color:var(--ac);}
-.cd.sel{background:var(--ac);color:white;border-color:var(--ac);}
-.cd.has::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--ac);}
+.cd.today{font-weight:500;color:var(--orange);border-color:var(--orange);}
+.cd.sel{background:var(--orange);color:white;border-color:var(--orange);}
+.cd.has::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--orange);}
 .cd.sel::after{background:white;}
 .cd.emp{cursor:default;}
 .sum-card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:14px;margin-top:1rem;}
-.sum-card h3{font-size:14px;font-weight:500;color:var(--tx2);margin-bottom:10px;}
+.sum-card h3{font-size:11px;font-weight:400;color:var(--tx3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px;}
 .sr{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--sur2);}
 .sr:last-child{border-bottom:none;}
 .sl{font-size:13px;color:var(--tx2);}
@@ -178,25 +205,25 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);
 
 /* Progress */
 .pc{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:14px;margin-bottom:1rem;}
-.pc h3{font-size:14px;font-weight:500;color:var(--tx2);margin-bottom:12px;}
+.pc h3{font-size:11px;font-weight:400;color:var(--tx3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px;}
 .chart-ctrl{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;}
 .range-btn{padding:4px 10px;font-size:12px;border:1px solid var(--bdr);border-radius:20px;background:transparent;cursor:pointer;color:var(--tx2);font-family:inherit;}
-.range-btn.active{background:var(--ac);color:white;border-color:var(--ac);}
+.range-btn.active{background:var(--orange);color:white;border-color:var(--orange);}
 .chart-wrap{position:relative;height:200px;}
 .win{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:12px 14px;margin-bottom:1rem;}
 .wgrid{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;align-items:end;}
 .wf label{font-size:11px;color:var(--tx2);display:block;margin-bottom:4px;}
 .wf input{width:100%;border:1px solid var(--bdr);border-radius:var(--rs);padding:7px 10px;font-size:14px;font-family:inherit;background:var(--bg);outline:none;}
 .wf input:focus{border-color:var(--ac);}
-.wlbtn{padding:8px 14px;background:var(--abg);color:var(--ac);border:1px solid var(--adr);border-radius:var(--rs);font-size:13px;cursor:pointer;font-family:inherit;}
+.wlbtn{padding:8px 14px;background:var(--abg);color:var(--orange);border:1px solid var(--adr);border-radius:var(--rs);font-size:13px;cursor:pointer;font-family:inherit;}
 
 /* AI Suggest */
 .aiblock{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:14px;margin-bottom:1rem;}
 .aihd{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
 .aititle{font-size:13px;font-weight:500;color:var(--tx2);}
-.aibtn{padding:5px 12px;background:var(--abg);color:var(--ac);border:1px solid var(--adr);border-radius:20px;font-size:12px;cursor:pointer;font-family:inherit;}
+.aibtn{padding:5px 12px;background:var(--abg);color:var(--orange);border:1px solid var(--adr);border-radius:20px;font-size:12px;cursor:pointer;font-family:inherit;}
 .aibtn:disabled{opacity:.5;cursor:not-allowed;}
-.aic{font-size:13px;color:#2D5A3D;line-height:1.8;white-space:pre-wrap;}
+.aic{font-size:13px;color:var(--tx);line-height:1.8;white-space:pre-wrap;}
 .aiph{font-size:13px;color:var(--tx3);}
 
 /* Settings */
@@ -209,13 +236,13 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);
 .sf{display:flex;flex-direction:column;gap:4px;}
 .sf label{font-size:11px;color:var(--tx2);}
 .sf input,.sf select{padding:8px 10px;border:1px solid var(--bdr);border-radius:var(--rs);font-size:14px;font-family:inherit;background:var(--bg);color:var(--tx);outline:none;}
-.sf input:focus,.sf select:focus{border-color:var(--ac);}
+.sf input:focus,.sf select:focus{border-color:var(--orange);}
 .sf.full{grid-column:1/-1;}
 .shint{font-size:11px;color:var(--tx3);margin-top:3px;}
 .shint a{color:var(--ac);}
 .sauto{font-size:12px;color:var(--ac);padding:8px 10px;background:var(--abg);border-radius:var(--rs);margin-top:6px;line-height:1.7;}
 .sact{display:flex;gap:8px;margin-top:1rem;position:sticky;bottom:0;background:var(--sur);padding-top:8px;}
-.ssave{flex:1;padding:10px;background:var(--ac);color:white;border:none;border-radius:var(--rs);font-size:14px;cursor:pointer;font-family:inherit;}
+.ssave{flex:1;padding:10px;background:var(--orange);color:white;border:none;border-radius:var(--rs);font-size:14px;cursor:pointer;font-family:inherit;}
 .scancel{padding:10px 14px;background:transparent;border:1px solid var(--bdr);border-radius:var(--rs);font-size:14px;cursor:pointer;color:var(--tx2);font-family:inherit;}
 
 @media(max-width:480px){
@@ -228,6 +255,8 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);
   .bgrp{flex-direction:column;}
   .bgrp .abtn,.bgrp .mbtn{width:100%;}
 }
+
+.footer-logo path,.footer-logo rect,.footer-logo polygon,.footer-logo circle{fill:white!important;}
 </style>
 </head>
 <body>
@@ -235,85 +264,85 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);
 <!-- Onboarding -->
 <div class="ob-ov hidden" id="ob-ov">
   <div class="ob-card">
-    <h2>歡迎使用 Diet Daily 👋</h2>
-    <p class="ob-sub">開始前需要取得免費的 Gemini API Key，只需 3 分鐘</p>
-    <div class="ob-step">
-      <div class="ob-num">1</div>
-      <div class="ob-content">
-        <h4>前往 Google AI Studio</h4>
-        <p>點此連結：<a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a><br>用 Google 帳號登入</p>
-      </div>
-    </div>
-    <div class="ob-step">
-      <div class="ob-num">2</div>
-      <div class="ob-content">
-        <h4>建立 API Key</h4>
-        <p>點「Create API Key」→ 選擇一個 Google Cloud 專案 → 複製產生的 Key（AIza 開頭）</p>
-      </div>
-    </div>
-    <div class="ob-step">
-      <div class="ob-num">3</div>
-      <div class="ob-content">
-        <h4>貼入設定頁</h4>
-        <p>關閉此視窗後，在設定頁面將 Key 貼入「Gemini API Key」欄位 → 儲存即可</p>
-      </div>
-    </div>
-    <div class="ob-step">
-      <div class="ob-num">4</div>
-      <div class="ob-content">
-        <h4>免費額度說明</h4>
-        <p>Gemini 3.1 Flash-Lite 每日免費 500 次，日常記錄完全足夠<br>⚠️ API Key 請勿分享給他人，避免額度被用盡</p>
-      </div>
-    </div>
-    <button class="ob-btn" id="ob-close">我已取得 API Key，開始使用</button>
-  </div>
-</div>
-
-<!-- Settings Modal -->
-<div class="sov hidden" id="smod">
-  <div class="smod">
-    <h2>個人設定</h2>
-    <div class="ssec">
-      <span class="ssec-t">API 金鑰</span>
-      <div class="srow">
-        <div class="sf full">
-          <label>Gemini API Key</label>
-          <input type="password" id="m-key" placeholder="AIza..." />
-          <span class="shint">還沒有？<a href="#" id="show-ob">查看取得教學</a></span>
+    <!-- Page 1: API guide + key input -->
+    <div id="ob-p1">
+      <h2 style="font-size:20px;font-weight:500;margin-bottom:6px;">歡迎使用 Diet Diary 👋</h2>
+      <p class="ob-sub">填入 Gemini API Key 以啟用 AI 解析等完整功能，免費申請只需 3 分鐘</p>
+      <div class="ob-step">
+        <div class="ob-num">1</div>
+        <div class="ob-content">
+          <h4>前往 Google AI Studio</h4>
+          <p>點此連結：<a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a><br>用 Google 帳號登入即可進入</p>
         </div>
       </div>
-    </div>
-    <div class="ssec">
-      <span class="ssec-t">基本資料</span>
-      <div class="srow">
-        <div class="sf"><label>年齡</label><input type="number" id="m-age" placeholder="28" /></div>
-        <div class="sf"><label>性別</label><select id="m-gender"><option value="female">女</option><option value="male">男</option></select></div>
-        <div class="sf"><label>身高 (cm)</label><input type="number" id="m-height" placeholder="161" /></div>
-        <div class="sf"><label>目前體重 (kg)</label><input type="number" id="m-weight" placeholder="62" /></div>
-        <div class="sf"><label>目標體重 (kg)</label><input type="number" id="m-goal-w" placeholder="49" /></div>
+      <div class="ob-step">
+        <div class="ob-num">2</div>
+        <div class="ob-content">
+          <h4>建立並複製 API Key</h4>
+          <p>點「Create API Key」→ 選擇 Google Cloud 專案（可選擇預設專案）→ 複製產生的 Key（AIza 開頭）</p>
+        </div>
       </div>
-    </div>
-    <div class="ssec">
-      <span class="ssec-t">InBody 數據（更準確，可選填）</span>
-      <div class="srow">
-        <div class="sf"><label>基礎代謝率 BMR (kcal)</label><input type="number" id="m-bmr" placeholder="例如：1224" /></div>
-        <div class="sf"><label>TDEE 建議攝取 (kcal)</label><input type="number" id="m-tdee" placeholder="例如：1627" /></div>
+      <div class="ob-step" style="border-bottom:none;margin-bottom:1rem;">
+        <div class="ob-num">3</div>
+        <div class="ob-content">
+          <h4>貼入下方並繼續</h4>
+          <input type="password" id="ob-key-input" placeholder="貼上你的 API Key（AIza...）" style="width:100%;margin-top:8px;padding:10px 12px;border:1px solid var(--bdr);border-radius:var(--rs);font-size:14px;font-family:inherit;background:var(--bg);outline:none;display:block;" />
+        </div>
       </div>
-    </div>
-    <div class="ssec">
-      <span class="ssec-t">每日目標（留空自動計算）</span>
-      <div class="srow">
-        <div class="sf"><label>熱量 (kcal)</label><input type="number" id="m-cal" placeholder="自動計算" /></div>
-        <div class="sf"><label>蛋白質 g（一般日）</label><input type="number" id="m-pro" placeholder="自動計算" /></div>
-        <div class="sf"><label>脂肪 (g)</label><input type="number" id="m-fat" placeholder="自動計算" /></div>
-        <div class="sf"><label>碳水 (g)</label><input type="number" id="m-carb" placeholder="自動計算" /></div>
-        <div class="sf"><label>每日喝水目標 (ml)</label><input type="number" id="m-water" placeholder="自動計算" /></div>
+      <div style="background:var(--sur2);border-radius:var(--rs);padding:12px 14px;margin-bottom:1rem;font-size:12px;color:var(--tx2);line-height:1.8;">
+        <div style="font-weight:500;color:var(--tx);margin-bottom:6px;">補充說明</div>
+        <div>1. Gemini API 每日免費提供 500 次呼叫，足夠日常飲食記錄使用</div>
+        <div>2. API Key 僅儲存於你的裝置本地，不會上傳至任何伺服器或洩漏個人資料；請勿將 Key 分享給他人，以免免費額度被消耗</div>
       </div>
-      <div class="sauto hidden" id="sauto"></div>
+      <button class="ob-btn" id="ob-confirm">確認，繼續填寫個人資料 →</button>
+      <button id="ob-skip" style="width:100%;margin-top:8px;padding:8px 12px;background:transparent;border:1px solid var(--bdr);border-radius:var(--rs);font-size:12px;color:var(--tx3);cursor:pointer;font-family:inherit;display:block;text-align:center;">跳過（部分 AI 功能將停用，可隨時在設定補填）</button>
     </div>
-    <div class="sact">
-      <button class="scancel" id="s-cancel">取消</button>
-      <button class="ssave" id="s-save">儲存</button>
+    <!-- Page 2: Settings -->
+    <div id="ob-p2" class="hidden">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+        <h2 style="margin-bottom:0;font-size:18px;font-weight:500;">個人設定</h2>
+        <button id="ob-p2-close" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--tx3);line-height:1;padding:0 4px;">×</button>
+      </div>
+      <!-- API not set reminder -->
+      <div id="ob-no-key-remind" style="display:none;background:#FEF3EB;border:1px solid var(--adr);border-radius:var(--rs);padding:10px 14px;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;gap:10px;">
+        <span style="font-size:13px;color:var(--tx2);">⚠️ 尚未設定 API Key，AI 功能暫停</span>
+        <button onclick="document.getElementById('ob-p2').classList.add('hidden');document.getElementById('ob-p1').classList.remove('hidden');" style="padding:4px 12px;background:var(--orange);color:white;border:none;border-radius:20px;font-size:12px;cursor:pointer;font-family:inherit;white-space:nowrap;">返回填寫</button>
+      </div>
+      <!-- 基本資料 -->
+      <div style="margin-bottom:1.2rem;">
+        <div class="ssec-t">基本資料</div>
+        <div class="srow">
+          <div class="sf"><label>年齡</label><input type="number" id="s2-age" placeholder="" /></div>
+          <div class="sf"><label>性別</label><select id="s2-gender"><option value="female">女</option><option value="male">男</option></select></div>
+          <div class="sf"><label>身高 (cm)</label><input type="number" id="s2-height" placeholder="" /></div>
+          <div class="sf"><label>目前體重 (kg)</label><input type="number" id="s2-weight" placeholder="" /></div>
+          <div class="sf full"><label>目標體重 (kg)</label><input type="number" id="s2-goal-w" placeholder="" /></div>
+        </div>
+      </div>
+      <!-- InBody -->
+      <div style="margin-bottom:1.2rem;">
+        <div class="ssec-t">InBody 資訊（選填）</div>
+        <div class="srow">
+          <div class="sf"><label>BMR 基礎代謝率 (kcal)</label><input type="number" id="s2-bmr" placeholder="參考 InBody" /></div>
+          <div class="sf"><label>TDEE 每日總熱量消耗 (kcal)</label><input type="number" id="s2-tdee" placeholder="參考 InBody" /></div>
+        </div>
+      </div>
+      <!-- 每日目標 -->
+      <div style="margin-bottom:1rem;">
+        <div class="ssec-t">每日目標（可留空自動計算，或諮詢專業後自行填寫）</div>
+        <div class="srow">
+          <div class="sf"><label>熱量 (kcal)</label><input type="number" id="s2-cal" placeholder="自動計算" /></div>
+          <div class="sf"><label>蛋白質 (g)</label><input type="number" id="s2-pro" placeholder="自動計算" /></div>
+          <div class="sf"><label>脂肪 (g)</label><input type="number" id="s2-fat" placeholder="自動計算" /></div>
+          <div class="sf"><label>碳水 (g)</label><input type="number" id="s2-carb" placeholder="自動計算" /></div>
+          <div class="sf full"><label>每日喝水目標 (ml)</label><input type="number" id="s2-water" placeholder="自動計算" /></div>
+        </div>
+        <div class="sauto hidden" id="s2-auto"></div>
+      </div>
+      <div style="display:flex;gap:8px;position:sticky;bottom:0;background:var(--sur);padding-top:8px;">
+        <button id="ob-back" style="padding:10px 16px;background:transparent;border:1px solid var(--bdr);border-radius:var(--rs);font-size:13px;cursor:pointer;color:var(--tx2);font-family:inherit;">← 返回</button>
+        <button class="ob-btn" id="ob-finish" style="flex:1;">儲存並開始使用</button>
+      </div>
     </div>
   </div>
 </div>
@@ -338,7 +367,34 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);
 
 <div class="app">
   <div class="hdr">
-    <h1>Diet Daily</h1>
+    <div style="display:flex;align-items:center;gap:10px;"><svg height="34" style="display:block;flex-shrink:0;" version="1.1" id="_圖層_2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 47.8 47.9" style="enable-background:new 0 0 47.8 47.9;" xml:space="preserve">
+<style type="text/css">
+	.icon-st0{fill:#F3904C;}
+</style>
+<g id="_圖層_1">
+	<g>
+		<g>
+			<g>
+				<path class="icon-st0" d="M26.3,14.3V0h-4.8v18c0,4.6-3.8,8.4-8.4,8.4S4.8,22.6,4.8,18V0H0v14.3c0,3.8,1.6,7.3,4.2,9.7
+					c2.3,2.2,5.5,3.5,8.9,3.5s6.6-1.3,8.9-3.5C24.7,21.6,26.3,18.1,26.3,14.3z"/>
+				<path class="icon-st0" d="M21.5,14.3V0h4.8v18c0,4.6,3.8,8.4,8.4,8.4s8.4-3.8,8.4-8.4V0h4.8v14.3c0,3.8-1.6,7.3-4.2,9.7
+					c-2.3,2.2-5.5,3.5-8.9,3.5s-6.6-1.3-8.9-3.5C23.2,21.6,21.5,18.1,21.5,14.3z"/>
+			</g>
+			<rect x="34.7" y="0" class="icon-st0" width="13.2" height="1.1"/>
+		</g>
+		<g>
+			<g>
+				<path class="icon-st0" d="M21.5,33.6v14.3h4.8V29.9c0-4.6,3.8-8.4,8.4-8.4s8.4,3.8,8.4,8.4v17.9h4.8V33.6c0-3.8-1.6-7.3-4.2-9.7
+					c-2.3-2.2-5.5-3.5-8.9-3.5s-6.6,1.3-8.9,3.5C23.2,26.3,21.5,29.7,21.5,33.6z"/>
+				<path class="icon-st0" d="M26.3,33.6v14.3h-4.8V29.9c0-4.6-3.8-8.4-8.4-8.4s-8.4,3.8-8.4,8.4v17.9H0V33.6c0-3.8,1.6-7.3,4.2-9.7
+					c2.3-2.2,5.5-3.5,8.9-3.5s6.6,1.3,8.9,3.5C24.7,26.3,26.3,29.7,26.3,33.6z"/>
+			</g>
+			<rect y="46.7" class="icon-st0" width="13.1" height="1.1"/>
+		</g>
+	</g>
+</g>
+</svg><div><div style="font-size:16px;font-weight:500;line-height:1.2;">Diet Diary</div><div style="font-size:10px;color:var(--tx3);letter-spacing:.05em;">飲食日記</div></div></div>
     <div class="hdr-r">
       <div class="badge" id="date-badge"></div>
       <label class="ex-tog"><input type="checkbox" id="ex-chk"> 運動日</label>
@@ -358,23 +414,24 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);
   <div id="pane-today">
     <div class="alert hidden" id="bmr-alert">⚠️ 今日攝取低於基礎代謝率，建議至少吃 <b id="bmr-val">1224</b> kcal</div>
     <div class="goals">
-      <div class="gc"><div class="gl">熱量</div><div class="gv" id="g-cal">0</div><div class="gb"><div class="gf" id="gf-cal" style="width:0%;background:var(--cal)"></div></div></div>
-      <div class="gc"><div class="gl">蛋白質</div><div class="gv" id="g-pro">0g</div><div class="gb"><div class="gf" id="gf-pro" style="width:0%;background:var(--pro)"></div></div></div>
-      <div class="gc"><div class="gl">脂肪</div><div class="gv" id="g-fat">0g</div><div class="gb"><div class="gf" id="gf-fat" style="width:0%;background:var(--fat)"></div></div></div>
-      <div class="gc"><div class="gl">碳水</div><div class="gv" id="g-carb">0g</div><div class="gb"><div class="gf" id="gf-carb" style="width:0%;background:var(--carb)"></div></div></div>
+      <div class="gc"><div class="gl">熱量</div><div class="gv" id="g-cal">0</div><div class="gb"><div class="gf" id="gf-cal" style="width:0%;background:var(--orange)"></div></div></div>
+      <div class="gc"><div class="gl">蛋白質</div><div class="gv" id="g-pro">0g</div><div class="gb"><div class="gf" id="gf-pro" style="width:0%;background:#B89DBC"></div></div></div>
+      <div class="gc"><div class="gl">脂肪</div><div class="gv" id="g-fat">0g</div><div class="gb"><div class="gf" id="gf-fat" style="width:0%;background:#C9A87A"></div></div></div>
+      <div class="gc"><div class="gl">碳水</div><div class="gv" id="g-carb">0g</div><div class="gb"><div class="gf" id="gf-carb" style="width:0%;background:#C4A87A;"></div></div></div>
     </div>
     <div class="net-card">
       <div class="net-t">今日熱量平衡</div>
       <div class="net-g">
-        <div><div class="nv" style="color:var(--cal)" id="n-eat">0</div><div class="nl">飲食攝取</div></div>
-        <div><div class="nv" style="color:var(--pro)" id="n-burn">0</div><div class="nl">運動消耗</div></div>
+        <div><div class="nv" style="color:var(--orange)" id="n-eat">0</div><div class="nl">飲食攝取</div></div>
+        <div><div class="nv" style="color:var(--orange)" id="n-burn">0</div><div class="nl">運動消耗</div></div>
         <div><div class="nv" id="n-net">0</div><div class="nl">淨攝取</div></div>
       </div>
       <div class="net-r" id="n-remain"></div>
     </div>
     <div class="wrow">
+      <div class="sec-t">喝水目標</div>
       <div class="wtop">
-        <div class="wlbl">💧 喝水</div>
+        <div class="wlbl"></div>
         <div class="wbtns">
           <button class="wbtn" id="w200">+200</button>
           <button class="wbtn" id="w500">+500</button>
@@ -389,7 +446,12 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);
       <div class="wbar-w" style="margin-top:6px"><div class="wbar" id="wbar" style="width:0%"></div></div>
     </div>
     <div class="sug hidden" id="sug-banner"><div class="sug-t">今日 AI 建議</div><div class="sug-b" id="sug-text"></div></div>
+    <div id="no-key-banner" style="display:none;background:var(--abg);border:1px solid var(--adr);border-radius:var(--r);padding:12px 14px;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;gap:10px;">
+      <span style="font-size:13px;color:var(--tx2);">⚠️ 尚未設定 API Key，AI 功能暫時停用</span>
+      <button onclick="document.getElementById('ob-p1').classList.remove('hidden');document.getElementById('ob-p2').classList.add('hidden');document.getElementById('ob-ov').classList.remove('hidden');" style="padding:5px 12px;background:var(--orange);color:white;border:none;border-radius:20px;font-size:12px;cursor:pointer;font-family:inherit;white-space:nowrap;">設定 API Key</button>
+    </div>
     <div class="icard">
+      <div class="sec-t" style="margin-top:0;margin-bottom:10px;">飲食紀錄</div>
       <div class="chips" id="meal-chips">
         <button class="chip active" data-meal="早餐">早餐</button>
         <button class="chip" data-meal="午餐">午餐</button>
@@ -411,12 +473,8 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);
       <div class="photo-area">
         <div class="photo-btns">
           <label class="photo-btn" id="upload-label">
-            📁 上傳照片
+            📷 上傳或拍照辨識
             <input type="file" id="photo-upload" accept="image/*" />
-          </label>
-          <label class="photo-btn" id="camera-label">
-            📷 拍照辨識
-            <input type="file" id="photo-camera" accept="image/*" capture="environment" />
           </label>
         </div>
         <p class="photo-hint">💡 建議光線充足、食物佔畫面 70% 以上，多道菜可一起拍</p>
@@ -427,11 +485,13 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);
       </div>
       <div class="status" id="status"></div>
     </div>
+    <div class="sec-t" style="margin-top:1rem">今日飲食</div>
     <div id="today-entries"></div>
   </div>
 
   <!-- EXERCISE -->
   <div id="pane-exercise" class="hidden">
+    <div class="sec-t" style="margin-top:0">運動紀錄</div>
     <div class="excard">
       <div class="chips" id="ex-chips">
         <button class="chip active" data-ex="有氧">有氧</button>
@@ -450,6 +510,7 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);
       </div>
       <div class="status" id="ex-status"></div>
     </div>
+    <div class="sec-t" style="margin-top:1rem">今日運動</div>
     <div id="ex-entries"></div>
   </div>
 
@@ -476,17 +537,25 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);
       </div>
     </div>
     <div class="pc">
-      <h3>體重 & 體脂趨勢</h3>
-      <div class="chart-ctrl" id="range-ctrl">
-        <button class="range-btn active" data-days="30">1 個月</button>
-        <button class="range-btn" data-days="90">3 個月</button>
-        <button class="range-btn" data-days="180">6 個月</button>
-        <button class="range-btn" data-days="0">全部</button>
+      <div class="sec-t" style="margin-top:0">體重 & 體脂趨勢</div>
+      <div class="chart-ctrl" id="range-ctrl" style="flex-wrap:wrap;">
+        <button class="range-btn active" data-mode="thismonth">本月</button>
+        <button class="range-btn" data-mode="lastmonth">上月</button>
+        <button class="range-btn" data-mode="30">近 1 個月</button>
+        <button class="range-btn" data-mode="90">近 3 個月</button>
+        <button class="range-btn" data-mode="0">全部</button>
+        <button class="range-btn" data-mode="custom">自選</button>
       </div>
-      <div class="chart-wrap"><canvas id="body-chart"></canvas></div>
+      <div id="custom-range" style="display:none;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap;">
+        <input type="date" id="range-start" style="border:1px solid var(--bdr);border-radius:var(--rs);padding:5px 8px;font-size:12px;font-family:inherit;background:var(--bg);outline:none;" />
+        <span style="font-size:12px;color:var(--tx3)">至</span>
+        <input type="date" id="range-end" style="border:1px solid var(--bdr);border-radius:var(--rs);padding:5px 8px;font-size:12px;font-family:inherit;background:var(--bg);outline:none;" />
+        <button id="range-apply" style="padding:5px 12px;background:var(--ac);color:white;border:none;border-radius:var(--rs);font-size:12px;cursor:pointer;font-family:inherit;">套用</button>
+      </div>
+      <div class="chart-wrap"><canvas id="body-chart"></canvas></div><div id="chart-no-data" style="display:none;font-size:13px;color:var(--tx3);padding:6px 0;">還沒有數據，請先在上方輸入體重或體脂率</div>
     </div>
-    <div class="pc"><h3>目標進度</h3><div id="goal-stats"></div></div>
-    <div class="pc"><h3>本週平均</h3><div id="week-stats"></div></div>
+    <div class="pc"><div class="sec-t" style="margin-top:0">目標進度</div><div id="goal-stats"></div></div>
+    <div class="pc"><div class="sec-t" style="margin-top:0">本週平均</div><div id="week-stats"></div></div>
   </div>
 
   <!-- SUGGEST -->
@@ -520,7 +589,7 @@ const TW={'熱美式':'hot Americano coffee black','冰美式':'iced Americano',
 
 let cfg={},entries=[],weights=[],bodyfats=[],exercises=[],waterToday=0;
 let selMeal='早餐',selEx='有氧',calYear,calMonth,calSelDate,curTab='today',isExDay=false;
-let photoBase64=null,photoMime=null,bodyChart=null,chartDays=30;
+let photoBase64=null,photoMime=null,bodyChart=null,chartDays=30,chartMode='thismonth',customStart='',customEnd='';
 let manualGoals={cal:false,pro:false,fat:false,carb:false,water:false};
 
 function loadAll(){
@@ -544,7 +613,7 @@ function saveAll(){
   localStorage.setItem('dc-exday-'+getToday(),isExDay?'1':'0');
 }
 
-function getToday(){return new Date().toISOString().slice(0,10);}
+function getToday(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 function fmtDate(iso){return new Date(iso+'T00:00:00').toLocaleDateString('zh-TW',{month:'long',day:'numeric',weekday:'short'});}
 function fmtShort(iso){const d=new Date(iso+'T00:00:00');return (d.getMonth()+1)+'/'+(d.getDate());}
 function getTime(){return new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'});}
@@ -583,9 +652,9 @@ function updateGoals(){
   document.getElementById('g-pro').innerHTML=pr+'<span class="gt">g/'+goals.pro+'g</span>';
   document.getElementById('g-fat').innerHTML=f+'<span class="gt">g/'+goals.fat+'g</span>';
   document.getElementById('g-carb').innerHTML=cb+'<span class="gt">g/'+goals.carb+'g</span>';
-  const sp=(id,v,max,col)=>{const p=Math.min(100,max?Math.round(v/max*100):0);const el=document.getElementById(id);el.style.width=p+'%';el.style.background=p>=100?'var(--cal)':col;};
-  sp('gf-cal',c,goals.cal,'var(--cal)');sp('gf-pro',pr,goals.pro,'var(--pro)');
-  sp('gf-fat',f,goals.fat,'var(--fat)');sp('gf-carb',cb,goals.carb,'var(--carb)');
+  const sp=(id,v,max,col)=>{const p=Math.min(100,max?Math.round(v/max*100):0);const el=document.getElementById(id);el.style.width=p+'%';el.style.background=p>=100?'var(--orange)':col;};
+  sp('gf-cal',c,goals.cal,'#F3904C');sp('gf-pro',pr,goals.pro,'#B89DBC');
+  sp('gf-fat',f,goals.fat,'#C9A87A');sp('gf-carb',cb,goals.carb,'#C4A87A');
   const al=document.getElementById('bmr-alert');
   if(c>0&&c<goals.bmr){document.getElementById('bmr-val').textContent=goals.bmr;al.classList.remove('hidden');}
   else al.classList.add('hidden');
@@ -689,8 +758,7 @@ function clearPhoto(){
   document.getElementById('photo-preview').classList.add('hidden');
   document.getElementById('photo-img').src='';
   document.getElementById('photo-upload').value='';
-  document.getElementById('photo-camera').value='';
-}
+  }
 function handlePhotoFile(file){
   if(!file)return;
   const reader=new FileReader();
@@ -721,7 +789,7 @@ function buildHTML(list,dateStr){
   let h='<div class="day-sep"><span>'+fmtDate(dateStr)+'</span><span>'+total+' kcal</span></div>';
   list.forEach(e=>{
     let tc='var(--tx3)';if(e.meal==='酒精')tc='var(--alc)';if(e.meal==='飲料')tc='var(--water)';
-    h+=`<div class="entry"><div class="el"><div class="etag" style="color:${tc}">${e.meal} · ${e.time}</div><div class="ename">${e.display_name}</div></div><div class="macros"><div class="mm"><div class="mv" style="color:var(--cal)">${e.calories}</div><div class="ml2">kcal</div></div><div class="mm"><div class="mv" style="color:var(--pro)">${e.protein}g</div><div class="ml2">蛋白</div></div><div class="mm"><div class="mv" style="color:var(--fat)">${e.fat}g</div><div class="ml2">脂肪</div></div><div class="mm"><div class="mv" style="color:var(--carb)">${e.carbs}g</div><div class="ml2">碳水</div></div></div><button class="del" data-id="${e.id}">×</button></div>`;
+    h+=`<div class="entry"><div class="el"><div class="etag" style="color:${tc}">${e.meal} · ${e.time}</div><div class="ename">${e.display_name}</div></div><div class="macros"><div class="mm"><div class="mv" style="color:var(--orange);font-weight:600">${e.calories}</div><div class="ml2">kcal</div></div><div class="mm"><div class="mv" style="color:#B89DBC;font-weight:600">${e.protein}g</div><div class="ml2">蛋白</div></div><div class="mm"><div class="mv" style="color:#C9A87A;font-weight:600">${e.fat}g</div><div class="ml2">脂肪</div></div><div class="mm"><div class="mv" style="color:#C4A87A;font-weight:600">${e.carbs}g</div><div class="ml2">碳水</div></div></div><button class="del" data-id="${e.id}">×</button></div>`;
   });return h;
 }
 function renderToday(){
@@ -794,51 +862,96 @@ function renderCalEntries(){
 function renderProgress(){
   // Filter by range
   const now=new Date();
-  const cutoff=chartDays>0?new Date(now-chartDays*864e5).toISOString().slice(0,10):'0000-00-00';
-  const wFiltered=weights.filter(w=>w.date>=cutoff);
-  const bFiltered=bodyfats.filter(b=>b.date>=cutoff);
-
-  // Build date axis from actual dates (true time scale)
-  const allDates=new Set([...wFiltered.map(w=>w.date),...bFiltered.map(b=>b.date)]);
-  const sortedDates=[...allDates].sort();
-
-  if(bodyChart){bodyChart.destroy();bodyChart=null;}
-
-  const ctx=document.getElementById('body-chart').getContext('2d');
-  if(sortedDates.length<1){
-    ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
-    ctx.font='14px sans-serif';ctx.fillStyle='#AAA79F';ctx.textAlign='center';
-    ctx.fillText('還沒有數據',ctx.canvas.width/2,100);
-  } else {
-    // Calculate x positions based on actual time
-    const firstDate=new Date(sortedDates[0]+'T00:00:00');
-    const lastDate=new Date(sortedDates[sortedDates.length-1]+'T00:00:00');
-    const totalDays=Math.max(1,(lastDate-firstDate)/(864e5));
-
-    const wData=sortedDates.map(d=>{const f=wFiltered.find(w=>w.date===d);return f?f.w:null;});
-    const bData=sortedDates.map(d=>{const f=bFiltered.find(b=>b.date===d);return f?f.bf:null;});
-
-    bodyChart=new Chart(ctx,{
-      type:'line',
-      data:{
-        labels:sortedDates.map(d=>fmtShort(d)),
-        datasets:[
-          {label:'體重(kg)',data:wData,borderColor:'#3D6B4F',backgroundColor:'rgba(61,107,79,.1)',pointBackgroundColor:'#3D6B4F',pointRadius:4,tension:.3,yAxisID:'y',spanGaps:false},
-          {label:'體脂(%)',data:bData,borderColor:'#B87020',backgroundColor:'rgba(184,112,32,.1)',pointBackgroundColor:'#B87020',pointRadius:4,tension:.3,yAxisID:'y2',spanGaps:false}
-        ]
-      },
-      options:{
-        responsive:true,maintainAspectRatio:false,
-        interaction:{mode:'index',intersect:false},
-        plugins:{legend:{labels:{font:{size:12},boxWidth:12,padding:10}}},
-        scales:{
-          x:{ticks:{font:{size:10},maxTicksLimit:8},grid:{color:'rgba(0,0,0,.04)'}},
-          y:{type:'linear',position:'left',title:{display:true,text:'體重 kg',font:{size:11}},grid:{color:'rgba(0,0,0,.05)'}},
-          y2:{type:'linear',position:'right',title:{display:true,text:'體脂 %',font:{size:11}},grid:{drawOnChartArea:false}}
-        }
-      }
-    });
+  let cutoffStart='0000-00-00',cutoffEnd='9999-12-31';
+  if(chartMode==='thismonth'){
+    cutoffStart=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-01';
+  } else if(chartMode==='lastmonth'){
+    const lm=new Date(now.getFullYear(),now.getMonth()-1,1);
+    const lme=new Date(now.getFullYear(),now.getMonth(),0);
+    cutoffStart=lm.toISOString().slice(0,10);
+    cutoffEnd=lme.toISOString().slice(0,10);
+  } else if(chartMode==='custom'){
+    cutoffStart=customStart||'0000-00-00';
+    cutoffEnd=customEnd||'9999-12-31';
+  } else if(chartDays>0){
+    cutoffStart=new Date(now-chartDays*864e5).toISOString().slice(0,10);
   }
+  const wFiltered=weights.filter(w=>w.date>=cutoffStart&&w.date<=cutoffEnd);
+  const bFiltered=bodyfats.filter(b=>b.date>=cutoffStart&&b.date<=cutoffEnd);
+
+  // No data check
+  const noDataEl=document.getElementById('chart-no-data');
+  if(wFiltered.length===0&&bFiltered.length===0){
+    const ec=Chart.getChart('body-chart');
+    if(ec)ec.destroy();
+    if(bodyChart){try{bodyChart.destroy();}catch(e){}}
+    bodyChart=null;
+    if(noDataEl)noDataEl.style.display='block';
+    return;
+  }
+  if(noDataEl)noDataEl.style.display='none';
+
+  // Reliably destroy any existing chart on this canvas
+  const existingChart=Chart.getChart('body-chart');
+  if(existingChart) existingChart.destroy();
+  if(bodyChart&&bodyChart!==existingChart) bodyChart.destroy();
+  bodyChart=null;
+
+  // Build full date range so spacing is proportional (equal per day)
+  function genAllDates(a,b){
+    const out=[],d=new Date(a+'T00:00:00'),e=new Date(b+'T00:00:00');
+    while(d<=e){
+      out.push(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'));
+      d.setDate(d.getDate()+1);
+    }
+    return out;
+  }
+  const allW=wFiltered.map(w=>w.date),allB=bFiltered.map(b=>b.date);
+  const allDates=[...new Set([...allW,...allB])].sort();
+  const fullDates=genAllDates(allDates[0],allDates[allDates.length-1]);
+
+  const wMap=Object.fromEntries(wFiltered.map(w=>[w.date,w.w]));
+  const bMap=Object.fromEntries(bFiltered.map(b=>[b.date,b.bf]));
+  const wData=fullDates.map(d=>wMap.hasOwnProperty(d)?wMap[d]:null);
+  const bData=fullDates.map(d=>bMap.hasOwnProperty(d)?bMap[d]:null);
+  // Labels: show date only for days with data, else empty string
+  const hasDSet=new Set(allDates);
+  const labels=fullDates.map(d=>hasDSet.has(d)?fmtShort(d):'');
+  // Point radius: show dot only where data exists
+  const wR=fullDates.map(d=>wMap.hasOwnProperty(d)?5:0);
+  const bR=fullDates.map(d=>bMap.hasOwnProperty(d)?5:0);
+
+  bodyChart=new Chart(document.getElementById('body-chart'),{
+    type:'line',
+    data:{
+      labels:labels,
+      datasets:[
+        {label:'體重 kg',data:wData,borderColor:'#F3904C',backgroundColor:'rgba(243,144,76,.08)',
+         pointBackgroundColor:'#F3904C',pointRadius:wR,pointHoverRadius:7,
+         tension:.3,yAxisID:'y',spanGaps:true},
+        {label:'體脂 %',data:bData,borderColor:'#B89DBC',backgroundColor:'rgba(184,157,188,.08)',
+         pointBackgroundColor:'#B89DBC',pointRadius:bR,pointHoverRadius:7,
+         tension:.3,yAxisID:'y2',spanGaps:true}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{labels:{font:{size:12},boxWidth:12,padding:10,color:'#604D3F'}},
+        tooltip:{callbacks:{title:items=>fullDates[items[0].dataIndex]||''}}
+      },
+      scales:{
+        x:{ticks:{font:{size:10},color:'#B8A898',maxRotation:0},grid:{color:'rgba(0,0,0,.03)'}},
+        y:{type:'linear',position:'left',
+           title:{display:true,text:'體重 kg',font:{size:10},color:'#B8A898'},
+           ticks:{color:'#B8A898',font:{size:10}},grid:{color:'rgba(0,0,0,.04)'}},
+        y2:{type:'linear',position:'right',
+            title:{display:true,text:'體脂 %',font:{size:10},color:'#B8A898'},
+            ticks:{color:'#B8A898',font:{size:10}},grid:{drawOnChartArea:false}}
+      }
+    }
+  });
 
   const cur=weights.length?weights[weights.length-1].w:(cfg.weight||62);
   const curBf=bodyfats.length?bodyfats[bodyfats.length-1].bf:null;
@@ -880,65 +993,6 @@ async function genSuggest(type){
 }
 
 // ── Settings ──────────────────────────────────────
-function autoCalc(){
-  const a=parseInt(document.getElementById('m-age').value)||0;
-  const g=document.getElementById('m-gender').value;
-  const w=parseFloat(document.getElementById('m-weight').value)||0;
-  const bmr=parseInt(document.getElementById('m-bmr').value)||0;
-  if((!a||!w)&&!bmr)return;
-  const goals=calcGoals(w,a,g,bmr,isExDay);
-  if(!manualGoals.cal){document.getElementById('m-cal').value='';document.getElementById('m-cal').placeholder='建議 '+goals.cal;}
-  if(!manualGoals.pro){document.getElementById('m-pro').value='';document.getElementById('m-pro').placeholder='建議 '+goals.pro;}
-  if(!manualGoals.fat){document.getElementById('m-fat').value='';document.getElementById('m-fat').placeholder='建議 '+goals.fat;}
-  if(!manualGoals.carb){document.getElementById('m-carb').value='';document.getElementById('m-carb').placeholder='建議 '+goals.carb;}
-  if(!manualGoals.water){document.getElementById('m-water').value='';document.getElementById('m-water').placeholder='建議 '+goals.water;}
-  const h=document.getElementById('sauto');
-  h.textContent='BMR '+goals.bmr+' kcal → TDEE '+goals.tdee+' kcal → 減脂目標 '+goals.cal+' kcal\n蛋白質 '+goals.pro+'g｜脂肪 '+goals.fat+'g｜碳水 '+goals.carb+'g｜喝水 '+goals.water+'ml';
-  h.classList.remove('hidden');
-}
-function openSettings(){
-  manualGoals={cal:false,pro:false,fat:false,carb:false,water:false};
-  document.getElementById('m-key').value=cfg.apiKey||'';
-  document.getElementById('m-age').value=cfg.age||'';
-  document.getElementById('m-gender').value=cfg.gender||'female';
-  document.getElementById('m-height').value=cfg.height||'';
-  document.getElementById('m-weight').value=cfg.weight||'';
-  document.getElementById('m-bmr').value=cfg.bmr||'';
-  document.getElementById('m-tdee').value=cfg.tdee||'';
-  document.getElementById('m-goal-w').value=cfg.goalWeight||'';
-  // Show manually set values, otherwise blank to show placeholder
-  document.getElementById('m-cal').value=cfg.manualCal?cfg.calGoal:'';
-  document.getElementById('m-pro').value=cfg.manualPro?cfg.proGoal:'';
-  document.getElementById('m-fat').value=cfg.manualFat?cfg.fatGoal:'';
-  document.getElementById('m-carb').value=cfg.manualCarb?cfg.carbGoal:'';
-  document.getElementById('m-water').value=cfg.manualWater?cfg.waterGoal:'';
-  document.getElementById('smod').classList.remove('hidden');
-  autoCalc();
-}
-function saveSettings(){
-  cfg.apiKey=document.getElementById('m-key').value.trim();
-  cfg.age=parseInt(document.getElementById('m-age').value)||28;
-  cfg.gender=document.getElementById('m-gender').value;
-  cfg.height=parseFloat(document.getElementById('m-height').value)||161;
-  cfg.weight=parseFloat(document.getElementById('m-weight').value)||62;
-  cfg.bmr=parseInt(document.getElementById('m-bmr').value)||0;
-  cfg.tdee=parseInt(document.getElementById('m-tdee').value)||0;
-  cfg.goalWeight=parseFloat(document.getElementById('m-goal-w').value)||49;
-  const g=calcGoals(cfg.weight,cfg.age,cfg.gender,cfg.bmr,isExDay);
-  const calV=parseInt(document.getElementById('m-cal').value);
-  const proV=parseInt(document.getElementById('m-pro').value);
-  const fatV=parseInt(document.getElementById('m-fat').value);
-  const carbV=parseInt(document.getElementById('m-carb').value);
-  const watV=parseInt(document.getElementById('m-water').value);
-  cfg.calGoal=calV||g.cal; cfg.manualCal=!!calV;
-  cfg.proGoal=proV||g.pro; cfg.manualPro=!!proV;
-  cfg.proGoalEx=Math.round(cfg.weight*1.8);
-  cfg.fatGoal=fatV||g.fat; cfg.manualFat=!!fatV;
-  cfg.carbGoal=carbV||g.carb; cfg.manualCarb=!!carbV;
-  cfg.waterGoal=watV||g.water; cfg.manualWater=!!watV;
-  saveAll();document.getElementById('smod').classList.add('hidden');
-  updateGoals();updateWater();
-}
 
 function switchTab(t){
   curTab=t;
@@ -960,31 +1014,119 @@ document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('w-date').value=getToday();
   document.getElementById('ex-chk').checked=isExDay;
   updateGoals();renderToday();updateWater();
+  if(!cfg.apiKey){
+    const b=document.getElementById('no-key-banner');
+    if(b) b.style.display='flex';
+  }
 
   // Show onboarding if no API key
-  if(!cfg.apiKey){
-    document.getElementById('ob-ov').classList.remove('hidden');
+  if(!cfg.apiKey){document.getElementById('ob-ov').classList.remove('hidden');}
+
+  // Onboarding page 1 confirm
+  document.getElementById('ob-confirm').addEventListener('click',()=>{
+    const key=document.getElementById('ob-key-input').value.trim();
+    if(key){
+      cfg.apiKey=key;saveAll();
+      const b=document.getElementById('no-key-banner');if(b)b.style.display='none';
+    }
+    goToSettings(!!key);
+  });
+  document.getElementById('ob-skip').addEventListener('click',()=>goToSettings(false));
+
+  function goToSettings(hasKey){
+    document.getElementById('ob-p1').classList.add('hidden');
+    document.getElementById('ob-p2').classList.remove('hidden');
+    // pre-fill existing cfg
+    const fills={age:cfg.age||'',height:cfg.height||'',weight:cfg.weight||'','goal-w':cfg.goalWeight||'',bmr:cfg.bmr||'',tdee:cfg.tdee||''};
+    Object.entries(fills).forEach(([k,v])=>{const el=document.getElementById('s2-'+k);if(el&&v)el.value=v;});
+    if(cfg.manualCal){const e=document.getElementById('s2-cal');if(e)e.value=cfg.calGoal;}
+    if(cfg.manualPro){const e=document.getElementById('s2-pro');if(e)e.value=cfg.proGoal;}
+    if(cfg.manualFat){const e=document.getElementById('s2-fat');if(e)e.value=cfg.fatGoal;}
+    if(cfg.manualCarb){const e=document.getElementById('s2-carb');if(e)e.value=cfg.carbGoal;}
+    if(cfg.manualWater){const e=document.getElementById('s2-water');if(e)e.value=cfg.waterGoal;}
+    const rem=document.getElementById('ob-no-key-remind');
+    if(rem) rem.style.display=(!hasKey&&!cfg.apiKey)?'flex':'none';
+    s2AutoCalc();
   }
-  document.getElementById('ob-close').addEventListener('click',()=>{
+  // Onboarding back
+  document.getElementById('ob-back').addEventListener('click',()=>{
+    document.getElementById('ob-p2').classList.add('hidden');
+    document.getElementById('ob-p1').classList.remove('hidden');
+  });
+  document.getElementById('ob-p2-close').addEventListener('click',()=>{
     document.getElementById('ob-ov').classList.add('hidden');
-    openSettings();
   });
-  document.getElementById('show-ob').addEventListener('click',e=>{
-    e.preventDefault();
-    document.getElementById('smod').classList.add('hidden');
-    document.getElementById('ob-ov').classList.remove('hidden');
+  // s2 auto-calc
+  function s2AutoCalc(){
+    const a=parseInt(document.getElementById('s2-age').value)||0;
+    const g=document.getElementById('s2-gender').value;
+    const w=parseFloat(document.getElementById('s2-weight').value)||0;
+    const bmr=parseInt(document.getElementById('s2-bmr').value)||0;
+    if((!a||!w)&&!bmr)return;
+    const goals=calcGoals(w,a,g,bmr,isExDay);
+    const fields={cal:goals.cal,pro:goals.pro,fat:goals.fat,carb:goals.carb,water:goals.water};
+    Object.entries(fields).forEach(([k,v])=>{const el=document.getElementById('s2-'+k);if(el&&!el.value)el.placeholder='建議 '+v;});
+    const h=document.getElementById('s2-auto');
+    if(h){h.textContent='BMR '+goals.bmr+' kcal → TDEE '+goals.tdee+' kcal → 減脂目標 '+goals.cal+' kcal';h.classList.remove('hidden');}
+  }
+  ['s2-age','s2-height','s2-weight','s2-gender','s2-bmr'].forEach(id=>{
+    const el=document.getElementById(id);if(el){el.addEventListener('input',s2AutoCalc);el.addEventListener('change',s2AutoCalc);}
   });
+  ['cal','pro','fat','carb','water'].forEach(k=>{
+    const el=document.getElementById('s2-'+k);
+    if(el) el.addEventListener('input',()=>{manualGoals[k]=!!el.value;});
+  });
+
+  // Onboarding finish
+  document.getElementById('ob-finish').addEventListener('click',()=>{
+    const a=parseInt(document.getElementById('s2-age').value);
+    const g=document.getElementById('s2-gender').value;
+    const h=parseFloat(document.getElementById('s2-height').value);
+    const w=parseFloat(document.getElementById('s2-weight').value);
+    const gw=parseFloat(document.getElementById('s2-goal-w').value);
+    const bmr=parseInt(document.getElementById('s2-bmr').value)||0;
+    const tdee=parseInt(document.getElementById('s2-tdee').value)||0;
+    if(a)cfg.age=a;if(h)cfg.height=h;if(w)cfg.weight=w;if(gw)cfg.goalWeight=gw;
+    cfg.gender=g;cfg.bmr=bmr;cfg.tdee=tdee;
+    const watV=parseInt(document.getElementById('s2-water').value);
+    const calV=parseInt(document.getElementById('s2-cal').value);
+    const proV=parseInt(document.getElementById('s2-pro').value);
+    const fatV=parseInt(document.getElementById('s2-fat').value);
+    const carbV=parseInt(document.getElementById('s2-carb').value);
+    const goals=calcGoals(cfg.weight,cfg.age,cfg.gender,cfg.bmr,isExDay);
+    cfg.calGoal=calV||goals.cal; cfg.manualCal=!!calV;
+    cfg.proGoal=proV||goals.pro; cfg.manualPro=!!proV;
+    cfg.proGoalEx=Math.round((cfg.weight||62)*1.8);
+    cfg.fatGoal=fatV||goals.fat; cfg.manualFat=!!fatV;
+    cfg.carbGoal=carbV||goals.carb; cfg.manualCarb=!!carbV;
+    cfg.waterGoal=watV||goals.water; cfg.manualWater=!!watV;
+    if(!cfg.manualCal)cfg.calGoal=goals.cal;
+    if(!cfg.manualPro)cfg.proGoal=goals.pro;
+    if(!cfg.manualFat)cfg.fatGoal=goals.fat;
+    if(!cfg.manualCarb)cfg.carbGoal=goals.carb;
+    if(!cfg.manualWater)cfg.waterGoal=goals.water;
+    saveAll();
+    document.getElementById('ob-ov').classList.add('hidden');
+    updateGoals();updateWater();
+  });
+
 
   document.getElementById('meal-chips').addEventListener('click',e=>{const c=e.target.closest('.chip');if(!c)return;document.querySelectorAll('#meal-chips .chip').forEach(x=>x.classList.remove('active'));c.classList.add('active');selMeal=c.dataset.meal;});
   document.getElementById('ex-chips').addEventListener('click',e=>{const c=e.target.closest('.chip');if(!c)return;document.querySelectorAll('#ex-chips .chip').forEach(x=>x.classList.remove('active'));c.classList.add('active');selEx=c.dataset.ex;});
-  document.getElementById('ex-chk').addEventListener('change',function(){isExDay=this.checked;saveAll();updateGoals();});
+  document.getElementById('ex-chk').addEventListener('change',function(){
+    isExDay=this.checked;saveAll();updateGoals();
+    const tog=this.closest('.ex-tog');
+    if(tog) tog.classList.toggle('checked',this.checked);
+  });
+  // Set initial state
+  const togEl=document.getElementById('ex-chk').closest('.ex-tog');
+  if(togEl&&isExDay) togEl.classList.add('checked');
   document.getElementById('add-btn').addEventListener('click',addEntry);
   document.getElementById('manual-btn').addEventListener('click',()=>{document.getElementById('mn-name').value=document.getElementById('food-input').value;document.getElementById('shmod').classList.remove('hidden');document.getElementById('mn-name').focus();});
   document.getElementById('mn-save').addEventListener('click',addManual);
   document.getElementById('mn-cancel').addEventListener('click',()=>document.getElementById('shmod').classList.add('hidden'));
 
   document.getElementById('photo-upload').addEventListener('change',function(){handlePhotoFile(this.files[0]);});
-  document.getElementById('photo-camera').addEventListener('change',function(){handlePhotoFile(this.files[0]);});
   document.getElementById('photo-clear').addEventListener('click',clearPhoto);
 
   document.getElementById('w200').addEventListener('click',()=>{waterToday+=200;saveAll();updateWater();});
@@ -996,17 +1138,26 @@ document.addEventListener('DOMContentLoaded',function(){
   });
 
   ['today','exercise','calendar','progress','suggest'].forEach(t=>document.getElementById('tab-'+t).addEventListener('click',()=>switchTab(t)));
-  document.getElementById('settings-btn').addEventListener('click',openSettings);
-  document.getElementById('s-cancel').addEventListener('click',()=>document.getElementById('smod').classList.add('hidden'));
-  document.getElementById('s-save').addEventListener('click',saveSettings);
+  document.getElementById('settings-btn').addEventListener('click',()=>{
+    // Fill s2 fields with current cfg
+    document.getElementById('s2-age').value=cfg.age||'';
+    document.getElementById('s2-gender').value=cfg.gender||'female';
+    document.getElementById('s2-height').value=cfg.height||'';
+    document.getElementById('s2-weight').value=cfg.weight||'';
+    document.getElementById('s2-bmr').value=cfg.bmr||'';
+    document.getElementById('s2-tdee').value=cfg.tdee||'';
+    document.getElementById('s2-goal-w').value=cfg.goalWeight||'';
+    document.getElementById('s2-water').value=cfg.manualWater?cfg.waterGoal:'';
+    document.getElementById('s2-cal').value=cfg.manualCal?cfg.calGoal:'';
+    document.getElementById('s2-pro').value=cfg.manualPro?cfg.proGoal:'';
+    document.getElementById('s2-fat').value=cfg.manualFat?cfg.fatGoal:'';
+    document.getElementById('s2-carb').value=cfg.manualCarb?cfg.carbGoal:'';
+    manualGoals={cal:cfg.manualCal,pro:cfg.manualPro,fat:cfg.manualFat,carb:cfg.manualCarb,water:cfg.manualWater};
+    goToSettings(!!cfg.apiKey);
+    document.getElementById('ob-ov').classList.remove('hidden');
+  });
 
-  ['m-age','m-height','m-weight','m-gender','m-bmr'].forEach(id=>{
-    document.getElementById(id).addEventListener('input',autoCalc);
-    document.getElementById(id).addEventListener('change',autoCalc);
-  });
-  ['cal','pro','fat','carb','water'].forEach(k=>{
-    document.getElementById('m-'+k).addEventListener('input',()=>{manualGoals[k]=!!document.getElementById('m-'+k).value;});
-  });
+
 
   document.getElementById('w-log').addEventListener('click',()=>{
     const w=parseFloat(document.getElementById('w-input').value),bf=parseFloat(document.getElementById('bf-input').value);
@@ -1025,12 +1176,78 @@ document.addEventListener('DOMContentLoaded',function(){
     const btn=e.target.closest('.range-btn');if(!btn)return;
     document.querySelectorAll('.range-btn').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
-    chartDays=parseInt(btn.dataset.days);
+    chartMode=btn.dataset.mode;
+    chartDays=parseInt(btn.dataset.mode)||0;
+    const customDiv=document.getElementById('custom-range');
+    if(chartMode==='custom'){customDiv.style.display='flex';}
+    else{customDiv.style.display='none';renderProgress();}
+  });
+  document.getElementById('range-apply').addEventListener('click',()=>{
+    customStart=document.getElementById('range-start').value;
+    customEnd=document.getElementById('range-end').value||getToday();
     renderProgress();
   });
 
   ['daily','weekly','goal','exercise-s'].forEach(t=>document.getElementById('btn-'+t).addEventListener('click',()=>genSuggest(t.replace('-s',''))));
 });
 </script>
+<p style="text-align:center;font-size:11px;color:var(--tx3);padding:1rem 1.5rem .5rem;line-height:1.8;max-width:680px;margin:0 auto;">本工具僅供個人日常飲食紀錄與參考使用，所有數值為系統估算，不構成醫療或專業營養建議。若有增肌、減脂或特殊健康需求，建議諮詢合格營養師或醫師，請勿自行過度節食或貿然調整飲食。</p>
+<footer style="background:var(--orange);">
+  <div style="max-width:680px;margin:0 auto;padding:1.5rem 1rem 1.2rem;">
+    <div style="display:flex;justify-content:center;margin-bottom:1rem;" class="footer-logo"><svg height="40" style="display:block;" id="_圖層_3" data-name="圖層 3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 219.74 73.98">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <g id="_圖層_1" data-name="圖層 1">
+    <g>
+      <g>
+        <g>
+          <g>
+            <path class="footer-logo-c1" d="M25.31,13.77V0h-4.57v17.27c0,4.46-3.62,8.08-8.08,8.08s-8.08-3.62-8.08-8.08V0H0v13.77c0,3.68,1.58,7,4.09,9.31,2.25,2.08,5.26,3.34,8.57,3.34s6.31-1.26,8.57-3.34c2.51-2.31,4.09-5.63,4.09-9.31Z"/>
+            <path class="footer-logo-c1" d="M20.73,13.77V0s4.57,0,4.57,0v17.27c0,4.46,3.62,8.08,8.08,8.08s8.08-3.62,8.08-8.08V0s4.57,0,4.57,0v13.77c0,3.68-1.58,7-4.09,9.31-2.25,2.08-5.26,3.34-8.57,3.34-3.31,0-6.31-1.26-8.57-3.34-2.51-2.31-4.09-5.63-4.09-9.31Z"/>
+          </g>
+          <rect class="footer-logo-c1" x="33.39" width="12.65" height="1.1"/>
+        </g>
+        <g>
+          <g>
+            <path class="footer-logo-c1" d="M20.73,32.29v13.77h4.57v-17.27c0-4.46,3.62-8.08,8.08-8.08s8.08,3.62,8.08,8.08v17.27h4.57v-13.77c0-3.68-1.58-7-4.09-9.31-2.25-2.08-5.26-3.34-8.57-3.34s-6.31,1.26-8.57,3.34c-2.51,2.31-4.09,5.63-4.09,9.31Z"/>
+            <path class="footer-logo-c1" d="M25.31,32.29v13.77s-4.57,0-4.57,0v-17.27c0-4.46-3.62-8.08-8.08-8.08-4.46,0-8.08,3.62-8.08,8.08v17.27s-4.57,0-4.57,0v-13.77c0-3.68,1.58-7,4.09-9.31,2.25-2.08,5.26-3.34,8.57-3.34s6.31,1.26,8.57,3.34c2.51,2.31,4.09,5.63,4.09,9.31Z"/>
+          </g>
+          <rect class="footer-logo-c1" y="44.97" width="12.65" height="1.1" transform="translate(12.65 91.03) rotate(180)"/>
+        </g>
+      </g>
+      <path class="footer-logo-c1" d="M110.35,10.17c-1.01.93-1.9,1.98-2.69,3.11-.8-1.13-1.7-2.18-2.71-3.11,1.01-.93,1.91-1.97,2.71-3.09.78,1.13,1.68,2.17,2.69,3.09Z"/>
+      <path class="footer-logo-c1" d="M160.86,10.17c-1.01.93-1.9,1.98-2.69,3.11-.8-1.13-1.7-2.18-2.71-3.11,1.01-.93,1.91-1.97,2.71-3.09.78,1.13,1.68,2.17,2.69,3.09Z"/>
+      <g>
+        <path class="footer-logo-c1" d="M99.82,7.4c-2.34.4-3.52,1.39-3.55,2.95l-.12,23.13c0,1.27.28,2.11.85,2.54.4.3,1.28.54,2.62.73l.16.4h-11.93l.24-.36c.65-.05,1.53-.24,2.66-.56.78-.43,1.17-1.17,1.17-2.22l-.16-22.7-11.45,26.21h-.48l-12.54-26.24-.16,16.13c-.03.75-.07,1.87-.12,3.35-.03,1.83.2,3.14.69,3.95.67,1.16,2,1.85,3.99,2.1l.12.36h-9.43l.16-.36c1.59-.13,2.65-.52,3.19-1.17.54-.65.81-1.75.81-3.31V10.94c0-.89-.34-1.67-1.01-2.36-.67-.69-1.47-1.05-2.38-1.11-.08-.05-.18-.17-.28-.36l7.52-.04,11.59,24.63c.46-.73,2.18-4.53,5.16-11.41l5.69-13.22h7.13l-.12.32Z"/>
+        <path class="footer-logo-c1" d="M104.33,37.15v-.16c.06-.03.1-.08.13-.16,1.66-.51,2.49-1.17,2.49-1.98v-12.01c0-.75-.24-1.33-.71-1.73-.31-.27-.94-.62-1.91-1.05l5.93-2.54v16.93c0,.83.21,1.4.62,1.69.08.05.64.27,1.68.65l.08.08c.05.11.07.22.04.32l-8.35-.04Z"/>
+        <path class="footer-logo-c1" d="M127.11,36.99h.04c.05.04.04.09-.04.16-.13-.05-.15-.15-.04-.28,2.77-.24,4.15-1.06,4.15-2.46V8.44s0-.07-.03-.14c-.02-.07-.04-.11-.05-.14,0-.08.01-.16.04-.24h-5.56c-3.63,0-6.57,2.37-8.83,7.1-.05-.05-.15-.13-.28-.24-.13-.11-.2-.2-.2-.28l1.85-8.14c1.5.59,3.67.89,6.49.89h18.34c.94-.1,1.88-.21,2.82-.33,1.16-.12,2-.31,2.54-.55.13,0,.28.13.44.4,1.05,5.17,1.57,7.58,1.57,7.23v.6c-.08.03-.24.15-.48.36-.7-1.51-1.56-2.87-2.58-4.05-1.29-1.51-2.59-2.42-3.91-2.72-.73-.16-1.38-.24-1.98-.24h-5.68c-.22.22-.32.36-.32.44l.12,25.68c.08.4.27.97.56,1.69.43.56,1.07.9,1.94,1.01.62.03,1.22.04,1.81.04l.16.36h-13.75l.81-.2.04.04Z"/>
+        <path class="footer-logo-c1" d="M154.69,37.15v-.16c.06-.03.1-.08.13-.16,1.66-.51,2.49-1.17,2.49-1.98v-12.01c0-.75-.24-1.33-.71-1.73-.3-.27-.94-.62-1.91-1.05l5.93-2.54v16.93c0,.83.21,1.4.62,1.69.08.05.64.27,1.68.65l.08.08c.05.11.07.22.04.32l-8.35-.04Z"/>
+        <path class="footer-logo-c1" d="M189.48,37.15l.4-.2.08-.2c1.69-.24,2.54-1.22,2.54-2.94-.03-.19-.01-.83.04-1.93.05-1.1.08-2.05.08-2.86,0-1.23-.04-2.33-.12-3.3-.46-4.21-1.86-6.32-4.21-6.32-.97,0-1.9.31-2.8.93-.97.7-1.46,1.5-1.46,2.41v10.5c0,2.31.87,3.47,2.62,3.5l.28.4h-8.75l.32-.44c.59-.03,1.14-.22,1.65-.57.51-.35.77-.79.77-1.33v-9.5c0-1.54-.28-2.83-.85-3.88-.7-1.35-1.73-2.02-3.1-2.02-2.04,0-3.37.78-3.99,2.34-.32.86-.48,2.52-.48,4.97l.08,7.76c.03,1.29.86,2.07,2.5,2.34l.32.32h-8.63l.28-.36c.51.05,1.02-.11,1.53-.5.51-.39.77-.81.77-1.27v-12.74c0-.83-.75-1.65-2.26-2.46l5.4-2.22-.04,2.34c0,.4.03.83.08,1.29l.04.08c.46-1.1,1.33-1.98,2.62-2.62,1.16-.62,2.36-.93,3.63-.93,2.15,0,3.8,1.28,4.96,3.83.75-.85,1.52-1.69,2.3-2.51.91-.88,2.23-1.32,3.95-1.32,2.39,0,4.03,1.26,4.92,3.78.62,1.72.89,4.2.81,7.44-.03.48-.05,1.25-.08,2.29-.05.83-.08,1.43-.08,1.81,0,2.52.82,3.74,2.46,3.66l.4.4h-8.99Z"/>
+        <path class="footer-logo-c1" d="M219.55,31.22c-.59,1.96-1.67,3.53-3.25,4.72-1.57,1.18-3.38,1.77-5.42,1.77-2.85,0-5.05-1.22-6.61-3.67-1.32-2.04-1.98-4.56-1.98-7.54,0-.16.07-.26.2-.28.22-2.42,1.18-4.46,2.9-6.13,1.72-1.67,3.79-2.5,6.21-2.5,1.96,0,3.59.5,4.88,1.49,1.05.78,2.11,2.11,3.18,3.99v.93h-13.63c-.19.32-.28.79-.28,1.41,0,2.57.5,4.66,1.49,6.27,1.21,1.98,3.05,2.97,5.52,2.97,1.42,0,2.71-.4,3.87-1.19,1.16-.79,2-1.86,2.54-3.21l.52-.16c.05.24,0,.62-.16,1.13ZM211.13,18.36c-2.42,0-4.07,1.56-4.96,4.68.21.03.5.04.85.04h7.74v-1.09c0-.78-.41-1.58-1.23-2.4-.82-.82-1.62-1.23-2.4-1.23Z"/>
+      </g>
+      <g>
+        <path class="footer-logo-c1" d="M73.16,57.31c.18.21.15.53-.06.72-.01.01-5.32,4.53-.64,2.86,3.1-1.11,12.17-6.86,20.9-12.39,9.66-6.12,18.92-11.99,19.95-11.1.4.35.23.99-.64,1.99-6.26,7.26-9.4,11.71-10.35,13.94-.28.67-.37,1.03-.29,1.1.07.07.41-.04.95-.29,1.84-.87,5.12-3.48,8.95-7.31,1.77-1.77,2.64-2.22,3.07-1.8.4.4.1,1.32-.3,2.55-.56,1.74-1.38,4.24-.83,5.8.54,1.53,2.55,2.19,7.88.33.26-.09.55.05.64.31.09.26-.05.55-.31.64-6.06,2.12-8.44,1.11-9.16-.95-.66-1.88.22-4.57.82-6.44.29-.9.59-1.48.55-1.52-.06-.06-.39.55-1.64,1.8-3.91,3.91-7.29,6.59-9.23,7.51-.96.45-1.68.5-2.09.11-.4-.39-.41-1.12.06-2.23.99-2.31,4.18-6.86,10.51-14.2.41-.47.84-.49.74-.57-.46-.39-9.41,5.28-18.74,11.19-8.78,5.56-17.88,11.34-21.1,12.49-9.91,3.56-.39-4.56-.36-4.58.21-.18.53-.16.72.05Z"/>
+        <path class="footer-logo-c1" d="M127.93,52.42c.39-.43.61-.76.61-.77.15-.21.43-.26.64-.12.15.1.22.27.2.44-.26,1.9-.34,2.62-.24,2.63.19.03.72-.29,1.56-.77.71-.41,1.61-.94,2.75-1.49.23-.11.51-.02.62.22.11.23.01.51-.22.62-1.11.53-1.99,1.05-2.69,1.45-1,.58-1.65.96-2.14.89-.67-.09-.85-.7-.73-2.14-.86.89-2.21,1.96-3.75,2.11-.86.08-1.24-.28-1.3-.87-.04-.4.14-.9.46-1.38.29-.44.71-.88,1.17-1.21.99-.71,2.18-.94,2.99.19.04.06.07.13.08.19ZM127.1,52.77c-.41-.58-1.11-.41-1.7.02-.37.26-.7.62-.93.97-.21.31-.33.6-.31.78,0,.04.09.06.3.04,1.16-.11,2.22-.89,2.97-1.62-.12-.02-.24-.08-.32-.19Z"/>
+        <path class="footer-logo-c1" d="M134.6,54.53c-.24.06-.5-.08-.56-.33-.16-.61.99-1.84,2.18-3.1.28-.3.57-.6.83-.89-.12,0-.23,0-.34-.02-.39-.03-.73-.08-.94-.19-.5-.24-.63-.58-.23-1.04.21-.24.74-.53,1.7-.88,1.24-.45,1.84-.33,2.02.15.08.24-.02.56-.24.94.6-.08,1.11-.19,1.33-.32.33-.19.57-.13.73.14.36.61-.99,1.93-1.56,2.68-1.23,1.59-2.82,3.67-3.19,4.46,1-.35,2.13-.93,3.17-1.53,1.43-.84,2.65-1.71,3.03-2.11.17-.19.46-.2.65-.02.19.17.2.46.02.65-.42.45-1.73,1.4-3.24,2.28-1.14.66-2.4,1.3-3.52,1.67-.58.2-.92.05-1.06-.36-.27-.82,1.84-3.57,3.4-5.6.4-.52.81-.9,1.1-1.17-.47.1-1.03.18-1.59.22-.42.5-.92,1.04-1.42,1.56-1.01,1.08-1.99,2.12-1.96,2.24.07.25-.08.5-.33.56ZM138.39,48.56c-.02-.06-.22.18-.84.41-.34.12-.6.23-.8.32h.02c.33.02.72.02,1.12,0,.33-.38.53-.66.51-.73Z"/>
+        <path class="footer-logo-c1" d="M150.85,36.96c.23,0,.48.09.64.26.21.24.25.51.25.84,0,.49-.13,1.08-.35,1.79-.46,1.52-1.31,3.54-2.25,5.58-.94,2.04-1.97,4.09-2.79,5.64-.17.32-.32.62-.47.89.62-.39,1.18-.72,1.53-.91.17-.09.32-.16.51-.17.01,0,.02,0,.04,0,0,0,0,0,.02,0,.2,0,.48.15.57.35.09.21.06.37.03.51-.03.15-.08.28-.14.43-.13.28-.3.58-.49.84-.19.26-.36.48-.64.63-.05.03-.13.05-.18.06-.01,0-.03,0-.04,0-.23,0-.43-.18-.45-.41-.01-.17.09-.36.24-.44,0,0,.19-.16.34-.37.1-.13.2-.29.28-.44-.6.34-1.53.91-2.32,1.47-.09.06-.17.12-.25.18-.16.51-.32,1.01-.47,1.51.5.32,1.06.47,1.68.47.38,0,.78-.06,1.19-.16,1.46-.38,3.06-1.45,4.38-3,.07-.08.2-.15.31-.16.01,0,.03,0,.04,0,.23,0,.43.18.45.41,0,.11-.04.26-.11.34-1.42,1.66-3.14,2.84-4.84,3.29-.46.12-.92.18-1.36.18-.71,0-1.39-.16-2-.48-.77,2.6-1.38,4.88-1.63,6.3-.04.24-.08.45-.1.63.12-.18.26-.4.41-.66.06-.11.22-.22.35-.23.01,0,.03,0,.04,0,.23,0,.43.18.45.41,0,.08-.02.2-.06.27-.32.55-.57.93-.8,1.2-.11.13-.22.24-.35.32-.14.09-.39.16-.62.04-.22-.12-.28-.31-.32-.46-.03-.15-.04-.29-.03-.45,0-.33.06-.73.15-1.23.28-1.55.92-3.96,1.74-6.69-.14-.13-.28-.27-.41-.43-.1-.12-.15-.29-.14-.43,0-.14.05-.24.1-.34.1-.19.23-.35.4-.51.21-.22.49-.44.79-.67,1.15-3.67,2.51-7.6,3.68-10.65.59-1.53,1.12-2.83,1.57-3.77.22-.47.42-.85.6-1.14.09-.14.18-.26.27-.37.1-.1.19-.22.42-.26.03,0,.05,0,.08,0,.02,0,.05,0,.07,0ZM142.43,63.71s0,0,0,0c0,.01,0,.02,0,0ZM150.76,38.08c-.15.23-.34.59-.55,1.04-.43.91-.96,2.19-1.54,3.71-.67,1.74-1.4,3.78-2.12,5.9.58-1.15,1.19-2.41,1.78-3.67.93-2.02,1.78-4.03,2.21-5.47.22-.72.32-1.3.31-1.6,0,0,0-.02,0-.02-.02.03-.05.07-.08.11ZM150.94,37.84s.02-.01.02-.01c0,0,0,0-.02.01Z"/>
+        <path class="footer-logo-c1" d="M153.89,54.87c.76.48,2.02.29,3.44-.21,1.55-.54,3.27-1.45,4.81-2.29.23-.12.5-.04.62.19.12.22.04.5-.18.62-1.58.87-3.34,1.79-4.95,2.35-1.71.6-3.26.78-4.3.08-.03-.02-.05-.04-.07-.06-.92-.95-.67-2.36.03-3.54.31-.52.7-.99,1.11-1.35.44-.38.91-.65,1.34-.72.57-.09,1.05.1,1.34.69,1.22,2.48-3.09,2.77-3.11,2.77-.65.07-.43,1.09-.1,1.46ZM156.27,51.03c-.08-.16-.21-.21-.37-.19-.26.04-.57.23-.89.5-.34.3-.67.69-.92,1.12-.02.03-.04.06-.05.08.57-.07,2.78-.41,2.23-1.53Z"/>
+        <path class="footer-logo-c1" d="M168.43,41.1c.24.1.34.37.24.6,0,0-.27.63-.68,1.65,7.85-.31,15.28.1,15.32.1.25.01.45.23.43.48-.01.25-.23.45-.48.43-.03,0-7.7-.43-15.64-.09-2.26,5.67-7.2,18.97-5.28,22.47.12.22.04.5-.18.62-.23.12-.5.04-.63-.18-2.05-3.73,2.72-16.9,5.08-22.87-4.01.21-8.01.62-11.06,1.39-2.42.61-3.3.75-3.29.78.02.08.41-.13,1.01-.15.8-.03,1.79-.14,2.63-.29.77-.14,1.4-.1,1.39-.17-.05-.25.12-.49.37-.54.25-.05.49.12.54.37.11.59-.86,1.01-2.13,1.24-.88.16-1.93.27-2.77.3-1.03.03-1.83-.12-1.93-.54-.12-.47.88-1.12,3.95-1.9,3.21-.82,7.45-1.24,11.66-1.44.51-1.27.84-2.04.84-2.05.07-.18.24-.28.42-.28.06,0,.12.01.18.04Z"/>
+        <path class="footer-logo-c1" d="M174.38,50.35c.14.14.17.35.08.52l-1.02,2.41c1.1-.92,2.52-1.9,3.34-1.62,1.01.34,1.02,1.11,1.03,1.91,0,.38,0,.78.18,1.01.11.15.75-.27,1.42-.77.5-.37.99-.79,1.36-1.1.19-.17.35-.3.48-.4.2-.15.49-.12.65.08.15.2.12.49-.08.64-.09.07-.25.21-.45.38-.38.33-.89.76-1.41,1.15-1.05.77-2.16,1.31-2.71.57-.35-.47-.35-1.02-.36-1.55,0-.47,0-.92-.4-1.05-.92-.31-3.97,2.86-3.98,2.87-.13.13-.33.18-.51.1-.24-.1-.34-.37-.25-.6l1.03-2.43c-1.48,1.33-3.57,3.07-4.24,2.97-1.51-.24.07-2.99.07-3,.12-.22.41-.3.63-.17.22.12.3.41.17.63,0,0-.91,1.6-.73,1.63.62.1,5.03-4.18,5.04-4.19.09-.09.21-.13.32-.13.12,0,.24.05.33.14ZM171.29,48.75c.13.22.06.5-.16.63-.34.2-.81,1.03-.82,1.04-.12.22-.41.3-.63.17-.22-.12-.3-.41-.17-.63,0,0,.59-1.04,1.14-1.37.07-.04.14-.06.22-.06.16,0,.33.07.42.22Z"/>
+        <path class="footer-logo-c1" d="M189.82,47.93c.73-.88,1.22-1.51,1.22-1.52.19-.25.53-.33.75-.19.14.1.2.27.17.44h0c0,.06-.56,3.38-1.53,7.68,1.39-.94,2.63-1.67,3.55-2.08.28-.13.57-.02.65.24.08.26-.09.57-.37.7-1.02.46-2.51,1.35-4.16,2.53-2.28,9.71-6.46,22.93-11.29,16.57-.21-.27-.38-.56-.51-.86-1.04-2.33.14-5.23,2.3-8.09,2.08-2.76,5.09-5.49,7.85-7.59.25-.19.5-.38.75-.56.62-2.74,1.09-5.18,1.38-6.74-2.01,2.39-5.92,6.68-7.54,5.95-.53-.24-.69-.73-.56-1.35.09-.44.33-.95.69-1.47,1.2-1.76,4.19-4.55,6.64-3.68ZM181.43,63.88c-1.92,2.54-2.99,5.08-2.12,7.01.11.24.24.47.42.7,3.62,4.77,7.08-6.08,9.16-14.93-2.65,2.02-5.49,4.62-7.46,7.22ZM186.89,49.43c-.34.25-.67.47-.99.68-.27.21-.53.44-.78.68-.43.42-.8.86-1.09,1.28-.26.39-.44.74-.5,1.02-.04.18,0,.31.1.36.9.41,3.53-2.41,5.4-4.6-.11-.02-.22-.03-.33-.03-.56,0-1.19.24-1.81.6Z"/>
+      </g>
+    </g>
+  </g>
+</svg></div>
+    <div style="border-top:1px solid rgba(255,255,255,0.25);padding-top:10px;text-align:center;font-size:11px;color:rgba(255,255,255,0.8);">
+      © 2026 MiTime Marketing. All rights reserved. &nbsp;|&nbsp;
+      <a href="https://linktr.ee/mitime_mkt" target="_blank" style="color:white;text-decoration:underline;text-underline-offset:3px;">追蹤我們</a>
+    </div>
+  </div>
+</footer>
 </body>
 </html>
