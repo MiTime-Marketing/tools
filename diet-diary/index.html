@@ -306,8 +306,10 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);
         <div>1. 本工具使用 Gemini 3.1 Flash-Lite 模型，每日免費提供 500 次呼叫，足夠日常飲食記錄使用</div>
         <div>2. API Key 僅儲存於你的裝置本地，不會上傳至任何伺服器或洩漏個人資料；請勿將 Key 分享給他人，以免免費額度被消耗</div>
       </div>
-      <button class="ob-btn" id="ob-confirm">確認，繼續填寫個人資料 →</button>
-      <button id="ob-skip" style="width:100%;margin-top:8px;padding:8px 12px;background:transparent;border:1px solid var(--bdr);border-radius:var(--rs);font-size:12px;color:var(--tx3);cursor:pointer;font-family:inherit;display:block;text-align:center;">跳過（部分 AI 功能將停用，可隨時在設定補填）</button>
+      <div style="display:flex;gap:8px;position:sticky;bottom:0;background:var(--sur);padding-top:8px;padding-bottom:1.5rem;">
+        <button id="ob-skip" style="padding:10px 12px;background:transparent;border:1px solid var(--bdr);border-radius:var(--rs);font-size:12px;color:var(--tx3);cursor:pointer;font-family:inherit;white-space:nowrap;">跳過，AI 功能暫停</button>
+        <button class="ob-btn" id="ob-confirm" style="flex:1;font-size:14px;padding:10px;">確認，繼續填寫 →</button>
+      </div>
     </div>
     <!-- Page 2: Settings -->
     <div id="ob-p2" class="hidden">
@@ -1257,7 +1259,7 @@ document.addEventListener('DOMContentLoaded',function(){
 </svg></div>
     <div style="border-top:1px solid rgba(255,255,255,0.25);padding-top:10px;text-align:center;font-size:11px;color:rgba(255,255,255,0.8);">
       © 2026 MiTime Marketing. All rights reserved. &nbsp;|&nbsp;
-      <a href="https://linktr.ee/mitime_mkt" target="_blank" style="color:white;text-decoration:underline;text-underline-offset:3px;">追蹤我們</a>
+      <a href="https://linktr.ee/mitime.mkt" target="_blank" style="color:white;text-decoration:underline;text-underline-offset:3px;">追蹤我們</a>
     </div>
   </div>
 </footer>
