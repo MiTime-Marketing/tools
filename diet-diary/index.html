@@ -381,9 +381,12 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);
 </div>
 
 <!-- Manual Entry -->
-<div class="sh-ov hidden" id="shmod">
-  <div class="sh-card">
-    <h3>手動輸入營養</h3>
+<div class="ob-ov hidden" id="shmod">
+  <div class="ob-card" style="max-height:85vh;overflow-y:auto;padding-bottom:1.5rem;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+      <h3 style="margin:0;font-size:16px;font-weight:500;">手動輸入營養</h3>
+      <button id="mn-close" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--tx3);line-height:1;padding:0 4px;">×</button>
+    </div>
     <div class="sh-grid">
       <div class="shf full"><label>食物名稱</label><input type="text" id="mn-name" placeholder="例如：雞胸肉沙拉" /></div>
       <div class="shf"><label>熱量 kcal</label><input type="number" id="mn-cal" placeholder="0" /></div>
@@ -537,12 +540,15 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);
         <button class="chip" data-ex="其他">其他</button>
       </div>
       <div class="drow" style="margin-bottom:8px;"><label>記錄日期</label><input type="date" id="ex-date" /></div>
-      <div class="exrow">
-        <input class="exinput" id="ex-name" type="text" placeholder="運動名稱" />
+      <div id="ex-name-row" style="display:none;margin-bottom:8px;">
+        <input class="exinput" id="ex-name" type="text" placeholder="請輸入運動名稱" />
+      </div>
+      <div class="exrow" style="grid-template-columns:1fr 1fr auto;">
         <input class="exinput" id="ex-mins" type="number" placeholder="分鐘" />
-        <input class="exinput" id="ex-kcal" type="number" placeholder="大卡" />
+        <input class="exinput" id="ex-kcal" type="number" placeholder="大卡（選填）" />
         <button class="exadd" id="ex-add">記錄</button>
       </div>
+      <p style="font-size:11px;color:var(--tx3);margin-top:6px;">只需輸入分鐘數即可記錄，系統將根據運動類型與體重自動估算消耗熱量；如已知確切大卡，亦可自行填入。</p>
       <div class="status" id="ex-status"></div>
     </div>
     <div class="no-key-banner-extra" style="display:flex;background:var(--abg);border:1px solid var(--adr);border-radius:var(--r);padding:12px 14px;margin-bottom:1rem;align-items:center;justify-content:space-between;gap:10px;"><span style="font-size:13px;color:var(--tx2);">⚠️ 尚未設定 API Key，AI 功能暫時停用</span><button onclick="document.getElementById('ob-p1').classList.remove('hidden');document.getElementById('ob-p2').classList.add('hidden');document.getElementById('ob-ov').classList.remove('hidden');" style="padding:5px 12px;background:var(--orange);color:white;border:none;border-radius:20px;font-size:12px;cursor:pointer;font-family:inherit;white-space:nowrap;">設定 API Key</button></div>
@@ -888,12 +894,14 @@ function renderToday(){
 const MET_VALS={'走路':3.5,'慢跑':7.0,'騎腳踏車':6.0,'游泳':6.0,'重訓':5.0,'有氧':7.0,'瑜伽':3.0};
 function calcExKcal(mins,met){return Math.round(mins*met*(cfg.weight||60)/60);}
 async function addExercise(){
-  const name=document.getElementById('ex-name').value.trim()||selEx;
+  const rawName=document.getElementById('ex-name').value.trim();
+  const name=rawName||selEx;
   const mins=parseInt(document.getElementById('ex-mins').value)||0;
   const manual=parseInt(document.getElementById('ex-kcal').value)||0;
   const date=document.getElementById('ex-date').value||getToday();
-  if(!mins){document.getElementById('ex-status').textContent='請填入分鐘數';return;}
   const st=document.getElementById('ex-status');
+  if(selEx==='其他'&&!rawName){st.textContent='請輸入運動名稱';return;}
+  if(!mins){st.textContent='請填入分鐘數';return;}
   let kcal=manual;
   if(!kcal){
     const met=MET_VALS[selEx];
@@ -1317,7 +1325,7 @@ document.addEventListener('DOMContentLoaded',function(){
 
 
   document.getElementById('meal-chips').addEventListener('click',e=>{const c=e.target.closest('.chip');if(!c)return;document.querySelectorAll('#meal-chips .chip').forEach(x=>x.classList.remove('active'));c.classList.add('active');selMeal=c.dataset.meal;});
-  document.getElementById('ex-chips').addEventListener('click',e=>{const c=e.target.closest('.chip');if(!c)return;document.querySelectorAll('#ex-chips .chip').forEach(x=>x.classList.remove('active'));c.classList.add('active');selEx=c.dataset.ex;});
+  document.getElementById('ex-chips').addEventListener('click',e=>{const c=e.target.closest('.chip');if(!c)return;document.querySelectorAll('#ex-chips .chip').forEach(x=>x.classList.remove('active'));c.classList.add('active');selEx=c.dataset.ex;const nr=document.getElementById('ex-name-row');if(nr)nr.style.display=selEx==='其他'?'block':'none';});
   document.getElementById('ex-chk').addEventListener('change',function(){
     isExDay=this.checked;saveAll();updateGoals();
     const tog=this.closest('.ex-tog');
@@ -1330,6 +1338,7 @@ document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('manual-btn').addEventListener('click',()=>{document.getElementById('mn-name').value=document.getElementById('food-input').value;document.getElementById('shmod').classList.remove('hidden');document.getElementById('mn-name').focus();});
   document.getElementById('mn-save').addEventListener('click',addManual);
   document.getElementById('mn-cancel').addEventListener('click',()=>document.getElementById('shmod').classList.add('hidden'));
+  document.getElementById('mn-close').addEventListener('click',()=>document.getElementById('shmod').classList.add('hidden'));
 
   document.getElementById('photo-upload').addEventListener('change',function(){handlePhotoFile(this.files[0]);});
   document.getElementById('photo-clear').addEventListener('click',clearPhoto);
