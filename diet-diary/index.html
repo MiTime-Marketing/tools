@@ -269,6 +269,32 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);
 }
 
 .footer-logo path,.footer-logo rect,.footer-logo polygon,.footer-logo circle{fill:white!important;}
+
+/* Edit button */
+.edit-btn{background:none;border:none;cursor:pointer;color:var(--tx3);padding:0;line-height:1;flex-shrink:0;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:6px;}
+.edit-btn:hover{color:var(--orange);}
+.del{background:none;border:none;cursor:pointer;color:var(--tx3);font-size:18px;padding:0;line-height:1;flex-shrink:0;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:6px;}
+.del:hover{color:var(--cal);}
+.del-confirm{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+.del-confirm span{font-size:12px;color:var(--cal);}
+.del-confirm button{padding:2px 8px;border:none;border-radius:12px;font-size:11px;cursor:pointer;font-family:inherit;}
+.del-confirm .dc-yes{background:var(--cal);color:white;}
+.del-confirm .dc-no{background:var(--sur2);color:var(--tx2);}
+/* Inline edit form */
+.inline-edit{background:var(--sur2);border-radius:var(--r);padding:10px 12px;margin-top:6px;}
+.inline-edit .ie-row{display:grid;gap:6px;margin-bottom:8px;}
+.inline-edit .ie-row-2{grid-template-columns:1fr 1fr;}
+.inline-edit .ie-row-4{grid-template-columns:repeat(4,1fr);}
+.inline-edit input,.inline-edit select{width:100%;padding:6px 8px;border:1px solid var(--bdr);border-radius:var(--rs);font-size:13px;font-family:inherit;background:var(--bg);color:var(--tx);outline:none;}
+.inline-edit label{font-size:11px;color:var(--tx3);display:block;margin-bottom:2px;}
+.ie-actions{display:flex;gap:8px;}
+.ie-save{flex:1;padding:7px;background:var(--orange);color:white;border:none;border-radius:var(--rs);font-size:13px;cursor:pointer;font-family:inherit;}
+.ie-cancel{padding:7px 14px;background:transparent;border:1px solid var(--bdr);border-radius:var(--rs);font-size:13px;cursor:pointer;font-family:inherit;color:var(--tx2);}
+/* Toast */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(40,40,40,0.88);color:white;padding:10px 20px;border-radius:20px;font-size:13px;z-index:9999;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity 0.25s;}
+.toast.show{opacity:1;}
+/* Incomplete profile banner */
+#profile-hint{background:#FFF8EC;border:1px solid #F3C97A;border-radius:var(--r);padding:10px 14px;margin-bottom:1rem;font-size:12px;color:#886A1A;display:none;align-items:center;justify-content:space-between;gap:8px;}
 </style>
 </head>
 <body>
@@ -448,6 +474,7 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);
 
   <!-- TODAY -->
   <div id="pane-today">
+    <div id="profile-hint" style="display:none;background:#FFF8EC;border:1px solid #F3C97A;border-radius:var(--r);padding:10px 14px;margin-bottom:1rem;font-size:12px;color:#886A1A;align-items:center;justify-content:space-between;gap:8px;"><span>⚠️ 目前尚未更新個人數值，請至<button onclick="document.getElementById('settings-btn').click()" style="background:none;border:none;color:#E8920A;text-decoration:underline;cursor:pointer;font-size:12px;font-family:inherit;padding:0 2px;">設定</button>完成年齡、身高、體重填寫，以取得更準確的目標</span></div>
     <div class="alert hidden" id="bmr-alert">⚠️ 今日攝取低於基礎代謝率，建議至少吃 <b id="bmr-val">1224</b> kcal</div>
     <div class="goals">
       <div class="gc"><div class="gl">熱量</div><div class="gv" id="g-cal">0</div><div class="gb"><div class="gf" id="gf-cal" style="width:0%;background:var(--orange)"></div></div></div>
@@ -881,14 +908,15 @@ function buildHTML(list,dateStr){
   let h='<div class="day-sep"><span>'+fmtDate(dateStr)+'</span><span>'+total+' kcal</span></div>';
   list.forEach(e=>{
     let tc='var(--tx3)';if(e.meal==='酒精')tc='var(--alc)';if(e.meal==='飲料')tc='var(--water)';
-    h+=`<div class="entry"><div class="el"><div class="etag" style="color:${tc}">${e.meal} · ${e.time}</div><div class="ename">${e.display_name}</div></div><div class="macros"><div class="mm"><div class="mv" style="color:var(--orange);font-weight:600">${e.calories}</div><div class="ml2">kcal</div></div><div class="mm"><div class="mv" style="color:#B89DBC;font-weight:600">${e.protein}g</div><div class="ml2">蛋白</div></div><div class="mm"><div class="mv" style="color:#C9A87A;font-weight:600">${e.fat}g</div><div class="ml2">脂肪</div></div><div class="mm"><div class="mv" style="color:#C4A87A;font-weight:600">${e.carbs}g</div><div class="ml2">碳水</div></div></div><button class="del" data-id="${e.id}">×</button></div>`;
+    h+=`<div class="entry"><div class="el"><div class="etag" style="color:${tc}">${e.meal} · ${e.time}</div><div class="ename">${e.display_name}</div></div><div class="macros"><div class="mm"><div class="mv" style="color:var(--orange);font-weight:600">${e.calories}</div><div class="ml2">kcal</div></div><div class="mm"><div class="mv" style="color:#B89DBC;font-weight:600">${e.protein}g</div><div class="ml2">蛋白</div></div><div class="mm"><div class="mv" style="color:#C9A87A;font-weight:600">${e.fat}g</div><div class="ml2">脂肪</div></div><div class="mm"><div class="mv" style="color:#C4A87A;font-weight:600">${e.carbs}g</div><div class="ml2">碳水</div></div></div><div style="display:flex;gap:0;align-items:center;"><button class="edit-btn" data-edit-id="${e.id}"><svg viewBox="-15 -15 484 484" width="15" height="15" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="m401.648438 18.234375c-24.394532-24.351563-63.898438-24.351563-88.292969 0l-22.101563 22.222656-235.269531 235.144531-.5.503907c-.121094.121093-.121094.25-.25.25-.25.375-.625.746093-.871094 1.121093 0 .125-.128906.125-.128906.25-.25.375-.371094.625-.625 1-.121094.125-.121094.246094-.246094.375-.125.375-.25.625-.378906 1 0 .121094-.121094.121094-.121094.25l-52.199219 156.96875c-1.53125 4.46875-.367187 9.417969 2.996094 12.734376 2.363282 2.332031 5.550782 3.636718 8.867188 3.625 1.355468-.023438 2.699218-.234376 3.996094-.625l156.847656-52.324219c.121094 0 .121094 0 .25-.121094.394531-.117187.773437-.285156 1.121094-.503906.097656-.011719.183593-.054688.253906-.121094.371094-.25.871094-.503906 1.246094-.753906.371093-.246094.75-.621094 1.125-.871094.125-.128906.246093-.128906.246093-.25.128907-.125.378907-.246094.503907-.5l257.371093-257.371094c24.351563-24.394531 24.351563-63.898437 0-88.289062zm-232.273438 353.148437-86.914062-86.910156 217.535156-217.535156 86.914062 86.910156zm-99.15625-63.808593 75.929688 75.925781-114.015626 37.960938zm347.664062-184.820313-13.238281 13.363282-86.917969-86.917969 13.367188-13.359375c14.621094-14.609375 38.320312-14.609375 52.945312 0l33.964844 33.964844c14.511719 14.6875 14.457032 38.332031-.121094 52.949218zm0 0"/></svg></button><button class="del" data-id="${e.id}">×</button></div></div>`;
   });return h;
 }
 function renderToday(){
   const te=entries.filter(e=>e.date===getToday());
   const w=document.getElementById('today-entries');
   w.innerHTML=te.length?buildHTML(te,getToday()):'<div class="empty">還沒有記錄，輸入今天吃了什麼開始吧！</div>';
-  w.querySelectorAll('.del').forEach(b=>b.addEventListener('click',()=>delEntry(parseInt(b.dataset.id))));
+  w.querySelectorAll('[data-edit-id]').forEach(b=>b.addEventListener('click',()=>editFood(parseInt(b.dataset.editId))));
+  w.querySelectorAll('.del[data-id]').forEach(b=>b.addEventListener('click',()=>confirmDel(b,()=>{delEntry(parseInt(b.dataset.id));})));
 }
 
 const MET_VALS={'走路':3.5,'慢跑':7.0,'騎腳踏車':6.0,'游泳':6.0,'重訓':5.0,'有氧':7.0,'瑜伽':3.0};
@@ -930,8 +958,9 @@ function renderExercise(){
   const te=exercises.filter(e=>e.date===getToday());
   const w=document.getElementById('ex-entries');
   if(!te.length){w.innerHTML='<div class="empty">今天還沒有運動記錄</div>';return;}
-  w.innerHTML=te.map(e=>`<div class="ex-entry"><div class="exl"><div class="exname">${e.name}</div><div class="exmeta">${e.type} · ${e.mins}分 · ${e.time}</div></div><div class="excal">-${e.kcal}kcal</div><button class="del" data-exid="${e.id}">×</button></div>`).join('');
-  w.querySelectorAll('.del[data-exid]').forEach(b=>b.addEventListener('click',()=>{exercises=exercises.filter(e=>e.id!==parseInt(b.dataset.exid));saveAll();renderExercise();updateGoals();}));
+  w.innerHTML=te.map(e=>`<div class="ex-entry"><div class="exl"><div class="exname">${e.name}</div><div class="exmeta">${e.type} · ${e.mins}分 · ${e.time}</div></div><div class="excal">-${e.kcal}kcal</div><div style="display:flex;align-items:center;"><button class="edit-btn" data-edit-exid="${e.id}"><svg viewBox="-15 -15 484 484" width="15" height="15" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="m401.648438 18.234375c-24.394532-24.351563-63.898438-24.351563-88.292969 0l-22.101563 22.222656-235.269531 235.144531-.5.503907c-.121094.121093-.121094.25-.25.25-.25.375-.625.746093-.871094 1.121093 0 .125-.128906.125-.128906.25-.25.375-.371094.625-.625 1-.121094.125-.121094.246094-.246094.375-.125.375-.25.625-.378906 1 0 .121094-.121094.121094-.121094.25l-52.199219 156.96875c-1.53125 4.46875-.367187 9.417969 2.996094 12.734376 2.363282 2.332031 5.550782 3.636718 8.867188 3.625 1.355468-.023438 2.699218-.234376 3.996094-.625l156.847656-52.324219c.121094 0 .121094 0 .25-.121094.394531-.117187.773437-.285156 1.121094-.503906.097656-.011719.183593-.054688.253906-.121094.371094-.25.871094-.503906 1.246094-.753906.371093-.246094.75-.621094 1.125-.871094.125-.128906.246093-.128906.246093-.25.128907-.125.378907-.246094.503907-.5l257.371093-257.371094c24.351563-24.394531 24.351563-63.898437 0-88.289062zm-232.273438 353.148437-86.914062-86.910156 217.535156-217.535156 86.914062 86.910156zm-99.15625-63.808593 75.929688 75.925781-114.015626 37.960938zm347.664062-184.820313-13.238281 13.363282-86.917969-86.917969 13.367188-13.359375c14.621094-14.609375 38.320312-14.609375 52.945312 0l33.964844 33.964844c14.511719 14.6875 14.457032 38.332031-.121094 52.949218zm0 0"/></svg></button><button class="del" data-exid="${e.id}">×</button></div></div>`).join('');
+  w.querySelectorAll('[data-edit-exid]').forEach(b=>b.addEventListener('click',()=>editExercise(parseInt(b.dataset.editExid))));
+  w.querySelectorAll('.del[data-exid]').forEach(b=>b.addEventListener('click',()=>confirmDel(b,()=>{exercises=exercises.filter(e=>e.id!==parseInt(b.dataset.exid));saveAll();renderExercise();updateGoals();})));
 }
 
 function renderCalendar(){
@@ -964,12 +993,15 @@ function renderCalEntries(){
   const bfDay=bodyfats.find(b=>b.date===calSelDate);
   const goals=getGoals();
   const w=document.getElementById('cal-entries');
-  if(w){w.innerHTML=de.length?buildHTML(de,calSelDate):'<div class="empty">這天還沒有飲食記錄</div>';w.querySelectorAll('.del').forEach(b=>b.addEventListener('click',()=>delEntry(parseInt(b.dataset.id))));}
+  if(w){w.innerHTML=de.length?buildHTML(de,calSelDate):'<div class="empty">這天還沒有飲食記錄</div>';
+    w.querySelectorAll('[data-edit-id]').forEach(b=>b.addEventListener('click',()=>editFood(parseInt(b.dataset.editId))));
+    w.querySelectorAll('.del[data-id]').forEach(b=>b.addEventListener('click',()=>confirmDel(b,()=>{delEntry(parseInt(b.dataset.id));})));}
   const exW=document.getElementById('cal-ex-entries');
   if(exW){
     if(exDay.length){
-      exW.innerHTML=exDay.map(e=>`<div class="ex-entry"><div class="exl"><div class="exname">${e.name}</div><div class="exmeta">${e.type} · ${e.mins}分 · ${e.time}</div></div><div class="excal">-${e.kcal}kcal</div><button class="del" data-cal-exid="${e.id}">×</button></div>`).join('');
-      exW.querySelectorAll('[data-cal-exid]').forEach(btn=>btn.addEventListener('click',()=>{exercises=exercises.filter(e=>e.id!==parseInt(btn.dataset.calExid));saveAll();renderCalEntries();updateGoals();}));
+      exW.innerHTML=exDay.map(e=>`<div class="ex-entry"><div class="exl"><div class="exname">${e.name}</div><div class="exmeta">${e.type} · ${e.mins}分 · ${e.time}</div></div><div class="excal">-${e.kcal}kcal</div><div style="display:flex;align-items:center;"><button class="edit-btn" data-edit-exid="${e.id}"><svg viewBox="-15 -15 484 484" width="15" height="15" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="m401.648438 18.234375c-24.394532-24.351563-63.898438-24.351563-88.292969 0l-22.101563 22.222656-235.269531 235.144531-.5.503907c-.121094.121093-.121094.25-.25.25-.25.375-.625.746093-.871094 1.121093 0 .125-.128906.125-.128906.25-.25.375-.371094.625-.625 1-.121094.125-.121094.246094-.246094.375-.125.375-.25.625-.378906 1 0 .121094-.121094.121094-.121094.25l-52.199219 156.96875c-1.53125 4.46875-.367187 9.417969 2.996094 12.734376 2.363282 2.332031 5.550782 3.636718 8.867188 3.625 1.355468-.023438 2.699218-.234376 3.996094-.625l156.847656-52.324219c.121094 0 .121094 0 .25-.121094.394531-.117187.773437-.285156 1.121094-.503906.097656-.011719.183593-.054688.253906-.121094.371094-.25.871094-.503906 1.246094-.753906.371093-.246094.75-.621094 1.125-.871094.125-.128906.246093-.128906.246093-.25.128907-.125.378907-.246094.503907-.5l257.371093-257.371094c24.351563-24.394531 24.351563-63.898437 0-88.289062zm-232.273438 353.148437-86.914062-86.910156 217.535156-217.535156 86.914062 86.910156zm-99.15625-63.808593 75.929688 75.925781-114.015626 37.960938zm347.664062-184.820313-13.238281 13.363282-86.917969-86.917969 13.367188-13.359375c14.621094-14.609375 38.320312-14.609375 52.945312 0l33.964844 33.964844c14.511719 14.6875 14.457032 38.332031-.121094 52.949218zm0 0"/></svg></button><button class="del" data-cal-exid="${e.id}">×</button></div></div>`).join('');
+      exW.querySelectorAll('[data-edit-exid]').forEach(b=>b.addEventListener('click',()=>editExercise(parseInt(b.dataset.editExid))));
+      exW.querySelectorAll('[data-cal-exid]').forEach(btn=>btn.addEventListener('click',()=>confirmDel(btn,()=>{exercises=exercises.filter(e=>e.id!==parseInt(btn.dataset.calExid));saveAll();renderCalEntries();updateGoals();})));
     }else exW.innerHTML='<div class="empty" style="padding:0.6rem 0;">這天沒有運動記錄</div>';
   }
   const sw=document.getElementById('cal-summary');if(!sw)return;
@@ -1006,14 +1038,20 @@ function renderTodayWB(){
   if(!wt&&!bf){card.style.display='none';return;}
   card.style.display='block';
   let h='';
-  if(wt)h+=`<div class="ex-entry"><div class="exl"><div class="exname">${wt.w} kg</div><div class="exmeta">體重</div></div><button class="del" data-wb-type="w" data-wb-date="${today}">×</button></div>`;
-  if(bf)h+=`<div class="ex-entry"><div class="exl"><div class="exname">${bf.bf} %</div><div class="exmeta">體脂率</div></div><button class="del" data-wb-type="bf" data-wb-date="${today}">×</button></div>`;
+  if(wt)h+=`<div class="ex-entry"><div class="exl"><div class="exname">${wt.w} kg</div><div class="exmeta">體重</div></div><div style="display:flex;align-items:center;"><button class="edit-btn" data-edit-wb="w" data-edit-wb-date="${today}" data-edit-wb-val="${wt.w}"><svg viewBox="-15 -15 484 484" width="15" height="15" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="m401.648438 18.234375c-24.394532-24.351563-63.898438-24.351563-88.292969 0l-22.101563 22.222656-235.269531 235.144531-.5.503907c-.121094.121093-.121094.25-.25.25-.25.375-.625.746093-.871094 1.121093 0 .125-.128906.125-.128906.25-.25.375-.371094.625-.625 1-.121094.125-.121094.246094-.246094.375-.125.375-.25.625-.378906 1 0 .121094-.121094.121094-.121094.25l-52.199219 156.96875c-1.53125 4.46875-.367187 9.417969 2.996094 12.734376 2.363282 2.332031 5.550782 3.636718 8.867188 3.625 1.355468-.023438 2.699218-.234376 3.996094-.625l156.847656-52.324219c.121094 0 .121094 0 .25-.121094.394531-.117187.773437-.285156 1.121094-.503906.097656-.011719.183593-.054688.253906-.121094.371094-.25.871094-.503906 1.246094-.753906.371093-.246094.75-.621094 1.125-.871094.125-.128906.246093-.128906.246093-.25.128907-.125.378907-.246094.503907-.5l257.371093-257.371094c24.351563-24.394531 24.351563-63.898437 0-88.289062zm-232.273438 353.148437-86.914062-86.910156 217.535156-217.535156 86.914062 86.910156zm-99.15625-63.808593 75.929688 75.925781-114.015626 37.960938zm347.664062-184.820313-13.238281 13.363282-86.917969-86.917969 13.367188-13.359375c14.621094-14.609375 38.320312-14.609375 52.945312 0l33.964844 33.964844c14.511719 14.6875 14.457032 38.332031-.121094 52.949218zm0 0"/></svg></button><button class="del" data-wb-type="w" data-wb-date="${today}">×</button></div></div>`;
+  if(bf)h+=`<div class="ex-entry"><div class="exl"><div class="exname">${bf.bf} %</div><div class="exmeta">體脂率</div></div><div style="display:flex;align-items:center;"><button class="edit-btn" data-edit-wb="bf" data-edit-wb-date="${today}" data-edit-wb-val="${bf.bf}"><svg viewBox="-15 -15 484 484" width="15" height="15" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="m401.648438 18.234375c-24.394532-24.351563-63.898438-24.351563-88.292969 0l-22.101563 22.222656-235.269531 235.144531-.5.503907c-.121094.121093-.121094.25-.25.25-.25.375-.625.746093-.871094 1.121093 0 .125-.128906.125-.128906.25-.25.375-.371094.625-.625 1-.121094.125-.121094.246094-.246094.375-.125.375-.25.625-.378906 1 0 .121094-.121094.121094-.121094.25l-52.199219 156.96875c-1.53125 4.46875-.367187 9.417969 2.996094 12.734376 2.363282 2.332031 5.550782 3.636718 8.867188 3.625 1.355468-.023438 2.699218-.234376 3.996094-.625l156.847656-52.324219c.121094 0 .121094 0 .25-.121094.394531-.117187.773437-.285156 1.121094-.503906.097656-.011719.183593-.054688.253906-.121094.371094-.25.871094-.503906 1.246094-.753906.371093-.246094.75-.621094 1.125-.871094.125-.128906.246093-.128906.246093-.25.128907-.125.378907-.246094.503907-.5l257.371093-257.371094c24.351563-24.394531 24.351563-63.898437 0-88.289062zm-232.273438 353.148437-86.914062-86.910156 217.535156-217.535156 86.914062 86.910156zm-99.15625-63.808593 75.929688 75.925781-114.015626 37.960938zm347.664062-184.820313-13.238281 13.363282-86.917969-86.917969 13.367188-13.359375c14.621094-14.609375 38.320312-14.609375 52.945312 0l33.964844 33.964844c14.511719 14.6875 14.457032 38.332031-.121094 52.949218zm0 0"/></svg></button><button class="del" data-wb-type="bf" data-wb-date="${today}">×</button></div></div>`;
   el.innerHTML=h;
+  el.querySelectorAll('[data-edit-wb]').forEach(btn=>btn.addEventListener('click',()=>{
+    if(btn.dataset.editWb==='w')editWeight(btn.dataset.editWbDate,btn.dataset.editWbVal);
+    else editBodyfat(btn.dataset.editWbDate,btn.dataset.editWbVal);
+  }));
   el.querySelectorAll('[data-wb-type]').forEach(btn=>btn.addEventListener('click',()=>{
-    const d=btn.dataset.wbDate;
-    if(btn.dataset.wbType==='w')weights=weights.filter(w=>w.date!==d);
-    else bodyfats=bodyfats.filter(b=>b.date!==d);
-    saveAll();renderProgress();
+    confirmDel(btn,()=>{
+      const d=btn.dataset.wbDate;
+      if(btn.dataset.wbType==='w')weights=weights.filter(w=>w.date!==d);
+      else bodyfats=bodyfats.filter(b=>b.date!==d);
+      saveAll();renderProgress();
+    });
   }));
 }
 function renderProgress(){
@@ -1203,6 +1241,130 @@ function switchTab(t){
 }
 
 // ── Init ──────────────────────────────────────────
+
+// ── Toast ─────────────────────────────────────────────────────
+let toastTimer=null;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  if(!t)return;
+  t.textContent=msg;t.classList.add('show');
+  if(toastTimer)clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+// ── Delete confirm ────────────────────────────────────────────
+function confirmDel(btn,onConfirm){
+  // Replace button with inline confirm
+  const parent=btn.parentElement;
+  const orig=btn.outerHTML;
+  const dc=document.createElement('div');
+  dc.className='del-confirm';
+  dc.innerHTML='<span>確定刪除？</span><button class="dc-yes">是</button><button class="dc-no">否</button>';
+  parent.replaceChild(dc,btn);
+  dc.querySelector('.dc-yes').addEventListener('click',()=>{onConfirm();});
+  dc.querySelector('.dc-no').addEventListener('click',()=>{dc.outerHTML=orig;});
+}
+
+// ── Edit Modal ────────────────────────────────────────────────
+let _editData={};
+function openEditModal(title,bodyHTML,data){
+  document.getElementById('edit-modal-title').textContent=title;
+  document.getElementById('edit-modal-body').innerHTML=bodyHTML;
+  _editData=data;
+  document.getElementById('edit-modal').style.display='flex';
+}
+function closeEditModal(){
+  document.getElementById('edit-modal').style.display='none';
+}
+function saveEdit(){
+  const t=_editData.type;
+  if(t==='food'){
+    const e=entries.find(x=>x.id===_editData.id);if(!e){closeEditModal();return;}
+    e.display_name=document.getElementById('ie-name').value.trim()||e.display_name;
+    e.calories=parseInt(document.getElementById('ie-cal').value)||0;
+    e.protein=parseInt(document.getElementById('ie-pro').value)||0;
+    e.fat=parseInt(document.getElementById('ie-fat').value)||0;
+    e.carbs=parseInt(document.getElementById('ie-carb').value)||0;
+    saveAll();updateGoals();renderToday();
+    if(typeof renderCalEntries==='function'&&document.getElementById('pane-calendar')&&!document.getElementById('pane-calendar').classList.contains('hidden'))renderCalEntries();
+    showToast('已更新。如需 AI 重新分析營養素，請重新輸入此筆餐點');
+  } else if(t==='exercise'){
+    const e=exercises.find(x=>x.id===_editData.id);if(!e){closeEditModal();return;}
+    e.name=document.getElementById('ie-exname').value.trim()||e.name;
+    e.mins=parseInt(document.getElementById('ie-exmins').value)||e.mins;
+    e.kcal=parseInt(document.getElementById('ie-exkcal').value)||e.kcal;
+    saveAll();updateGoals();renderExercise();
+    if(typeof renderCalEntries==='function'&&document.getElementById('pane-calendar')&&!document.getElementById('pane-calendar').classList.contains('hidden'))renderCalEntries();
+    showToast('已更新。如需 AI 重新估算消耗熱量，請重新輸入此筆運動');
+  } else if(t==='weight'){
+    const idx=weights.findIndex(x=>x.date===_editData.date);
+    const newW=parseFloat(document.getElementById('ie-wval').value);
+    if(!isNaN(newW)&&newW>0){
+      if(idx>=0)weights[idx].w=newW;
+      else weights.push({w:newW,date:_editData.date});
+      saveAll();renderProgress();showToast('已更新');
+    }
+  } else if(t==='bodyfat'){
+    const idx=bodyfats.findIndex(x=>x.date===_editData.date);
+    const newB=parseFloat(document.getElementById('ie-bfval').value);
+    if(!isNaN(newB)&&newB>0){
+      if(idx>=0)bodyfats[idx].bf=newB;
+      else bodyfats.push({bf:newB,date:_editData.date});
+      saveAll();renderProgress();showToast('已更新');
+    }
+  }
+  closeEditModal();
+}
+
+// ── Edit openers ──────────────────────────────────────────────
+function editFood(id){
+  const e=entries.find(x=>x.id===id);if(!e)return;
+  openEditModal('編輯飲食記錄',
+    `<div class="inline-edit" style="background:transparent;padding:0;">
+      <div class="ie-row" style="margin-bottom:8px;"><label>食物名稱</label><input id="ie-name" value="${e.display_name}" /></div>
+      <div class="ie-row ie-row-4">
+        <div><label>熱量 kcal</label><input id="ie-cal" type="number" value="${e.calories}" /></div>
+        <div><label>蛋白質 g</label><input id="ie-pro" type="number" value="${e.protein}" /></div>
+        <div><label>脂肪 g</label><input id="ie-fat" type="number" value="${e.fat}" /></div>
+        <div><label>碳水 g</label><input id="ie-carb" type="number" value="${e.carbs}" /></div>
+      </div>
+    </div>`,
+    {type:'food',id}
+  );
+}
+function editExercise(id){
+  const e=exercises.find(x=>x.id===id);if(!e)return;
+  openEditModal('編輯運動記錄',
+    `<div class="inline-edit" style="background:transparent;padding:0;">
+      <div class="ie-row" style="margin-bottom:8px;"><label>運動名稱</label><input id="ie-exname" value="${e.name}" /></div>
+      <div class="ie-row ie-row-2">
+        <div><label>分鐘</label><input id="ie-exmins" type="number" value="${e.mins}" /></div>
+        <div><label>消耗熱量 kcal</label><input id="ie-exkcal" type="number" value="${e.kcal}" /></div>
+      </div>
+    </div>`,
+    {type:'exercise',id}
+  );
+}
+function editWeight(date,val){
+  openEditModal('編輯體重',
+    `<div><label style="font-size:12px;color:var(--tx3);display:block;margin-bottom:4px;">體重 (kg)</label><input id="ie-wval" type="number" step="0.1" value="${val}" style="width:100%;padding:8px 10px;border:1px solid var(--bdr);border-radius:var(--rs);font-size:15px;font-family:inherit;background:var(--bg);outline:none;" /></div>`,
+    {type:'weight',date}
+  );
+}
+function editBodyfat(date,val){
+  openEditModal('編輯體脂率',
+    `<div><label style="font-size:12px;color:var(--tx3);display:block;margin-bottom:4px;">體脂率 (%)</label><input id="ie-bfval" type="number" step="0.1" value="${val}" style="width:100%;padding:8px 10px;border:1px solid var(--bdr);border-radius:var(--rs);font-size:15px;font-family:inherit;background:var(--bg);outline:none;" /></div>`,
+    {type:'bodyfat',date}
+  );
+}
+
+// ── Profile completeness check ────────────────────────────────
+function updateProfileHint(){
+  const hint=document.getElementById('profile-hint');
+  if(!hint)return;
+  const incomplete=!(cfg.age&&cfg.height&&cfg.weight);
+  hint.style.display=incomplete?'flex':'none';
+}
 document.addEventListener('DOMContentLoaded',function(){
   loadAll();
   const now=new Date();calYear=now.getFullYear();calMonth=now.getMonth();calSelDate=getToday();
@@ -1211,7 +1373,7 @@ document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('w-date').value=getToday();
   document.getElementById('ex-date').value=getToday();
   document.getElementById('ex-chk').checked=isExDay;
-  updateGoals();renderToday();updateWater();
+  updateGoals();renderToday();updateWater();updateProfileHint();
   if(cfg.apiKey){const ki=document.getElementById('ob-key-input');if(ki)ki.value=cfg.apiKey;}
   // Popup: show only on first ever visit (no key, no flag)
   const _setupDone=localStorage.getItem('dc-setup-done')==='1'||!!cfg.apiKey;
@@ -1320,7 +1482,7 @@ document.addEventListener('DOMContentLoaded',function(){
     saveAll();
     localStorage.setItem('dc-setup-done','1');
     const _ov2=document.getElementById('ob-ov');_ov2.classList.add('hidden');_ov2.classList.remove('show-popup');
-    updateGoals();updateWater();updateBanners();
+    updateGoals();updateWater();updateBanners();updateProfileHint();
   });
 
 
@@ -1403,6 +1565,7 @@ document.addEventListener('DOMContentLoaded',function(){
   });
 
   ['daily','weekly','goal','exercise'].forEach(t=>document.getElementById('btn-'+t).addEventListener('click',()=>genSuggest(t)));
+
 });
 </script>
 <footer style="background:var(--orange);">
@@ -1518,5 +1681,22 @@ document.addEventListener('DOMContentLoaded',function(){
   rl.href='mailto:'+em+'?subject=Diet%20Diary%20%E5%95%8F%E9%A1%8C%E5%9B%9E%E5%A0%B1&body='+body;
 })();
 </script>
+
+<div id="toast" class="toast"></div>
+
+<!-- Edit Modal -->
+<div class="ob-ov" id="edit-modal" style="display:none;">
+  <div class="ob-card" style="max-height:85vh;overflow-y:auto;padding-bottom:1.5rem;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+      <h3 style="margin:0;font-size:16px;font-weight:500;" id="edit-modal-title">編輯</h3>
+      <button onclick="closeEditModal()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--tx3);line-height:1;padding:0 4px;">×</button>
+    </div>
+    <div id="edit-modal-body"></div>
+    <div style="display:flex;gap:8px;margin-top:12px;">
+      <button class="ie-cancel" onclick="closeEditModal()">取消</button>
+      <button class="ie-save" onclick="saveEdit()">儲存</button>
+    </div>
+  </div>
+</div>
 </body>
 </html
