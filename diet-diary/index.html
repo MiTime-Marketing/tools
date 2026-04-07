@@ -171,12 +171,12 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);
 
 /* Entries */
 .day-sep{display:flex;justify-content:space-between;font-size:12px;color:var(--tx3);padding-bottom:6px;border-bottom:1px solid var(--bdr);margin-bottom:8px;}
-.entry{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:10px 12px;margin-bottom:6px;display:flex;gap:10px;align-items:flex-start;animation:fi .2s ease;}
+.entry{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:10px 12px;margin-bottom:6px;display:flex;gap:10px;align-items:center;animation:fi .2s ease;}
 @keyframes fi{from{opacity:0;transform:translateY(3px);}to{opacity:1;}}
 .el{flex:1;min-width:0;}
 .etag{font-size:11px;color:var(--tx3);margin-bottom:1px;}
 .ename{font-size:14px;font-weight:500;word-break:break-word;}
-.macros{display:flex;gap:5px;flex-shrink:0;}
+.macros{display:flex;gap:5px;flex-shrink:0;align-items:center;}
 .mm{text-align:right;min-width:30px;}
 .mv{font-size:12px;font-weight:500;font-family:'DM Mono',monospace;}
 .ml2{font-size:10px;color:var(--tx3);}
@@ -672,7 +672,7 @@ const GURL='https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-f
 const TW={'熱美式':'hot Americano coffee black','冰美式':'iced Americano','美式':'Americano coffee black','拿鐵':'latte milk coffee','熱拿鐵':'hot latte','無糖拿鐵':'unsweetened latte','鮮奶茶':'milk tea with fresh milk','豆漿':'soy milk 250ml','無糖豆漿':'unsweetened soy milk 250ml','地瓜':'sweet potato 150g','烏龍麵':'udon noodle soup','鍋燒烏龍麵':'hot pot udon noodle with egg fishcake vegetables','茶葉蛋':'tea egg','水煮蛋':'hard boiled egg','御飯糰':'onigiri rice ball','可頌':'croissant','吐司':'toast bread','抓餅':'scallion pancake Taiwan','蔥抓餅':'scallion pancake Taiwan style','雞腿便當':'chicken leg bento box Taiwan rice','雞胸肉':'cooked chicken breast 100g','滷肉飯':'braised pork rice Taiwan','燙青菜':'blanched vegetables with oyster sauce','關東煮':'oden Japanese style','毛豆':'edamame 100g','希臘優格':'Greek yogurt plain','乾紅酒':'dry red wine 150ml','啤酒':'beer 350ml','蛋餅':'egg crepe Taiwan style','地瓜蛋餅':'sweet potato egg crepe Taiwan'};
 
 let cfg={},entries=[],weights=[],bodyfats=[],exercises=[],waterToday=0;
-let selMeal='早餐',selEx='有氧',calYear,calMonth,calSelDate,curTab='today',isExDay=false;
+let selMeal='早餐',selEx='走路',calYear,calMonth,calSelDate,curTab='today',isExDay=false;
 let photoBase64=null,photoMime=null,bodyChart=null,chartDays=30,chartMode='thismonth',customStart='',customEnd='';
 let manualGoals={cal:false,pro:false,fat:false,carb:false,water:false};
 
@@ -768,7 +768,15 @@ async function callGemini(parts,maxT,json){
   try{
     const r=await fetch(GURL+key,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),signal:controller.signal});
     clearTimeout(timer);
-    if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error((e.error&&e.error.message)||'HTTP '+r.status);}
+    if(!r.ok){
+      const e=await r.json().catch(()=>({}));
+      const msg=(e.error&&e.error.message)||'';
+      const status=r.status;
+      if(status===503||msg.toLowerCase().includes('high demand')||msg.toLowerCase().includes('overloaded'))throw new Error('AI 服務目前繁忙，請稍後再試');
+      if(status===429||msg.toLowerCase().includes('quota')||msg.toLowerCase().includes('rate limit'))throw new Error('今日 AI 免費額度已用完，明天自動恢復');
+      if(status===401||status===403||msg.toLowerCase().includes('api key')||msg.toLowerCase().includes('invalid'))throw new Error('API Key 無效，請至設定重新確認');
+      throw new Error(msg||'AI 發生錯誤（'+status+'），請稍後再試');
+    }
     const data=await r.json();
     return(data.candidates[0].content.parts[0].text||'').trim();
   }catch(e){
@@ -1253,17 +1261,7 @@ function showToast(msg){
 }
 
 // ── Delete confirm ────────────────────────────────────────────
-function confirmDel(btn,onConfirm){
-  // Replace button with inline confirm
-  const parent=btn.parentElement;
-  const orig=btn.outerHTML;
-  const dc=document.createElement('div');
-  dc.className='del-confirm';
-  dc.innerHTML='<span>確定刪除？</span><button class="dc-yes">是</button><button class="dc-no">否</button>';
-  parent.replaceChild(dc,btn);
-  dc.querySelector('.dc-yes').addEventListener('click',()=>{onConfirm();});
-  dc.querySelector('.dc-no').addEventListener('click',()=>{dc.outerHTML=orig;});
-}
+function confirmDel(btn,onConfirm){showDelModal(onConfirm);}
 
 // ── Edit Modal ────────────────────────────────────────────────
 let _editData={};
@@ -1365,6 +1363,13 @@ function updateProfileHint(){
   const incomplete=!(cfg.age&&cfg.height&&cfg.weight);
   hint.style.display=incomplete?'flex':'none';
 }
+
+let _delCallback=null;
+function showDelModal(cb){_delCallback=cb;document.getElementById('del-modal').style.display='flex';}
+function closeDelModal(){document.getElementById('del-modal').style.display='none';_delCallback=null;}
+document.addEventListener('DOMContentLoaded',function(){
+  document.getElementById('del-confirm-btn').addEventListener('click',()=>{if(_delCallback)_delCallback();closeDelModal();});
+});
 document.addEventListener('DOMContentLoaded',function(){
   loadAll();
   const now=new Date();calYear=now.getFullYear();calMonth=now.getMonth();calSelDate=getToday();
@@ -1682,6 +1687,18 @@ document.addEventListener('DOMContentLoaded',function(){
 })();
 </script>
 
+
+<!-- Delete Confirm Modal -->
+<div class="ob-ov" id="del-modal" style="display:none;">
+  <div class="ob-card" style="max-width:340px;text-align:center;padding-bottom:1.5rem;">
+    <p style="font-size:16px;font-weight:500;margin-bottom:0.5rem;">確定要刪除？</p>
+    <p style="font-size:13px;color:var(--tx3);margin-bottom:1.5rem;">刪除後無法復原</p>
+    <div style="display:flex;gap:10px;">
+      <button onclick="closeDelModal()" style="flex:1;padding:10px;background:transparent;border:1px solid var(--bdr);border-radius:var(--rs);font-size:14px;cursor:pointer;font-family:inherit;color:var(--tx2);">取消</button>
+      <button id="del-confirm-btn" style="flex:1;padding:10px;background:var(--cal);color:white;border:none;border-radius:var(--rs);font-size:14px;cursor:pointer;font-family:inherit;">確定刪除</button>
+    </div>
+  </div>
+</div>
 <div id="toast" class="toast"></div>
 
 <!-- Edit Modal -->
