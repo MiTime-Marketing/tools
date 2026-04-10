@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -601,6 +603,16 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);
     <div class="sec-t" style="margin-top:0.8rem;font-size:12px;">運動</div>
     <div id="cal-ex-entries"></div>
     <div id="cal-summary"></div>
+
+    <div style="margin-top:1.2rem;padding:1rem;background:var(--cardbg);border-radius:12px;border:1px solid var(--bdr);">
+      <h3 style="font-size:14px;font-weight:600;color:var(--tx);margin-bottom:4px;">資料備份</h3>
+      <p style="font-size:11px;color:var(--tx3);margin-bottom:10px;">將所有紀錄匯出為備份檔，可於其他裝置或資料遺失時匯入還原。</p>
+      <div style="display:flex;gap:10px;">
+        <button id="btn-export" style="flex:1;padding:10px;border:1px solid var(--ac);background:transparent;color:var(--ac);border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;">匯出備份</button>
+        <button id="btn-import" style="flex:1;padding:10px;border:1px solid var(--bdr);background:transparent;color:var(--tx2);border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;">匯入還原</button>
+      </div>
+      <input type="file" id="import-file" accept=".json" style="display:none;">
+    </div>
   </div>
 
   <!-- PROGRESS -->
@@ -695,6 +707,45 @@ function saveAll(){
   localStorage.setItem('dc-water',waterToday);
   localStorage.setItem('dc-water-date',getToday());
   localStorage.setItem('dc-exday-'+getToday(),isExDay?'1':'0');
+}
+
+function exportBackup(){
+  const backup={dc_cfg:cfg,dc_entries:entries,dc_weights:weights,dc_bodyfats:bodyfats,dc_exercises:exercises,dc_water:waterToday,dc_water_date:localStorage.getItem('dc-water-date')||'',dc_setup_done:localStorage.getItem('dc-setup-done')||''};
+  const exdayKeys={};
+  for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith('dc-exday-'))exdayKeys[k]=localStorage.getItem(k);}
+  backup.dc_exdays=exdayKeys;
+  backup._export_date=new Date().toISOString();
+  backup._version='DietDiary';
+  const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  const today=getToday();
+  a.href=url;a.download='DietDiary_備份_'+today+'.json';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+  showToast('備份檔案已下載');
+}
+
+function importBackup(file){
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const data=JSON.parse(e.target.result);
+      if(!data._version||data._version!=='DietDiary'){showToast('檔案格式不正確');return;}
+      if(!confirm('匯入將覆蓋目前所有資料，確定嗎？'))return;
+      if(data.dc_cfg)localStorage.setItem('dc-cfg',JSON.stringify(data.dc_cfg));
+      if(data.dc_entries)localStorage.setItem('dc-entries',JSON.stringify(data.dc_entries));
+      if(data.dc_weights)localStorage.setItem('dc-weights',JSON.stringify(data.dc_weights));
+      if(data.dc_bodyfats)localStorage.setItem('dc-bodyfats',JSON.stringify(data.dc_bodyfats));
+      if(data.dc_exercises)localStorage.setItem('dc-exercises',JSON.stringify(data.dc_exercises));
+      if(data.dc_water!==undefined)localStorage.setItem('dc-water',data.dc_water);
+      if(data.dc_water_date)localStorage.setItem('dc-water-date',data.dc_water_date);
+      if(data.dc_setup_done)localStorage.setItem('dc-setup-done',data.dc_setup_done);
+      if(data.dc_exdays){for(const k in data.dc_exdays){localStorage.setItem(k,data.dc_exdays[k]);}}
+      showToast('還原成功，頁面即將重新載入');
+      setTimeout(()=>location.reload(),1200);
+    }catch(err){showToast('檔案讀取失敗，請確認格式');}
+  };
+  reader.readAsText(file);
 }
 
 function getToday(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
@@ -1552,6 +1603,9 @@ document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('ex-add').addEventListener('click',addExercise);
   document.getElementById('cal-prev').addEventListener('click',()=>{if(calMonth===0){calMonth=11;calYear--;}else calMonth--;renderCalendar();});
   document.getElementById('cal-next').addEventListener('click',()=>{if(calMonth===11){calMonth=0;calYear++;}else calMonth++;renderCalendar();});
+  document.getElementById('btn-export').addEventListener('click',exportBackup);
+  document.getElementById('btn-import').addEventListener('click',()=>document.getElementById('import-file').click());
+  document.getElementById('import-file').addEventListener('change',function(){if(this.files[0]){importBackup(this.files[0]);this.value='';}});
 
   document.getElementById('range-ctrl').addEventListener('click',e=>{
     const btn=e.target.closest('.range-btn');if(!btn)return;
