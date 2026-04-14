@@ -681,6 +681,7 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);
 
 <script>
 const GURL='https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-preview:generateContent?key=';
+const GURL_FALLBACK='https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=';
 
 
 let cfg={},entries=[],weights=[],bodyfats=[],exercises=[],waterToday=0;
@@ -814,27 +815,37 @@ async function callGemini(parts,maxT,json){
   const key=cfg.apiKey;if(!key) throw new Error('請先設定 API Key');
   const body={contents:[{parts}],generationConfig:{temperature:json?0:0.7,maxOutputTokens:maxT||500}};
   if(json) body.generationConfig.responseMimeType='application/json';
-  const controller=new AbortController();
-  const timer=setTimeout(()=>controller.abort(),15000);
-  try{
-    const r=await fetch(GURL+key,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),signal:controller.signal});
-    clearTimeout(timer);
-    if(!r.ok){
-      const e=await r.json().catch(()=>({}));
-      const msg=(e.error&&e.error.message)||'';
-      const status=r.status;
-      if(status===503||msg.toLowerCase().includes('high demand')||msg.toLowerCase().includes('overloaded'))throw new Error('AI 服務目前繁忙，請稍後再試');
-      if(status===429||msg.toLowerCase().includes('quota')||msg.toLowerCase().includes('rate limit'))throw new Error('今日 AI 免費額度已用完，明天自動恢復');
-      if(status===401||status===403||msg.toLowerCase().includes('api key')||msg.toLowerCase().includes('invalid'))throw new Error('API Key 無效，請至設定重新確認');
-      throw new Error(msg||'AI 發生錯誤（'+status+'），請稍後再試');
+  async function tryFetch(url){
+    const controller=new AbortController();
+    const timer=setTimeout(()=>controller.abort(),15000);
+    try{
+      const r=await fetch(url+key,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),signal:controller.signal});
+      clearTimeout(timer);
+      if(!r.ok){
+        const e=await r.json().catch(()=>({}));
+        const msg=(e.error&&e.error.message)||'';
+        const status=r.status;
+        if(status===503||status===500||msg.toLowerCase().includes('high demand')||msg.toLowerCase().includes('overloaded'))return{retry:true,msg};
+        if(status===429||msg.toLowerCase().includes('quota')||msg.toLowerCase().includes('rate limit'))throw new Error('今日 AI 免費額度已用完，明天自動恢復');
+        if(status===401||status===403||msg.toLowerCase().includes('api key')||msg.toLowerCase().includes('invalid'))throw new Error('API Key 無效，請至設定重新確認');
+        throw new Error(msg||'AI 發生錯誤（'+status+'），請稍後再試');
+      }
+      const data=await r.json();
+      return{ok:true,text:(data.candidates[0].content.parts[0].text||'').trim()};
+    }catch(e){
+      clearTimeout(timer);
+      if(e.name==='AbortError')return{retry:true,msg:'timeout'};
+      throw e;
     }
-    const data=await r.json();
-    return(data.candidates[0].content.parts[0].text||'').trim();
-  }catch(e){
-    clearTimeout(timer);
-    if(e.name==='AbortError') throw new Error('請求逾時，請重新整理後再試一次');
-    throw e;
   }
+  const r1=await tryFetch(GURL);
+  if(r1.ok) return r1.text;
+  if(r1.retry){
+    const r2=await tryFetch(GURL_FALLBACK);
+    if(r2.ok) return r2.text;
+    if(r2.retry) throw new Error('AI 服務目前繁忙，請稍後再試');
+  }
+  throw new Error('AI 服務目前繁忙，請稍後再試');
 }
 async function callText(p,maxT,json){return callGemini([{text:p}],maxT,json);}
 async function callWithImage(prompt,b64,mime){
