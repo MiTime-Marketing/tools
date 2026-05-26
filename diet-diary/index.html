@@ -1,5 +1,6 @@
 
 
+
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -680,7 +681,7 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);
 </div>
 
 <script>
-const GURL='https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-preview:generateContent?key=';
+const GURL='https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=';
 const GURL_FALLBACK='https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=';
 
 
@@ -825,7 +826,7 @@ async function callGemini(parts,maxT,json){
         const e=await r.json().catch(()=>({}));
         const msg=(e.error&&e.error.message)||'';
         const status=r.status;
-        if(status===503||status===500||msg.toLowerCase().includes('high demand')||msg.toLowerCase().includes('overloaded'))return{retry:true,msg};
+        if(status===503||status===500||status===404||msg.toLowerCase().includes('high demand')||msg.toLowerCase().includes('overloaded')||msg.toLowerCase().includes('no longer available'))return{retry:true,msg};
         if(status===429||msg.toLowerCase().includes('quota')||msg.toLowerCase().includes('rate limit'))throw new Error('今日 AI 免費額度已用完，明天自動恢復');
         if(status===401||status===403||msg.toLowerCase().includes('api key')||msg.toLowerCase().includes('invalid'))throw new Error('API Key 無效，請至設定重新確認');
         throw new Error(msg||'AI 發生錯誤（'+status+'），請稍後再試');
