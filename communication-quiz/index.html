@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="zh-Hant-TW">
 <head>
@@ -191,14 +190,10 @@
     </div>
 
     <div class="block">
-      <h3>存下來、分享出去</h3>
-      <img class="shot" id="shot16" alt="測驗結果圖（16:9）">
-      <button class="primary" id="dl16">下載結果圖（16:9）</button>
-      <button class="second" id="dl9">下載限動圖（9:16）</button>
-      <button class="ghost" id="copyLink">複製我的專屬結果連結</button>
-      <button class="ghost" id="copyText">複製結果文字</button>
+      <h3>分享出去</h3>
+      <button class="primary" id="copyLink">複製我的專屬結果連結</button>
+      <button class="ghost" id="copyText">複製結果文字，邀朋友一起測</button>
       <p class="toast" id="toast"></p>
-      <p class="note" id="saveHint">手機上如果按了沒反應，長按上面那張圖也可以直接存下來。</p>
     </div>
 
     <p style="margin-top:28px"><button class="ghost" id="again">我也要測一次</button></p>
@@ -209,7 +204,7 @@
 
 <script>
   // ▼▼▼ 把 Apps Script「網頁應用程式網址」貼在這裡 ▼▼▼
-  const API_URL = "https://script.google.com/macros/s/請貼上你的網址/exec";
+  const API_URL = "https://script.google.com/macros/s/AKfycbw7KT5x4MXLjLqRrb7UZd4K1A-znv4qXPqzzpan5P_Zjt7Fxkr5u85TALsXIg3RfTn0/exec";
   // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
   const BASE_URL = location.origin + location.pathname;
@@ -373,7 +368,6 @@
       bars.appendChild(row);
     });
 
-    drawCards();
     el("intro").hidden = true; el("quiz").hidden = true; el("result").hidden = false;
     el("toast").textContent = "";
     window.scrollTo(0, 0);
@@ -409,10 +403,10 @@
       .then(r => r.json())
       .then(res => {
         if (res && res.ok && res.sent) setSend("ok", "✓ 完整結果已寄到 " + mail + "。幾分鐘內沒看到的話，記得看一下「促銷內容」或垃圾信匣。");
-        else if (res && res.ok) setSend("fail", "結果已記錄，但這次信件沒寄出去（可能同一個信箱寄太多次了）。先下載下面的結果圖存起來。");
+        else if (res && res.ok) setSend("fail", "結果已記錄，但這次信件沒寄出去（可能同一個信箱寄太多次了）。先複製下面的專屬結果連結存起來。");
         else throw new Error(res && res.error);
       })
-      .catch(() => setSend("fail", "寄送時出了點問題，你可以再試一次，或先下載下面的結果圖存起來。"));
+      .catch(() => setSend("fail", "寄送時出了點問題，你可以再試一次，或先複製下面的專屬結果連結存起來。"));
   }
 
   /* ---------- 結果圖 ---------- */
@@ -603,8 +597,6 @@
     i = 0; picks = []; window.scrollTo(0, 0);
   });
 
-  el("dl16").addEventListener("click", () => saveImage("wide"));
-  el("dl9").addEventListener("click", () => saveImage("story"));
   el("copyLink").addEventListener("click", () => copy(myLink(), "連結已複製，可以貼給別人或自己留著"));
   el("copyText").addEventListener("click", () => {
     const t = T[topK];
