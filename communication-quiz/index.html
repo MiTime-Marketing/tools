@@ -67,7 +67,7 @@
 
   .meter { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
   .meter .track { flex: 1; height: 5px; background: var(--rule); border-radius: 99px; overflow: hidden; }
-  .meter .fill { height: 100%; background: var(--orange); border-radius: 99px; transition: width .25s ease; }
+  .meter .fill { display: block; height: 100%; background: var(--orange); border-radius: 99px; transition: width .25s ease; }
   .meter .count { font-size: 12.5px; color: var(--faint); font-variant-numeric: tabular-nums; white-space: nowrap; }
   .scene { font-size: 14.5px; color: var(--soft); background: var(--cream); border-radius: 10px; padding: 13px 15px; margin: 0 0 14px; }
   h2 { font-family: "Noto Serif TC", Georgia, serif; font-size: 21px; font-weight: 700; line-height: 1.55; margin: 0 0 20px; color: var(--ink-strong); text-wrap: balance; }
@@ -98,8 +98,8 @@
   .bars { display: grid; gap: 9px; }
   .bar { display: grid; grid-template-columns: 58px 1fr 26px; gap: 10px; align-items: center; font-size: 13.5px; }
   .bar .name { color: var(--soft); }
-  .bar .track { height: 9px; background: var(--rule); border-radius: 99px; overflow: hidden; }
-  .bar .fill { height: 100%; background: var(--purple); border-radius: 99px; }
+  .bar .track { display: block; height: 9px; background: var(--rule); border-radius: 99px; overflow: hidden; }
+  .bar .fill { display: block; height: 100%; background: var(--purple); border-radius: 99px; }
   .bar.top .name { color: var(--ink-strong); font-weight: 700; }
   .bar.top .fill { background: var(--orange); }
   .bar .num { color: var(--faint); font-variant-numeric: tabular-nums; text-align: right; }
