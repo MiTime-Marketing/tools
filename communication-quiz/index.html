@@ -1,0 +1,621 @@
+
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>你是哪一種溝通型？｜米田行銷</title>
+<meta name="description" content="八個情境，兩分鐘，看看你平常是怎麼開口的。">
+<meta property="og:title" content="你是哪一種溝通型？">
+<meta property="og:description" content="八個情境，兩分鐘，看看你平常是怎麼開口的。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700&display=swap">
+<style>
+  :root {
+    --ground: #FAF8F1;
+    --cream: #F4EDE2;
+    --card: #FFFFFF;
+    --ink: #604D3F;
+    --ink-strong: #4A3C31;
+    --soft: #7A6553;
+    --faint: #A3907C;
+    --rule: #E4DACA;
+    --orange: #F3904C;
+    --orange-deep: #C0702F;
+    --orange-soft: #FCEAD9;
+    --purple: #B89DBC;
+    --purple-deep: #7E6284;
+    --purple-soft: #F0E9F2;
+    --lift: 0 1px 2px rgba(96,77,63,.05), 0 12px 32px -24px rgba(96,77,63,.8);
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  html, body { background: var(--ground); }
+  body {
+    margin: 0; color: var(--ink);
+    font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, "PingFang TC", "Microsoft JhengHei", sans-serif;
+    font-size: 16px; line-height: 1.8; -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 580px; margin: 0 auto; padding-inline: 20px; padding-block: 30px 64px; }
+  .brandline { font-size: 11px; letter-spacing: .2em; color: var(--orange-deep); font-weight: 700; margin: 0 0 22px; }
+  h1 { font-family: "Noto Serif TC", Georgia, serif; font-weight: 700; font-size: clamp(30px, 8.5vw, 40px); line-height: 1.3; margin: 0 0 16px; color: var(--ink-strong); text-wrap: balance; }
+  .lede { color: var(--soft); font-size: 15.5px; margin: 0 0 6px; }
+  .note { color: var(--faint); font-size: 13.5px; margin: 0; }
+
+  .map { display: grid; grid-template-columns: 44px 1fr 1fr; grid-template-rows: 26px 1fr 1fr; gap: 6px; margin: 26px 0 10px; }
+  .map .axlab { font-size: 11.5px; color: var(--faint); display: flex; align-items: center; justify-content: center; text-align: center; letter-spacing: .06em; }
+  .map .axlab.side { writing-mode: vertical-rl; }
+  .map .cell { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: 12px 10px; text-align: center; font-size: 14px; font-weight: 500; color: var(--soft); display: flex; align-items: center; justify-content: center; min-height: 62px; }
+  .map .cell.on { background: var(--orange-soft); border-color: var(--orange); color: var(--ink-strong); font-weight: 700; }
+
+  .field { margin-top: 20px; }
+  .field label { display: block; font-size: 13.5px; font-weight: 700; color: var(--ink-strong); margin-bottom: 7px; }
+  .field .hint { font-size: 12.5px; color: var(--faint); font-weight: 400; }
+  .field input[type=text], .field input[type=email] { width: 100%; padding: 13px 14px; font: inherit; font-size: 16px; background: var(--card); border: 1px solid var(--rule); border-radius: 10px; color: var(--ink); -webkit-appearance: none; }
+  .field input:focus { outline: 2px solid var(--orange); outline-offset: 1px; border-color: var(--orange); }
+  .fine { margin: 8px 0 0; font-size: 12px; color: var(--faint); line-height: 1.7; }
+  .err { color: #B3452F; font-size: 13px; margin: 8px 0 0; min-height: 18px; }
+
+  button { font: inherit; cursor: pointer; border-radius: 10px; }
+  .primary { width: 100%; padding: 15px 20px; background: var(--orange); color: #FFF; border: none; font-weight: 700; font-size: 16.5px; box-shadow: var(--lift); }
+  .primary:hover { background: var(--orange-deep); }
+  .second { width: 100%; padding: 14px 20px; background: var(--card); color: var(--ink-strong); border: 1px solid var(--orange); font-weight: 500; font-size: 15.5px; margin-top: 10px; }
+  .second:hover { background: var(--orange-soft); }
+  .ghost { width: 100%; padding: 13px 20px; background: transparent; color: var(--soft); border: 1px solid var(--rule); font-size: 14.5px; margin-top: 10px; }
+  .ghost:hover { border-color: var(--orange); color: var(--orange-deep); }
+  button:focus-visible, .opt:focus-visible { outline: 2px solid var(--purple-deep); outline-offset: 2px; }
+
+  .meter { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
+  .meter .track { flex: 1; height: 5px; background: var(--rule); border-radius: 99px; overflow: hidden; }
+  .meter .fill { height: 100%; background: var(--orange); border-radius: 99px; transition: width .25s ease; }
+  .meter .count { font-size: 12.5px; color: var(--faint); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .scene { font-size: 14.5px; color: var(--soft); background: var(--cream); border-radius: 10px; padding: 13px 15px; margin: 0 0 14px; }
+  h2 { font-family: "Noto Serif TC", Georgia, serif; font-size: 21px; font-weight: 700; line-height: 1.55; margin: 0 0 20px; color: var(--ink-strong); text-wrap: balance; }
+  .opts { display: grid; gap: 10px; }
+  .opt { width: 100%; text-align: left; background: var(--card); border: 1px solid var(--rule); color: var(--ink); padding: 15px 16px; font-size: 15.5px; line-height: 1.65; display: flex; gap: 12px; align-items: flex-start; border-radius: 10px; font-family: inherit; cursor: pointer; }
+  .opt:hover { border-color: var(--orange); background: var(--orange-soft); }
+  .opt b { color: var(--orange-deep); font-weight: 700; font-size: 13.5px; line-height: 1.8; flex: none; }
+
+  .sendbox { border-radius: 12px; padding: 13px 16px; font-size: 14.5px; margin-bottom: 18px; border: 1px solid var(--rule); background: var(--card); color: var(--soft); }
+  .sendbox.ok { background: var(--orange-soft); border-color: var(--orange); color: var(--ink-strong); }
+  .sendbox .retry { width: auto; display: inline-block; margin: 8px 0 0; padding: 8px 14px; font-size: 13.5px; }
+
+  .badge { background: var(--cream); border: 1px solid var(--rule); border-radius: 16px; padding: 28px 24px; box-shadow: var(--lift); }
+  .badge .kicker { font-size: 12.5px; letter-spacing: .1em; color: var(--soft); margin: 0 0 6px; }
+  .badge h2 { font-size: 36px; margin: 0 0 8px; color: var(--orange-deep); }
+  .badge .oneline { font-size: 17px; color: var(--ink-strong); font-weight: 500; margin: 0; }
+  .block { margin-top: 28px; }
+  .block h3 { font-size: 12.5px; letter-spacing: .18em; color: var(--orange-deep); font-weight: 700; margin: 0 0 12px; padding-bottom: 9px; border-bottom: 1px solid var(--rule); }
+  .block p { margin: 0 0 14px; font-size: 15.5px; color: var(--ink); }
+  .block p:last-child { margin-bottom: 0; }
+  .roles { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+  .roles li { background: var(--card); border: 1px solid var(--rule); border-radius: 9px; padding: 11px 14px; font-size: 15px; color: var(--ink); }
+  .learn { background: var(--purple-soft); border: 1px solid var(--purple); border-radius: 12px; padding: 18px; font-size: 15.5px; color: var(--ink-strong); }
+  .learn strong { color: var(--purple-deep); }
+  .clash { background: var(--card); border: 1px solid var(--rule); border-radius: 12px; padding: 16px 18px; font-size: 15px; color: var(--ink); }
+  .clash b { color: var(--orange-deep); }
+
+  .bars { display: grid; gap: 9px; }
+  .bar { display: grid; grid-template-columns: 58px 1fr 26px; gap: 10px; align-items: center; font-size: 13.5px; }
+  .bar .name { color: var(--soft); }
+  .bar .track { height: 9px; background: var(--rule); border-radius: 99px; overflow: hidden; }
+  .bar .fill { height: 100%; background: var(--purple); border-radius: 99px; }
+  .bar.top .name { color: var(--ink-strong); font-weight: 700; }
+  .bar.top .fill { background: var(--orange); }
+  .bar .num { color: var(--faint); font-variant-numeric: tabular-nums; text-align: right; }
+  .scale { display: grid; grid-template-columns: 58px 1fr 26px; gap: 10px; margin-top: 6px; }
+  .scale .ticks { display: flex; justify-content: space-between; font-size: 11px; color: var(--faint); font-variant-numeric: tabular-nums; }
+  .scale .cap { font-size: 11px; color: var(--faint); }
+
+  .shot { width: 100%; border-radius: 12px; border: 1px solid var(--rule); display: block; margin-bottom: 12px; }
+  .toast { margin: 10px 0 0; font-size: 13.5px; color: var(--orange-deep); min-height: 20px; word-break: break-all; }
+  footer { margin-top: 46px; padding-top: 18px; border-top: 1px solid var(--rule); font-size: 12.5px; color: var(--faint); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="brandline">從工作到日常｜行銷 PM 的 4 步驟溝通術</p>
+
+  <!-- ===== 開始 ===== -->
+  <section id="intro">
+    <h1>你是哪一種溝通型？</h1>
+    <p class="lede">溝通會卡住，常常不是誰對誰錯，而是兩個人的預設模式不一樣。八個情境，兩分鐘，看看你平常是怎麼開口的。</p>
+
+    <div class="map" aria-hidden="true">
+      <div></div><div class="axlab">直接說</div><div class="axlab">要你猜</div>
+      <div class="axlab side">要事情</div><div class="cell">結論型</div><div class="cell">精算型</div>
+      <div class="axlab side">要感受</div><div class="cell">情緒型</div><div class="cell">和氣型</div>
+    </div>
+
+    <p class="note">沒有哪一型比較好，也沒有分數高低。請選「最像你」的，不是「你覺得對」的。</p>
+
+    <div class="field">
+      <label for="nick">你的暱稱　<span class="hint">結果頁會這樣稱呼你</span></label>
+      <input id="nick" type="text" maxlength="20" autocomplete="nickname" placeholder="小米">
+    </div>
+    <div class="field">
+      <label for="mail">Email　<span class="hint">做完會把完整結果寄給你</span></label>
+      <input id="mail" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com">
+    </div>
+    <p class="fine">填寫 Email 即表示同意米田行銷寄送你的測驗結果，之後也可能不定期寄送溝通與行銷相關的電子報，每封電子報都能隨時取消訂閱。</p>
+    <p class="err" id="formErr"></p>
+
+    <p style="margin-top:12px"><button class="primary" id="start">開始作答</button></p>
+  </section>
+
+  <!-- ===== 題目 ===== -->
+  <section id="quiz" hidden>
+    <div class="meter">
+      <span class="count" id="count">1 / 8</span>
+      <span class="track"><span class="fill" id="fill" style="width:12.5%"></span></span>
+    </div>
+    <p class="scene" id="scene"></p>
+    <h2 id="question"></h2>
+    <div class="opts" id="opts"></div>
+    <button class="ghost" id="back" hidden>上一題</button>
+  </section>
+
+  <!-- ===== 結果 ===== -->
+  <section id="result" hidden>
+    <div class="sendbox" id="sendbox" hidden></div>
+
+    <div class="badge">
+      <p class="kicker" id="r-hello"></p>
+      <h2 id="r-name"></h2>
+      <p class="oneline" id="r-oneline"></p>
+    </div>
+
+    <div class="map" id="r-map" aria-hidden="true">
+      <div></div><div class="axlab">直接說</div><div class="axlab">要你猜</div>
+      <div class="axlab side">要事情</div>
+      <div class="cell" data-k="result">結論型</div><div class="cell" data-k="analyst">精算型</div>
+      <div class="axlab side">要感受</div>
+      <div class="cell" data-k="feeler">情緒型</div><div class="cell" data-k="peace">和氣型</div>
+    </div>
+
+    <div class="block"><h3>你是這樣的人</h3><div id="r-who"></div></div>
+    <div class="block"><h3>你擅長的溝通位置</h3><ul class="roles" id="r-roles"></ul></div>
+    <div class="block"><h3>建議可以學習的</h3><div class="learn" id="r-learn"></div></div>
+    <div class="block"><h3>你最容易跟誰卡住</h3><div class="clash" id="r-clash"></div></div>
+
+    <div class="block">
+      <h3>你的傾向分佈</h3>
+      <div class="bars" id="r-bars"></div>
+      <div class="scale">
+        <span class="cap">八題中</span>
+        <span class="ticks"><span>0</span><span>2</span><span>4</span><span>6</span><span>8</span></span>
+        <span></span>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>存下來、分享出去</h3>
+      <img class="shot" id="shot16" alt="測驗結果圖（16:9）">
+      <button class="primary" id="dl16">下載結果圖（16:9）</button>
+      <button class="second" id="dl9">下載限動圖（9:16）</button>
+      <button class="ghost" id="copyLink">複製我的專屬結果連結</button>
+      <button class="ghost" id="copyText">複製結果文字</button>
+      <p class="toast" id="toast"></p>
+      <p class="note" id="saveHint">手機上如果按了沒反應，長按上面那張圖也可以直接存下來。</p>
+    </div>
+
+    <p style="margin-top:28px"><button class="ghost" id="again">我也要測一次</button></p>
+  </section>
+
+  <footer>米田行銷 MiTime Marketing &amp; Consulting</footer>
+</div>
+
+<script>
+  // ▼▼▼ 把 Apps Script「網頁應用程式網址」貼在這裡 ▼▼▼
+  const API_URL = "https://script.google.com/macros/s/請貼上你的網址/exec";
+  // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+
+  const BASE_URL = location.origin + location.pathname;
+  const INIT = Object.fromEntries(new URLSearchParams(location.search));
+</script>
+<script>
+  const ORDER = ["result", "analyst", "feeler", "peace"];
+
+  const T = {
+    result: {
+      name: "結論型", oneline: "講重點、要效率，最怕繞圈子",
+      who: [
+        "你的腦子跑得比對話快。別人還在鋪陳前因後果，你已經抓到他要說什麼了，所以你會很想直接跳到「那現在要怎麼辦」。對你來說，把問題解掉才是對彼此的尊重，繞來繞去反而是浪費大家的時間。",
+        "你討厭沒有結論的會議，也不太有耐心聽完整的來龍去脈。你講話直接，不是因為不在乎對方，而是因為你相信講清楚比講漂亮重要。",
+        "在需要有人拍板的場合，大家其實很依賴你。當所有人都在猶豫的時候，你是那個會把話講定、讓事情往前走的人。"
+      ],
+      roles: ["主持會議，把發散的討論收回來", "處理突發狀況，需要有人當場決定的時候", "對外談判、報價，需要守住立場的場合"],
+      learn: "<strong>慢半拍，先給一句背景。</strong>多數人需要一點鋪陳才跟得上你的結論。你一開口就下判斷，對方接收到的往往是「我被否定了」，而不是「我被回答了」。面對情緒型和和氣型的人，先說一句「我知道這件事卡很久了」，再講你的結論，接受度會差很多。",
+      clash: "<b>情緒型</b>。你要的是趕快解決，他要的是先被聽見。你覺得他在拖延，他覺得你不在乎，但其實你們想要的是同一件事，只是順序不一樣。先接住他一句，再談事情，兩分鐘可以省下兩小時。"
+    },
+    analyst: {
+      name: "精算型", oneline: "先把風險想過一輪，才願意開口",
+      who: [
+        "你不習慣馬上表態。別人拋出一個方向，你腦中同時在跑好幾條線：如果失敗會怎樣、誰要負責、有沒有更穩的做法、這件事三個月後會不會回來找我們。",
+        "你的沉默不是沒有意見，是還沒算完。等你開口的時候，通常已經是想過一輪的版本了，所以你很少踩到坑。",
+        "但也因為這樣，你常被誤會成不配合或是太冷淡。別人看到的是你沒有反應，看不到你腦子裡跑了多少東西。"
+      ],
+      roles: ["審合約、看細節，替團隊擋掉風險", "設計流程與規則，把事情變成可以重複執行的", "控預算、做評估，需要有人說「等一下」的位置"],
+      learn: "<strong>把你算過的東西講出來。</strong>你以為沉默是謹慎，別人讀到的卻是冷淡。你不用急著給結論，只要說出你在擔心什麼就好。一句「我在想的是萬一 X 發生怎麼辦」，就能把整場討論從對立變成一起解題，而且大家會發現你其實想得最深。",
+      clash: "<b>和氣型</b>。你在等他表態，他在等場面和緩，兩個人都不想先開口，結果事情永遠決定不了，最後被第三個人決定。跟這一型講話，你得主動把選項攤出來，逼出一個「哪一個比較可以」。"
+    },
+    feeler: {
+      name: "情緒型", oneline: "感受先行，真誠都寫在臉上",
+      who: [
+        "你對氣氛非常敏感。別人語氣一變、訊息少回一句，你馬上就察覺到了，而且會一直放在心上。",
+        "你講話帶著情緒，不是因為控制不住，是因為你相信說話本來就該有溫度。沒有感受的溝通，對你來說跟交辦事項沒兩樣。",
+        "大家覺得跟你相處很真實，願意跟你講真話，因為你不會假裝。但在很理性的場合，你的情緒容易被當成不專業，明明你講的內容是對的，卻因為語氣被打折扣。"
+      ],
+      roles: ["經營客戶關係，讓對方願意說真話", "帶人、顧團隊氣氛，看得出誰快撐不住了", "對外公關、說品牌故事，需要感染力的場合"],
+      learn: "<strong>把情緒和訴求分開講。</strong>先說感受，再說你具體要什麼。「我有點被這個時程嚇到，我想確認的是能不能延三天」，比直接說「這根本做不完」有用十倍。情緒不需要收起來，只要讓它後面接一個明確的要求，對方才接得住。",
+      clash: "<b>精算型</b>。你講感受，他問數據；你覺得他冷血，他覺得你不理性。跟這一型溝通，把你的感受翻譯成「我擔心會發生什麼」，他立刻就聽得懂了。你們其實都在講風險，只是用不同的語言。"
+    },
+    peace: {
+      name: "和氣型", oneline: "先照顧氣氛，不想讓場面僵掉",
+      who: [
+        "你很難在當下說「不」。不是沒有主見，而是你會先想到說出口之後對方的表情、後續的尷尬，還有大家會不會不開心。",
+        "所以你常常先說好，回家才發現自己其實不想做。然後你會自己吞下去，或是硬做完，或是拖到最後才說。",
+        "大家都覺得你很好溝通，但你其實是最難的一型，因為沒有人知道你真正的想法。你的「好」和你真的同意，中間差了很遠，而別人沒辦法分辨。"
+      ],
+      roles: ["跨部門專案，需要有人協調各方的位置", "合作介接，當內部與外部之間的橋", "團隊裡的潤滑劑，把僵掉的場面接回來"],
+      learn: "<strong>練習說「我需要想一下」。</strong>你的「好」常常不是真的好，但對方不知道，等到你做不到才說，關係反而更傷。爭取時間不會破壞氣氛，先說一句「我想確認一下再回你」，比事後反悔的成本低太多，而且會讓人更信任你。",
+      clash: "<b>結論型</b>。他講話又快又直，你會直覺先閃避、先說好，然後把不同意吞回去。跟這一型，你要練的是在當下講出一個具體的顧慮，哪怕只有一句。他其實不怕被反對，他只怕事後才發現有問題。"
+    }
+  };
+
+  const Q = [
+    { s: "會議上，有人提出一個方向，你心裡不太同意。", q: "當下你最可能的反應是？",
+      a: [["A", "直接說出來：「我覺得這個方向有問題，因為⋯⋯」，把話講清楚比較快", "result"],
+          ["B", "先問幾個問題，把我擔心的風險一個一個問出來，讓大家自己看到", "analyst"],
+          ["C", "表情大概先出賣我了，然後我會說：「可是這樣做，大家會不會太累？」", "feeler"],
+          ["D", "當下我會說「也可以啊」，會後再私下找人聊我的顧慮", "peace"]] },
+    { s: "客戶傳來一封很長的訊息，有五、六段。", q: "你打開之後的第一個動作是？",
+      a: [["A", "直接往下滑到最後，先看他到底要我做什麼", "result"],
+          ["B", "從頭看到尾，一邊看一邊記下哪幾句怪怪的、可能有陷阱", "analyst"],
+          ["C", "先感覺他的語氣，判斷他是不是在生氣或是不滿", "feeler"],
+          ["D", "先想他為什麼要寫這麼長，是不是遇到什麼難處", "peace"]] },
+    { s: "跟人共事的時候，總有一些事會讓人受不了。", q: "下面哪一件最戳到你？",
+      a: [["A", "講了十分鐘，還是講不到重點", "result"],
+          ["B", "資料都還沒看完，就急著做決定", "analyst"],
+          ["C", "明明就有情緒，卻一直說「我沒事」", "feeler"],
+          ["D", "講話太衝，把氣氛弄得很僵，事後也沒有人處理", "peace"]] },
+    { s: "有人提出一個你做不到、也不該答應的要求。", q: "你會怎麼回？",
+      a: [["A", "直接說「這個做不到」，然後講我可以做到的範圍到哪裡", "result"],
+          ["B", "把做不到的理由一條一條列出來，讓他知道不是我不願意", "analyst"],
+          ["C", "先說「我真的很想幫你」，再講我的難處在哪裡", "feeler"],
+          ["D", "說「我再看看」，然後盡量拖，希望這件事自己過去", "peace"]] },
+    { s: "專案出包了，大家都在群組裡，訊息一直跳。", q: "你發出的第一句話通常是？",
+      a: [["A", "「現在要怎麼補？」", "result"],
+          ["B", "「先確認一下，是哪一個環節出問題。」", "analyst"],
+          ["C", "「天啊，怎麼會這樣。」", "feeler"],
+          ["D", "「沒關係，我們先不要慌。」", "peace"]] },
+    { s: "同事或朋友跟你抱怨工作上的鳥事，講了十幾分鐘。", q: "你最自然的反應是？",
+      a: [["A", "開始幫他想接下來可以怎麼處理", "result"],
+          ["B", "問他更多細節，我想先搞清楚整件事的來龍去脈", "analyst"],
+          ["C", "跟著他一起罵，我完全可以感同身受", "feeler"],
+          ["D", "一直附和他，說「對啊，你真的很辛苦」", "peace"]] },
+    { s: "你要寫一封訊息給客戶，內容有點敏感。", q: "送出之前，你花最多時間在檢查什麼？",
+      a: [["A", "有沒有把重點講清楚，對方看完知不知道要做什麼", "result"],
+          ["B", "有沒有漏掉什麼、會不會被抓語病、以後會不會有爭議", "analyst"],
+          ["C", "語氣會不會太硬，讀起來像不像在責怪對方", "feeler"],
+          ["D", "對方看了會不會不舒服，會不會覺得我在逼他", "peace"]] },
+    { s: "團隊要做一個決定，意見分成兩派，討論二十分鐘還是沒結論。", q: "你會怎麼做？",
+      a: [["A", "說「那就先用 A 案，有問題我們再調整」，把它定下來", "result"],
+          ["B", "把兩個方案的風險和成本列出來，讓大家用同一個基準比較", "analyst"],
+          ["C", "直接說出我比較喜歡哪一個，還有我為什麼在意這件事", "feeler"],
+          ["D", "試著找一個折衷方案，讓兩邊都能接受一部分", "peace"]] }
+  ];
+
+  const el = id => document.getElementById(id);
+  let i = 0, picks = [], nick = "", mail = "", score = null, topK = null;
+
+  /* ---------- 題目 ---------- */
+  function render() {
+    const q = Q[i];
+    el("count").textContent = (i + 1) + " / " + Q.length;
+    el("fill").style.width = ((i + 1) / Q.length * 100) + "%";
+    el("scene").textContent = q.s;
+    el("question").textContent = q.q;
+    const box = el("opts");
+    box.innerHTML = "";
+    q.a.forEach(([letter, text, key]) => {
+      const b = document.createElement("button");
+      b.className = "opt"; b.type = "button";
+      b.innerHTML = "<b></b><span></span>";
+      b.querySelector("b").textContent = letter;
+      b.querySelector("span").textContent = text;
+      b.addEventListener("click", () => {
+        picks[i] = key;
+        if (i < Q.length - 1) { i++; render(); } else finish();
+      });
+      box.appendChild(b);
+    });
+    el("back").hidden = i === 0;
+    window.scrollTo(0, 0);
+  }
+
+  /* ---------- 結果 ---------- */
+  function computeScore(list) {
+    const s = { result: 0, analyst: 0, feeler: 0, peace: 0 };
+    list.forEach(k => { if (s[k] !== undefined) s[k]++; });
+    return s;
+  }
+
+  function showResult(sc, who) {
+    score = sc;
+    const sorted = ORDER.slice().sort((a, b) => sc[b] - sc[a]);
+    topK = sorted[0];
+    const t = T[topK];
+
+    el("r-hello").textContent = who ? who + "，你的溝通預設模式是" : "你的溝通預設模式是";
+    el("r-name").textContent = t.name;
+    el("r-oneline").textContent = t.oneline;
+
+    const whoBox = el("r-who"); whoBox.innerHTML = "";
+    t.who.forEach(p => { const n = document.createElement("p"); n.textContent = p; whoBox.appendChild(n); });
+    el("r-learn").innerHTML = t.learn;
+    el("r-clash").innerHTML = t.clash;
+    document.querySelectorAll("#r-map .cell").forEach(c => c.classList.toggle("on", c.dataset.k === topK));
+
+    const roles = el("r-roles"); roles.innerHTML = "";
+    t.roles.forEach(r => { const li = document.createElement("li"); li.textContent = r; roles.appendChild(li); });
+
+    const bars = el("r-bars"); bars.innerHTML = "";
+    sorted.forEach(k => {
+      const row = document.createElement("div");
+      row.className = "bar" + (k === topK ? " top" : "");
+      row.innerHTML = '<span class="name"></span><span class="track"><span class="fill"></span></span><span class="num"></span>';
+      row.querySelector(".name").textContent = T[k].name;
+      row.querySelector(".fill").style.width = (sc[k] / Q.length * 100) + "%";
+      row.querySelector(".num").textContent = sc[k];
+      bars.appendChild(row);
+    });
+
+    drawCards();
+    el("intro").hidden = true; el("quiz").hidden = true; el("result").hidden = false;
+    el("toast").textContent = "";
+    window.scrollTo(0, 0);
+  }
+
+  function finish() {
+    showResult(computeScore(picks), nick);
+    submit();
+  }
+
+  /* ---------- 自動寄出結果 ---------- */
+  function setSend(state, text) {
+    const b = el("sendbox");
+    b.hidden = false;
+    b.className = "sendbox" + (state === "ok" ? " ok" : "");
+    b.textContent = text;
+    if (state === "fail") {
+      const r = document.createElement("button");
+      r.className = "second retry"; r.type = "button"; r.textContent = "再寄一次";
+      r.addEventListener("click", submit);
+      b.appendChild(document.createElement("br"));
+      b.appendChild(r);
+    }
+  }
+
+  function submit() {
+    setSend("wait", "正在把完整結果寄到 " + mail + "⋯");
+    fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ nick: nick, email: mail, picks: picks.slice() })
+    })
+      .then(r => r.json())
+      .then(res => {
+        if (res && res.ok && res.sent) setSend("ok", "✓ 完整結果已寄到 " + mail + "。幾分鐘內沒看到的話，記得看一下「促銷內容」或垃圾信匣。");
+        else if (res && res.ok) setSend("fail", "結果已記錄，但這次信件沒寄出去（可能同一個信箱寄太多次了）。先下載下面的結果圖存起來。");
+        else throw new Error(res && res.error);
+      })
+      .catch(() => setSend("fail", "寄送時出了點問題，你可以再試一次，或先下載下面的結果圖存起來。"));
+  }
+
+  /* ---------- 結果圖 ---------- */
+  const IMG = { wide: null, story: null };
+
+  function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+
+  function drawCard(W, H) {
+    const c = document.createElement("canvas");
+    c.width = W; c.height = H;
+    const x = c.getContext("2d");
+    const F = '"Noto Sans TC", "PingFang TC", sans-serif';
+    const pad = Math.round(W * 0.085);
+    const t = T[topK];
+
+    x.fillStyle = "#FAF8F1"; x.fillRect(0, 0, W, H);
+    x.fillStyle = "#F4EDE2";
+    x.beginPath(); x.arc(W * 0.92, H * 0.08, W * 0.22, 0, Math.PI * 2); x.fill();
+
+    let y = pad;
+    x.fillStyle = "#C0702F";
+    x.font = "700 " + Math.round(W * 0.021) + "px " + F;
+    x.fillText("從工作到日常｜行銷 PM 的 4 步驟溝通術", pad, y + W * 0.021);
+    y += W * 0.075;
+
+    if (nick) {
+      x.fillStyle = "#7A6553";
+      x.font = "500 " + Math.round(W * 0.028) + "px " + F;
+      x.fillText(nick + "，你的溝通預設模式是", pad, y + W * 0.028);
+      y += W * 0.062;
+    }
+
+    x.fillStyle = "#C0702F";
+    x.font = "700 " + Math.round(W * 0.105) + "px " + F;
+    x.fillText(t.name, pad, y + W * 0.095);
+    y += W * 0.135;
+
+    x.fillStyle = "#4A3C31";
+    x.font = "500 " + Math.round(W * 0.034) + "px " + F;
+    x.fillText(t.oneline, pad, y + W * 0.03);
+    y += W * 0.085;
+
+    const wide = W > H;
+    const sorted = ORDER.slice().sort((a, b) => score[b] - score[a]);
+    const barsY = y;
+    const bw = (wide ? W * 0.44 : W - pad * 2) - W * 0.13;
+
+    x.fillStyle = "#A3907C";
+    x.font = "700 " + Math.round(W * 0.019) + "px " + F;
+    x.fillText("你的傾向分佈", pad, y);
+    y += W * 0.028;
+
+    sorted.forEach(k => {
+      x.fillStyle = "#7A6553";
+      x.font = "500 " + Math.round(W * 0.024) + "px " + F;
+      x.fillText(T[k].name, pad, y + W * 0.022);
+      const bx = pad + W * 0.105, bh = Math.round(W * 0.016);
+      x.fillStyle = "#E4DACA";
+      roundRect(x, bx, y + W * 0.005, bw, bh, bh / 2); x.fill();
+      const frac = score[k] / Q.length;
+      if (frac > 0) {
+        x.fillStyle = k === topK ? "#F3904C" : "#B89DBC";
+        roundRect(x, bx, y + W * 0.005, Math.max(bh, bw * frac), bh, bh / 2); x.fill();
+      }
+      x.fillStyle = "#A3907C";
+      x.font = "500 " + Math.round(W * 0.02) + "px " + F;
+      x.fillText(String(score[k]), bx + bw + W * 0.012, y + W * 0.021);
+      y += W * 0.046;
+    });
+
+    const mapW = wide ? W * 0.30 : W - pad * 2;
+    const mapX = wide ? W - pad - mapW : pad;
+    const mapY = wide ? barsY : y + W * 0.03;
+    const gap = W * 0.012;
+    const cell = (mapW - gap) / 2;
+    const cellH = wide ? cell * 0.62 : cell * 0.52;
+
+    x.fillStyle = "#A3907C";
+    x.font = "600 " + Math.round(W * 0.018) + "px " + F;
+    x.textAlign = "center";
+    x.fillText("直接說", mapX + cell / 2, mapY - W * 0.008);
+    x.fillText("要你猜", mapX + cell + gap + cell / 2, mapY - W * 0.008);
+
+    [["result", "analyst"], ["feeler", "peace"]].forEach((row, r) => {
+      row.forEach((k, cI) => {
+        const cx = mapX + cI * (cell + gap);
+        const cy = mapY + r * (cellH + gap);
+        const on = k === topK;
+        x.fillStyle = on ? "#FCEAD9" : "#FFFFFF";
+        roundRect(x, cx, cy, cell, cellH, W * 0.012); x.fill();
+        x.lineWidth = Math.max(2, W * 0.002);
+        x.strokeStyle = on ? "#F3904C" : "#E4DACA";
+        roundRect(x, cx, cy, cell, cellH, W * 0.012); x.stroke();
+        x.fillStyle = on ? "#4A3C31" : "#A3907C";
+        x.font = (on ? "700 " : "500 ") + Math.round(W * 0.024) + "px " + F;
+        x.fillText(T[k].name, cx + cell / 2, cy + cellH / 2 + W * 0.009);
+      });
+    });
+    x.textAlign = "left";
+
+    y = H - pad - W * 0.025;
+    x.fillStyle = "#A3907C";
+    x.font = "400 " + Math.round(W * 0.021) + "px " + F;
+    x.fillText("米田行銷 MiTime Marketing & Consulting　｜　@mky_riceinlife", pad, y + W * 0.02);
+    return c;
+  }
+
+  async function drawCards() {
+    try { if (document.fonts && document.fonts.ready) await document.fonts.ready; } catch (e) {}
+    IMG.wide = drawCard(1600, 900);
+    IMG.story = drawCard(1080, 1920);
+    el("shot16").src = IMG.wide.toDataURL("image/png");
+  }
+
+  function saveImage(which) {
+    const canvas = IMG[which];
+    if (!canvas) return;
+    const name = "溝通型測驗_" + (nick || "結果") + "_" + T[topK].name + (which === "story" ? "_限動" : "") + ".png";
+    canvas.toBlob(blob => {
+      try {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url; a.download = name; a.target = "_self";
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 4000);
+        el("toast").textContent = "已經開始下載";
+      } catch (e) {
+        el("toast").textContent = "這個瀏覽器不支援直接下載，長按上面那張圖存下來就好。";
+      }
+    }, "image/png");
+  }
+
+  /* ---------- 專屬連結 ---------- */
+  function myLink() {
+    return BASE_URL + "?n=" + encodeURIComponent(nick || "") + "&s=" + ORDER.map(k => score[k]).join(",");
+  }
+
+  function readInit() {
+    if (!INIT || !INIT.s) return null;
+    const s = String(INIT.s).split(",").map(Number);
+    if (s.length !== 4 || s.some(n => !Number.isInteger(n) || n < 0 || n > 8)) return null;
+    if (s.reduce((a, b) => a + b, 0) !== 8) return null;
+    const sc = {};
+    ORDER.forEach((k, idx) => sc[k] = s[idx]);
+    return { nick: String(INIT.n || "").slice(0, 20), score: sc };
+  }
+
+  async function copy(text, okMsg) {
+    try { await navigator.clipboard.writeText(text); el("toast").textContent = okMsg; }
+    catch (e) {
+      try {
+        const ta = document.createElement("textarea");
+        ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+        document.body.appendChild(ta); ta.select();
+        const ok = document.execCommand("copy"); ta.remove();
+        el("toast").textContent = ok ? okMsg : "請手動複製：" + text;
+      } catch (e2) { el("toast").textContent = "請手動複製：" + text; }
+    }
+  }
+
+  /* ---------- 事件 ---------- */
+  el("start").addEventListener("click", () => {
+    nick = el("nick").value.trim();
+    mail = el("mail").value.trim();
+    if (!nick) { el("formErr").textContent = "請先填一個暱稱，結果頁會用到。"; el("nick").focus(); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)) {
+      el("formErr").textContent = mail ? "Email 格式看起來怪怪的，再確認一下。" : "請填 Email，做完會把完整結果寄給你。";
+      el("mail").focus(); return;
+    }
+    el("formErr").textContent = "";
+    el("intro").hidden = true; el("quiz").hidden = false;
+    i = 0; picks = []; render();
+  });
+
+  el("back").addEventListener("click", () => { if (i > 0) { i--; render(); } });
+
+  el("again").addEventListener("click", () => {
+    history.replaceState(null, "", BASE_URL);
+    el("result").hidden = true; el("sendbox").hidden = true; el("intro").hidden = false;
+    i = 0; picks = []; window.scrollTo(0, 0);
+  });
+
+  el("dl16").addEventListener("click", () => saveImage("wide"));
+  el("dl9").addEventListener("click", () => saveImage("story"));
+  el("copyLink").addEventListener("click", () => copy(myLink(), "連結已複製，可以貼給別人或自己留著"));
+  el("copyText").addEventListener("click", () => {
+    const t = T[topK];
+    copy("我是【" + t.name + "】，" + t.oneline + "。你是哪一型？" + BASE_URL, "結果已複製，可以貼到聊天室了");
+  });
+
+  // 從專屬連結進來，直接顯示結果（不寄信）
+  (function () {
+    const r = readInit();
+    if (r) { nick = r.nick; showResult(r.score, r.nick); }
+  })();
+</script>
+</body>
+</html>
