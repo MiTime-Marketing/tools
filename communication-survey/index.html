@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>講座回饋問卷｜從工作到日常</title>
+<meta name="description" content="花 2 分鐘填回饋，講座簡報之後寄給你。">
+<meta property="og:title" content="講座回饋問卷｜從工作到日常">
+<meta property="og:description" content="花 2 分鐘填回饋，講座簡報之後寄給你。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700&display=swap">
+<style>
+  :root {
+    --ground: #FAF8F1;
+    --cream: #F4EDE2;
+    --card: #FFFFFF;
+    --ink: #604D3F;
+    --ink-strong: #4A3C31;
+    --soft: #7A6553;
+    --faint: #A3907C;
+    --rule: #E4DACA;
+    --orange: #F3904C;
+    --orange-deep: #C0702F;
+    --orange-soft: #FCEAD9;
+    --purple: #B89DBC;
+    --purple-deep: #7E6284;
+    --purple-soft: #F0E9F2;
+    --anchor: #252422;
+    --lift: 0 1px 2px rgba(96,77,63,.05), 0 12px 32px -24px rgba(96,77,63,.8);
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  html, body { background: var(--ground); }
+  body {
+    margin: 0; color: var(--ink);
+    font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, "PingFang TC", "Microsoft JhengHei", sans-serif;
+    font-size: 16px; line-height: 1.8; -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 580px; margin: 0 auto; padding-inline: 20px; padding-block: 30px 72px; }
+  .brandline { font-size: 11px; letter-spacing: .2em; color: var(--orange-deep); font-weight: 700; margin: 0 0 20px; }
+  h1 { font-family: "Noto Serif TC", Georgia, serif; font-weight: 700; font-size: clamp(28px, 7.6vw, 36px); line-height: 1.35; margin: 0 0 14px; color: var(--ink-strong); text-wrap: balance; }
+  .lede { color: var(--soft); font-size: 15.5px; margin: 0 0 8px; }
+  .note { color: var(--faint); font-size: 13.5px; margin: 0; }
+
+  .gift { margin: 22px 0 0; background: var(--orange-soft); border: 1px solid var(--orange); border-radius: 12px; padding: 14px 16px; font-size: 14.5px; color: var(--ink-strong); }
+  .gift b { color: var(--orange-deep); }
+
+  section.part { margin-top: 42px; }
+  section.part > .kicker { font-size: 12px; letter-spacing: .18em; color: var(--orange-deep); font-weight: 700; margin: 0 0 8px; }
+  section.part > h2 { font-family: "Noto Serif TC", Georgia, serif; font-size: 21px; font-weight: 700; line-height: 1.5; margin: 0 0 6px; color: var(--ink-strong); }
+  section.part > .sub { font-size: 13.5px; color: var(--faint); margin: 0 0 4px; }
+
+  .q { margin-top: 24px; }
+  .q > .lab { display: block; font-size: 15px; font-weight: 700; color: var(--ink-strong); margin-bottom: 4px; }
+  .q > .lab .req { color: var(--orange-deep); font-weight: 700; }
+  .q > .hint { font-size: 12.5px; color: var(--faint); margin: 0 0 10px; line-height: 1.7; }
+
+  input[type=text], input[type=email], select, textarea {
+    width: 100%; padding: 13px 14px; font: inherit; font-size: 16px;
+    background: var(--card); border: 1px solid var(--rule); border-radius: 10px; color: var(--ink);
+    -webkit-appearance: none; appearance: none;
+  }
+  select { background-image: linear-gradient(45deg, transparent 50%, var(--faint) 50%), linear-gradient(135deg, var(--faint) 50%, transparent 50%); background-position: calc(100% - 20px) 22px, calc(100% - 14px) 22px; background-size: 6px 6px, 6px 6px; background-repeat: no-repeat; padding-right: 40px; }
+  textarea { min-height: 112px; line-height: 1.75; resize: vertical; }
+  input:focus, select:focus, textarea:focus { outline: 2px solid var(--orange); outline-offset: 1px; border-color: var(--orange); }
+
+  .choices { display: grid; gap: 8px; }
+  .choices.two { grid-template-columns: 1fr 1fr; }
+  @media (max-width: 400px) { .choices.two { grid-template-columns: 1fr; } }
+  .choice { display: flex; gap: 10px; align-items: flex-start; background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: 12px 14px; font-size: 15px; line-height: 1.6; color: var(--ink); cursor: pointer; }
+  .choice:hover { border-color: var(--orange); background: var(--orange-soft); }
+  .choice input { flex: none; width: 18px; height: 18px; margin: 4px 0 0; accent-color: var(--orange-deep); }
+  .choice:has(input:checked) { border-color: var(--orange); background: var(--orange-soft); color: var(--ink-strong); font-weight: 500; }
+  .choice:has(input:focus-visible) { outline: 2px solid var(--purple-deep); outline-offset: 2px; }
+  .otherwrap { margin-top: 8px; }
+
+  .rate { border: 1px solid var(--rule); border-radius: 12px; background: var(--card); overflow: hidden; }
+  .rate .head { display: grid; grid-template-columns: 1fr repeat(5, 30px); gap: 6px; align-items: end; padding: 10px 14px 6px; background: var(--cream); font-size: 11px; color: var(--faint); }
+  .rate .head span { text-align: center; font-variant-numeric: tabular-nums; }
+  .rate .head .legend { text-align: left; font-size: 11px; letter-spacing: .04em; }
+  .rate .row { display: grid; grid-template-columns: 1fr repeat(5, 30px); gap: 6px; align-items: center; padding: 11px 14px; border-top: 1px solid var(--rule); }
+  .rate .row .name { font-size: 14.5px; color: var(--ink); line-height: 1.5; }
+  .rate .row label { display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  .rate .row input { width: 20px; height: 20px; margin: 0; accent-color: var(--orange-deep); }
+  .rate .foot { display: flex; justify-content: space-between; padding: 8px 14px 11px; font-size: 11.5px; color: var(--faint); border-top: 1px solid var(--rule); }
+
+  .scale3 { display: grid; grid-template-columns: 1fr repeat(3, 1fr); gap: 6px; align-items: center; }
+  .scale3 .name { font-size: 14.5px; color: var(--ink); }
+  .scale3 label { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 12.5px; color: var(--soft); background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: 10px 4px; cursor: pointer; text-align: center; }
+  .scale3 label:has(input:checked) { border-color: var(--orange); background: var(--orange-soft); color: var(--ink-strong); font-weight: 700; }
+  .scale3 label input { width: 16px; height: 16px; margin: 0; accent-color: var(--orange-deep); }
+
+  .err { color: #B3452F; font-size: 13.5px; margin: 10px 0 0; min-height: 20px; }
+  .submitbar { margin-top: 40px; }
+  button { font: inherit; cursor: pointer; border-radius: 10px; }
+  .primary { width: 100%; padding: 16px 20px; background: var(--orange); color: #FFF; border: none; font-weight: 700; font-size: 16.5px; box-shadow: var(--lift); }
+  .primary:hover { background: var(--orange-deep); }
+  .primary:disabled { background: var(--faint); cursor: default; }
+  .ghost { width: 100%; padding: 13px 20px; background: transparent; color: var(--soft); border: 1px solid var(--rule); font-size: 14.5px; margin-top: 10px; }
+  .ghost:hover { border-color: var(--orange); color: var(--orange-deep); }
+  .fine { margin: 12px 0 0; font-size: 12px; color: var(--faint); line-height: 1.75; }
+
+  .donecard { background: var(--cream); border: 1px solid var(--rule); border-radius: 16px; padding: 30px 24px; box-shadow: var(--lift); }
+  .donecard .tick { font-size: 30px; line-height: 1; color: var(--orange-deep); margin: 0 0 12px; }
+  .donecard h2 { font-family: "Noto Serif TC", Georgia, serif; font-size: 26px; margin: 0 0 10px; color: var(--ink-strong); }
+  .donecard p { margin: 0 0 12px; font-size: 15.5px; color: var(--ink); }
+  .donecard p:last-child { margin-bottom: 0; }
+  .sendbox { border-radius: 12px; padding: 13px 16px; font-size: 14.5px; margin-top: 18px; border: 1px solid var(--rule); background: var(--card); color: var(--soft); }
+  .sendbox.ok { background: var(--orange-soft); border-color: var(--orange); color: var(--ink-strong); }
+  .links { margin-top: 24px; display: grid; gap: 8px; }
+  .links a { display: block; background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: 13px 15px; font-size: 14.5px; color: var(--ink-strong); text-decoration: none; }
+  .links a:hover { border-color: var(--orange); background: var(--orange-soft); }
+  .links a span { display: block; font-size: 12.5px; color: var(--faint); }
+
+  footer { margin-top: 48px; padding-top: 18px; border-top: 1px solid var(--rule); font-size: 12.5px; color: var(--faint); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="brandline">從工作到日常｜行銷 PM 的 4 步驟溝通術</p>
+
+  <!-- ===================== 問卷 ===================== -->
+  <form id="form" novalidate>
+
+    <h1>講座回饋問卷</h1>
+    <p class="lede">謝謝你今天一起待了三個小時。想請你花 2 分鐘留下回饋，讓下一場可以更貼近你真正需要的。</p>
+    <p class="note">除了公開統計用途外，資料只用於講座後續服務與通知，不會提供給第三方。</p>
+
+    <p class="gift"><b>填完就送簡報。</b>我會盡快把這場講座的完整簡報寄到你填的信箱。</p>
+
+    <!-- ---------- 一、背景資料 ---------- -->
+    <section class="part">
+      <p class="kicker">PART 1</p>
+      <h2>先認識一下你</h2>
+      <p class="sub">願意提供的就填，沒有硬性要求。</p>
+
+      <div class="q">
+        <label class="lab" for="nick">怎麼稱呼你 <span class="req">*</span></label>
+        <p class="hint">姓名或暱稱都可以。</p>
+        <input id="nick" name="nick" type="text" maxlength="20" autocomplete="name" placeholder="小米">
+      </div>
+
+      <div class="q">
+        <label class="lab" for="email">Email <span class="req">*</span></label>
+        <p class="hint">講座簡報之後會寄到這個信箱，請確認沒有打錯。</p>
+        <input id="email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com">
+      </div>
+
+      <div class="q">
+        <label class="lab" for="industry">你目前所在的產業 <span class="req">*</span></label>
+        <select id="industry" name="industry">
+          <option value="">請選擇</option>
+          <option>電商／零售</option>
+          <option>餐飲／食品</option>
+          <option>美業／醫療保健</option>
+          <option>建築／室內設計</option>
+          <option>科技／軟體／資訊</option>
+          <option>金融／保險／投資</option>
+          <option>教育／培訓</option>
+          <option>製造／貿易</option>
+          <option>媒體／廣告／行銷</option>
+          <option>不動產</option>
+          <option>自由接案／個人工作室</option>
+          <option>學生</option>
+          <option>其他</option>
+        </select>
+      </div>
+
+      <div class="q">
+        <span class="lab">你的年齡區間 <span class="req">*</span></span>
+        <div class="choices two" data-group="age">
+          <label class="choice"><input type="radio" name="age" value="24 歲以下"><span>24 歲以下</span></label>
+          <label class="choice"><input type="radio" name="age" value="25–29 歲"><span>25–29 歲</span></label>
+          <label class="choice"><input type="radio" name="age" value="30–34 歲"><span>30–34 歲</span></label>
+          <label class="choice"><input type="radio" name="age" value="35–39 歲"><span>35–39 歲</span></label>
+          <label class="choice"><input type="radio" name="age" value="40–49 歲"><span>40–49 歲</span></label>
+          <label class="choice"><input type="radio" name="age" value="50 歲以上"><span>50 歲以上</span></label>
+        </div>
+      </div>
+
+      <div class="q">
+        <span class="lab">你目前的身份 <span class="req">*</span></span>
+        <p class="hint">可複選。身份重疊就都勾，沒有對應的選「其他」再補充。</p>
+        <div class="choices" data-group="role">
+          <label class="choice"><input type="checkbox" name="role" value="上班族（非管理職）"><span>上班族（非管理職）</span></label>
+          <label class="choice"><input type="checkbox" name="role" value="主管／管理職"><span>主管／管理職</span></label>
+          <label class="choice"><input type="checkbox" name="role" value="創業者／公司負責人"><span>創業者／公司負責人</span></label>
+          <label class="choice"><input type="checkbox" name="role" value="自由接案／個人工作室"><span>自由接案／個人工作室</span></label>
+          <label class="choice"><input type="checkbox" name="role" value="學生"><span>學生</span></label>
+          <label class="choice"><input type="checkbox" name="role" value="轉職中／待業中"><span>轉職中／待業中</span></label>
+          <label class="choice"><input type="checkbox" name="role" value="其他" data-other="roleOther"><span>其他</span></label>
+        </div>
+        <div class="otherwrap" hidden id="roleOtherWrap">
+          <input id="roleOther" type="text" maxlength="40" placeholder="你的狀況是…">
+        </div>
+      </div>
+
+      <div class="q">
+        <label class="lab" for="social">你的社群帳號</label>
+        <p class="hint">選填。IG／Threads／FB 或其他都可以，帳號或連結皆可。之後分享心得我才找得到你。</p>
+        <input id="social" name="social" type="text" maxlength="80" placeholder="@your_id">
+      </div>
+    </section>
+
+    <!-- ---------- 二、滿意度與內容回饋 ---------- -->
+    <section class="part">
+      <p class="kicker">PART 2</p>
+      <h2>今天這場，你覺得怎麼樣</h2>
+      <p class="sub">有任何希望更好的地方，都歡迎直接說。</p>
+
+      <div class="q">
+        <span class="lab">整體滿意度 <span class="req">*</span></span>
+        <p class="hint">1 = 很不滿意，5 = 很滿意。</p>
+        <div class="rate" id="rate">
+          <div class="head"><span class="legend">不滿意 → 滿意</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+        </div>
+      </div>
+
+      <div class="q">
+        <span class="lab">今天你最喜歡的段落 <span class="req">*</span></span>
+        <p class="hint">最多選 3 個。</p>
+        <div class="choices" data-group="fav" data-max="3">
+          <label class="choice"><input type="checkbox" name="fav" value="開場：從 PM 到自己開公司的溝通經歷"><span>開場：從 PM 到自己開公司的溝通經歷</span></label>
+          <label class="choice"><input type="checkbox" name="fav" value="四種溝通型：先搞懂你面對的是誰"><span>四種溝通型：先搞懂你面對的是誰</span></label>
+          <label class="choice"><input type="checkbox" name="fav" value="溝通型測驗（現場作答與結果）"><span>溝通型測驗（現場作答與結果）</span></label>
+          <label class="choice"><input type="checkbox" name="fav" value="時刻一：開口之前"><span>時刻一：開口之前</span></label>
+          <label class="choice"><input type="checkbox" name="fav" value="時刻二：開口的時候"><span>時刻二：開口的時候</span></label>
+          <label class="choice"><input type="checkbox" name="fav" value="時刻三：卡住的時候"><span>時刻三：卡住的時候</span></label>
+          <label class="choice"><input type="checkbox" name="fav" value="時刻四：講完之後"><span>時刻四：講完之後</span></label>
+          <label class="choice"><input type="checkbox" name="fav" value="回到家：家人與伴侶的溝通"><span>回到家：家人與伴侶的溝通</span></label>
+          <label class="choice"><input type="checkbox" name="fav" value="互動練習與 Q&amp;A"><span>互動練習與 Q&amp;A</span></label>
+        </div>
+      </div>
+
+      <div class="q">
+        <span class="lab">內容深度符合你的需求嗎 <span class="req">*</span></span>
+        <p class="hint">覺得剛好就選中間。</p>
+        <div class="scale3" data-group="depth">
+          <span class="name">課程深度</span>
+          <label><input type="radio" name="depth" value="太淺"><span>太淺</span></label>
+          <label><input type="radio" name="depth" value="剛好"><span>剛好</span></label>
+          <label><input type="radio" name="depth" value="太深"><span>太深</span></label>
+        </div>
+      </div>
+
+      <div class="q">
+        <label class="lab" for="suggest">針對這場講座，你還想說什麼</label>
+        <p class="hint">選填，但歡迎你多寫。想加強的、想改的、想鼓勵的都可以，我每一則都會看。</p>
+        <textarea id="suggest" name="suggest" maxlength="1000" placeholder="例如：希望某一段可以講更細、希望多一點實際案例…"></textarea>
+      </div>
+    </section>
+
+    <!-- ---------- 三、未來意向 ---------- -->
+    <section class="part">
+      <p class="kicker">PART 3</p>
+      <h2>接下來你會想看什麼</h2>
+      <p class="sub">想知道你還有哪些需求，以後內容才不會亂做。</p>
+
+      <div class="q">
+        <span class="lab">你對以下哪些主題有興趣</span>
+        <p class="hint">可複選，選填。</p>
+        <div class="choices" data-group="topic">
+          <label class="choice"><input type="checkbox" name="topic" value="溝通進階：實際案例拆解"><span>溝通進階：實際案例拆解</span></label>
+          <label class="choice"><input type="checkbox" name="topic" value="職場溝通：對上、對跨部門"><span>職場溝通：對上、對跨部門</span></label>
+          <label class="choice"><input type="checkbox" name="topic" value="家人與伴侶關係的溝通"><span>家人與伴侶關係的溝通</span></label>
+          <label class="choice"><input type="checkbox" name="topic" value="專案管理：PM 的做事方法"><span>專案管理：PM 的做事方法</span></label>
+          <label class="choice"><input type="checkbox" name="topic" value="行銷策略與品牌定位"><span>行銷策略與品牌定位</span></label>
+          <label class="choice"><input type="checkbox" name="topic" value="社群與內容經營"><span>社群與內容經營</span></label>
+          <label class="choice"><input type="checkbox" name="topic" value="個人品牌與接案"><span>個人品牌與接案</span></label>
+          <label class="choice"><input type="checkbox" name="topic" value="B2B 開發與電子報行銷"><span>B2B 開發與電子報行銷</span></label>
+          <label class="choice"><input type="checkbox" name="topic" value="AI 工具怎麼用在工作上"><span>AI 工具怎麼用在工作上</span></label>
+          <label class="choice"><input type="checkbox" name="topic" value="其他" data-other="topicOther"><span>其他</span></label>
+        </div>
+        <div class="otherwrap" hidden id="topicOtherWrap">
+          <input id="topicOther" type="text" maxlength="60" placeholder="你想看的主題是…">
+        </div>
+      </div>
+
+      <div class="q">
+        <span class="lab">哪些服務或內容你會有興趣</span>
+        <p class="hint">可複選，選填。勾了不代表要付費，我只會寄相關資訊給你。</p>
+        <div class="choices" data-group="want">
+          <label class="choice"><input type="checkbox" name="want" value="訂閱電子報，收溝通與行銷的內容"><span>訂閱電子報，收溝通與行銷的內容</span></label>
+          <label class="choice"><input type="checkbox" name="want" value="一對一溝通諮詢"><span>一對一溝通諮詢</span></label>
+          <label class="choice"><input type="checkbox" name="want" value="一對一 PM／專案諮詢"><span>一對一 PM／專案諮詢</span></label>
+          <label class="choice"><input type="checkbox" name="want" value="行銷顧問／專案陪跑"><span>行銷顧問／專案陪跑</span></label>
+          <label class="choice"><input type="checkbox" name="want" value="企業內訓或團體講座"><span>企業內訓或團體講座</span></label>
+          <label class="choice"><input type="checkbox" name="want" value="線上課程（可自己安排時間看）"><span>線上課程（可自己安排時間看）</span></label>
+          <label class="choice"><input type="checkbox" name="want" value="實體工作坊（可以現場練習）"><span>實體工作坊（可以現場練習）</span></label>
+          <label class="choice"><input type="checkbox" name="want" value="暫時沒有，先看看內容"><span>暫時沒有，先看看內容</span></label>
+        </div>
+      </div>
+
+      <div class="q">
+        <label class="lab" for="words">還有其他想跟我說的話嗎</label>
+        <p class="hint">選填。想合作、想許願主題、想問問題，都歡迎。</p>
+        <textarea id="words" name="words" maxlength="1000" placeholder="想說什麼都可以…"></textarea>
+      </div>
+    </section>
+
+    <div class="submitbar">
+      <p class="err" id="err" role="alert"></p>
+      <button type="submit" class="primary" id="go">送出回饋</button>
+      <p class="fine">簡報整理好之後會寄到你填的信箱。電子報隨時都能一鍵取消訂閱。</p>
+    </div>
+  </form>
+
+  <!-- ===================== 完成 ===================== -->
+  <section id="done" hidden>
+    <div class="donecard">
+      <p class="tick">✓</p>
+      <h2 id="doneTitle">收到了，謝謝你</h2>
+      <p id="doneBody">你的回饋我會一則一則看完。講座簡報整理好之後會寄到你填的信箱，等我一下。</p>
+    </div>
+
+    <div class="sendbox" id="sendbox"></div>
+
+    <div class="links">
+      <a href="https://www.threads.net/@mky_riceinlife" target="_blank" rel="noopener">在 Threads 追蹤小米 @mky_riceinlife<span>平常會在這裡聊行銷、接案和溝通</span></a>
+      <a href="https://www.instagram.com/mky_riceinlife/" target="_blank" rel="noopener">在 Instagram 追蹤小米<span>講座內容之後也會整理成圖文</span></a>
+      <a href="https://mitime-mkt.com" target="_blank" rel="noopener">米田行銷 MiTime<span>想談合作或諮詢，這裡找得到我</span></a>
+    </div>
+
+    <p class="fine">歡迎把今天的心得發到 Threads 或 IG 並 tag 我，看到我會私訊你。</p>
+  </section>
+
+  <footer>米田行銷 MiTime Marketing &amp; Consulting｜有任何問題寄信到 hi@mitime-mkt.com</footer>
+</div>
+
+<script>
+  // ▼▼▼ 這一行改成你的 Apps Script 網頁應用程式網址（安裝步驟 E-2）▼▼▼
+  const API_URL = "https://script.google.com/macros/s/請貼上你的網址/exec";
+  // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+
+  /* ---------- 滿意度題目 ---------- */
+  const RATE_ROWS = [
+    ["overall", "講座整體滿意度"],
+    ["speaker", "講師的表達與清楚度"],
+    ["useful",  "內容對我的實用程度"],
+    ["solved",  "是否解決我原本的溝通困惑"],
+    ["pace",    "講座的節奏安排"]
+  ];
+
+  const rateBox = document.getElementById("rate");
+  RATE_ROWS.forEach(([key, name]) => {
+    const row = document.createElement("div");
+    row.className = "row";
+    let html = '<div class="name">' + name + "</div>";
+    for (let i = 1; i <= 5; i++) {
+      html += '<label aria-label="' + name + " " + i + ' 分"><input type="radio" name="rate_' + key + '" value="' + i + '"></label>';
+    }
+    row.innerHTML = html;
+    rateBox.appendChild(row);
+  });
+  const foot = document.createElement("div");
+  foot.className = "foot";
+  foot.innerHTML = "<span>1 很不滿意</span><span>5 很滿意</span>";
+  rateBox.appendChild(foot);
+
+  /* ---------- 其他欄位展開 ---------- */
+  document.querySelectorAll("[data-other]").forEach(cb => {
+    cb.addEventListener("change", () => {
+      const wrap = document.getElementById(cb.dataset.other + "Wrap");
+      wrap.hidden = !cb.checked;
+      if (cb.checked) document.getElementById(cb.dataset.other).focus();
+    });
+  });
+
+  /* ---------- 最多選 3 ---------- */
+  document.querySelectorAll("[data-max]").forEach(group => {
+    const max = Number(group.dataset.max);
+    group.addEventListener("change", e => {
+      const boxes = [...group.querySelectorAll("input[type=checkbox]")];
+      const on = boxes.filter(b => b.checked);
+      if (on.length > max) {
+        e.target.checked = false;
+        setErr("最喜歡的段落最多選 " + max + " 個，想換的話先取消一個。");
+      } else {
+        setErr("");
+      }
+    });
+  });
+
+  /* ---------- 送出 ---------- */
+  const form = document.getElementById("form");
+  const errEl = document.getElementById("err");
+  const go = document.getElementById("go");
+
+  function setErr(msg) { errEl.textContent = msg; }
+  function val(id) { return (document.getElementById(id).value || "").trim(); }
+  function checked(name) { return [...document.querySelectorAll('input[name="' + name + '"]:checked')].map(i => i.value); }
+  function picked(name) { const el = document.querySelector('input[name="' + name + '"]:checked'); return el ? el.value : ""; }
+
+  function jump(sel) {
+    const el = document.querySelector(sel);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  form.addEventListener("submit", ev => {
+    ev.preventDefault();
+    setErr("");
+
+    const nick = val("nick");
+    const email = val("email");
+    const industry = val("industry");
+    const age = picked("age");
+    const role = checked("role");
+    const fav = checked("fav");
+    const depth = picked("depth");
+
+    if (!nick) { setErr("還沒填怎麼稱呼你。"); jump("#nick"); document.getElementById("nick").focus(); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setErr("Email 看起來不太對，簡報會寄不到。"); jump("#email"); document.getElementById("email").focus(); return; }
+    if (!industry) { setErr("還沒選產業。"); jump("#industry"); return; }
+    if (!age) { setErr("還沒選年齡區間。"); jump('[data-group="age"]'); return; }
+    if (!role.length) { setErr("身份至少選一個。"); jump('[data-group="role"]'); return; }
+
+    const rates = {};
+    for (const [key, name] of RATE_ROWS) {
+      const v = picked("rate_" + key);
+      if (!v) { setErr("「" + name + "」還沒評分。"); jump("#rate"); return; }
+      rates[key] = Number(v);
+    }
+
+    if (!fav.length) { setErr("最喜歡的段落至少選一個。"); jump('[data-group="fav"]'); return; }
+    if (!depth) { setErr("還沒選內容深度。"); jump('[data-group="depth"]'); return; }
+
+    const roleOther = val("roleOther");
+    const topicOther = val("topicOther");
+    const topics = checked("topic").filter(v => v !== "其他");
+    if (topicOther) topics.push("其他：" + topicOther);
+    const roles = role.filter(v => v !== "其他");
+    if (roleOther) roles.push("其他：" + roleOther);
+    if (role.includes("其他") && !roleOther) roles.push("其他");
+
+    const payload = {
+      nick: nick,
+      email: email,
+      social: val("social"),
+      industry: industry,
+      age: age,
+      roles: roles,
+      rates: rates,
+      fav: fav,
+      depth: depth,
+      suggest: val("suggest"),
+      topics: topics,
+      wants: checked("want"),
+      words: val("words")
+    };
+
+    go.disabled = true;
+    go.textContent = "送出中…";
+
+    form.hidden = true;
+    document.getElementById("done").hidden = false;
+    document.getElementById("doneTitle").textContent = nick + "，收到了，謝謝你";
+    setSend("", "正在送出…");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload)
+    })
+      .then(r => r.json())
+      .then(res => {
+        if (res && res.ok) setSend("ok", "✓ 回饋已經收到了。簡報整理好我會寄到 " + email + "，記得留意一下「促銷內容」或垃圾信匣。");
+        else throw new Error(res && res.error);
+      })
+      .catch(() => setSend("", "回饋好像沒送出去。麻煩你重新整理再填一次，或直接寄信到 hi@mitime-mkt.com 跟我說，我手動幫你登記。"));
+  });
+
+  function setSend(cls, msg) {
+    const box = document.getElementById("sendbox");
+    box.className = "sendbox" + (cls ? " " + cls : "");
+    box.textContent = msg;
+  }
+</script>
+</body>
+</html>
