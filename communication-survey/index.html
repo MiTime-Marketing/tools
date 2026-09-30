@@ -220,17 +220,13 @@
 
       <div class="q">
         <span class="lab">今天你最喜歡的段落 <span class="req">*</span></span>
-        <p class="hint">最多選 3 個。</p>
-        <div class="choices" data-group="fav" data-max="3">
+        <p class="hint">最多選 2 個。</p>
+        <div class="choices" data-group="fav" data-max="2">
           <label class="choice"><input type="checkbox" name="fav" value="開場：從 PM 到自己開公司的溝通經歷"><span>開場：從 PM 到自己開公司的溝通經歷</span></label>
-          <label class="choice"><input type="checkbox" name="fav" value="四種溝通型：先搞懂你面對的是誰"><span>四種溝通型：先搞懂你面對的是誰</span></label>
-          <label class="choice"><input type="checkbox" name="fav" value="溝通型測驗（現場作答與結果）"><span>溝通型測驗（現場作答與結果）</span></label>
-          <label class="choice"><input type="checkbox" name="fav" value="時刻一：開口之前"><span>時刻一：開口之前</span></label>
-          <label class="choice"><input type="checkbox" name="fav" value="時刻二：開口的時候"><span>時刻二：開口的時候</span></label>
-          <label class="choice"><input type="checkbox" name="fav" value="時刻三：卡住的時候"><span>時刻三：卡住的時候</span></label>
-          <label class="choice"><input type="checkbox" name="fav" value="時刻四：講完之後"><span>時刻四：講完之後</span></label>
-          <label class="choice"><input type="checkbox" name="fav" value="回到家：家人與伴侶的溝通"><span>回到家：家人與伴侶的溝通</span></label>
-          <label class="choice"><input type="checkbox" name="fav" value="互動練習與 Q&amp;A"><span>互動練習與 Q&amp;A</span></label>
+          <label class="choice"><input type="checkbox" name="fav" value="第一章 The People：溝通為什麼會失效、四種溝通型"><span>第一章 The People：溝通為什麼會失效、四種溝通型</span></label>
+          <label class="choice"><input type="checkbox" name="fav" value="第二章 The Process：工作中的 4 步驟溝通術"><span>第二章 The Process：工作中的 4 步驟溝通術（開案・對齊・執行・結案）</span></label>
+          <label class="choice"><input type="checkbox" name="fav" value="第三章 The Relationship：日常生活的溝通更難"><span>第三章 The Relationship：日常生活的溝通更難</span></label>
+          <label class="choice"><input type="checkbox" name="fav" value="補充：計畫型 vs 隨興型（MBTI 的 J／P）"><span>補充：計畫型 vs 隨興型（MBTI 的 J／P）</span></label>
         </div>
       </div>
 
@@ -318,12 +314,8 @@
     <div class="sendbox" id="sendbox"></div>
 
     <div class="links">
-      <a href="https://www.threads.net/@mky_riceinlife" target="_blank" rel="noopener">在 Threads 追蹤小米 @mky_riceinlife<span>平常會在這裡聊行銷、接案和溝通</span></a>
-      <a href="https://www.instagram.com/mky_riceinlife/" target="_blank" rel="noopener">在 Instagram 追蹤小米<span>講座內容之後也會整理成圖文</span></a>
-      <a href="https://mitime-mkt.com" target="_blank" rel="noopener">米田行銷 MiTime<span>想談合作或諮詢，這裡找得到我</span></a>
+      <a href="https://linktr.ee/mitime.mkt" target="_blank" rel="noopener">小米的所有連結<span>Threads、Instagram、聯絡方式都在這裡</span></a>
     </div>
-
-    <p class="fine">歡迎把今天的心得發到 Threads 或 IG 並 tag 我，看到我會私訊你。</p>
   </section>
 
   <footer>米田行銷 MiTime Marketing &amp; Consulting｜有任何問題寄信到 hi@mitime-mkt.com</footer>
@@ -466,7 +458,7 @@
     })
       .then(r => r.json())
       .then(res => {
-        if (res && res.ok) setSend("ok", "✓ 回饋已經收到了。簡報整理好我會寄到 " + email + "，記得留意一下「促銷內容」或垃圾信匣。");
+        if (res && res.ok) setSend("ok", "✓ 回饋已經收到了。簡報整理好我會寄到 " + email + "，近兩週再記得留意一下「促銷內容」或垃圾信匣。");
         else throw new Error(res && res.error);
       })
       .catch(() => setSend("", "回饋好像沒送出去。麻煩你重新整理再填一次，或直接寄信到 hi@mitime-mkt.com 跟我說，我手動幫你登記。"));
